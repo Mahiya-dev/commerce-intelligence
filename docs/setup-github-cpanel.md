@@ -19,10 +19,10 @@ Prinsip keamanan:
 1. Login ke github.com, klik **+** (kanan atas), lalu **New repository**.
 2. Isi kolom berikut:
    - **Owner**: akun Anda atau organisasi Madu Uray.
-   - **Repository name**: `uray-commerce-intelligence`
+   - **Repository name**: `commerce-intelligence`
    - **Private** ✅
    - **Jangan** centang "Add a README", ".gitignore", atau "license". Repo harus **kosong**, karena isinya akan dikirim dari sesi Claude.
-3. Klik **Create repository** dan catat nama lengkapnya, misalnya `maduuray/uray-commerce-intelligence`.
+3. Klik **Create repository** dan catat nama lengkapnya, misalnya `Mahiya-dev/commerce-intelligence`.
 
 Disarankan: aktifkan **2FA** di akun GitHub (Settings, lalu Password and authentication).
 
@@ -30,7 +30,7 @@ Disarankan: aktifkan **2FA** di akun GitHub (Settings, lalu Password and authent
 
 1. Buka **https://claude.ai/connect-github** dengan akun Claude yang Anda pakai sekarang.
 2. Klik connect/authorize akun GitHub Anda.
-3. Saat diminta memasang **Claude GitHub App**, pilih **Only select repositories**, lalu pilih `uray-commerce-intelligence` saja. Jangan beri akses ke semua repo.
+3. Saat diminta memasang **Claude GitHub App**, pilih **Only select repositories**, lalu pilih `commerce-intelligence` saja. Jangan beri akses ke semua repo.
    - Kalau repo dibuat di bawah **organisasi** GitHub, aplikasi harus dipasang oleh owner organisasi tersebut.
 4. Kirimkan nama repo (`owner/repo`) ke Claude di sesi ini.
 
@@ -60,6 +60,36 @@ Untuk sesi Claude berikutnya, **pilih repo ini saat memulai sesi** agar kode lan
    ```
 
    Kalau berhasil, Anda akan melihat prompt seperti `[USER_CPANEL@server ~]$`.
+
+### C.1 Bila SSH dari laptop gagal
+
+**Penting:** SSH dari laptop **tidak wajib** untuk melanjutkan. Bagian D cukup dijalankan di menu **Terminal** cPanel
+(di browser). Bila menu Terminal ada, lanjutkan ke Bagian D dan selesaikan SSH laptop belakangan.
+
+Jalankan dengan mode diagnosis, lalu cocokkan pesan terakhirnya:
+
+```bash
+ssh -v -i ~/.ssh/id_ed25519_laptop -p PORT_SSH USER_CPANEL@DOMAIN_ANDA
+```
+
+| Pesan                                                                 | Penyebab                                                | Solusi                                                                                                                 |
+| --------------------------------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `Connection timed out`                                                | Port salah, atau firewall hosting memblokir IP Anda     | Tanyakan port SSH ke provider (sering bukan 22). Beberapa hosting mewajibkan **whitelist IP** di cPanel/tiket support  |
+| `Connection refused`                                                  | SSH tidak aktif di port itu                             | Port salah atau shell access belum diaktifkan provider                                                                 |
+| `Permission denied (publickey)`                                       | Key belum **Authorize**, key salah, atau username salah | cPanel → Manage SSH Keys → Authorize; username = **username cPanel** (bukan email/domain); cek path `-i`               |
+| `Permission denied (publickey,password)` setelah input password       | Login password dinonaktifkan / password salah           | Gunakan key, bukan password                                                                                            |
+| `UNPROTECTED PRIVATE KEY FILE` / `bad permissions`                    | Izin file key terlalu longgar                           | Mac/Linux: `chmod 600 ~/.ssh/id_ed25519_laptop`. Windows: lihat perintah di bawah                                      |
+| `invalid format` / `load pubkey ... invalid format`                   | Key berformat PuTTY (`.ppk`) atau file terunduh rusak   | Gunakan key format OpenSSH, atau buat key di laptop (`ssh-keygen -t ed25519`) lalu **Import** public key-nya di cPanel |
+| Login berhasil lalu langsung tertutup / `Shell access is not enabled` | Paket hosting tanpa shell                               | Minta provider mengaktifkan (jailed) shell                                                                             |
+
+Windows — perbaiki izin key (PowerShell):
+
+```powershell
+icacls $env:USERPROFILE\.ssh\id_ed25519_laptop /inheritance:r /grant:r "$($env:USERNAME):(R)"
+```
+
+Kirim ke Claude **pesan error dan ±15 baris terakhir** output `ssh -v` (tidak berisi key, tapi samarkan domain/username
+bila perlu). **Jangan** kirim isi file key.
 
 ## Bagian D — Izinkan cPanel menarik kode dari GitHub (±10 menit)
 
@@ -92,7 +122,7 @@ Lakukan di **terminal SSH cPanel** dari Bagian C. Cara lain: buka cPanel, lalu m
    ssh -T git@github.com
    ```
 
-   Jawab `yes` saat ditanya fingerprint. Hasil yang benar: `Hi owner/uray-commerce-intelligence! You've successfully authenticated...`
+   Jawab `yes` saat ditanya fingerprint. Hasil yang benar: `Hi Mahiya-dev/commerce-intelligence! You've successfully authenticated...`
    - Kalau muncul `Connection refused` atau timeout, berarti hosting memblokir koneksi keluar ke port 22. Coba ganti `HostName ssh.github.com` dan tambahkan baris `Port 443`, lalu ulangi. Kalau masih gagal, minta provider membuka akses keluar ke `github.com`.
 
 5. Kirim ke Claude **teks hasil** `ssh -T git@github.com` saja (bukan isi key).
