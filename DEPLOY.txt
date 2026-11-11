@@ -1,0 +1,12 @@
+Uray Commerce Intelligence — paket cPanel
+1. Upload & extract folder ini ke luar public_html, mis. ~/apps/uray-commerce-intelligence
+2. cPanel → Setup Node.js App → Create Application
+     Node.js version : 20.x atau 22.x
+     Application root: apps/uray-commerce-intelligence
+     Application URL : subdomain Anda
+     Startup file    : server.js
+3. Isi Environment variables (lihat .env.example) ATAU buat file .env di folder ini.
+4. Terminal cPanel (masuk ke virtualenv app):  node cli/migrate.cjs
+5. Owner pertama:  node cli/admin.cjs create-org ... / create-user ... / grant ...
+6. Restart aplikasi di Setup Node.js App. Cek https://<subdomain>/api/health
+Panduan lengkap: docs/deployment.md di repositori.

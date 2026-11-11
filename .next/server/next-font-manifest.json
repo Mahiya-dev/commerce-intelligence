@@ -1,0 +1,83 @@
+{
+  "app": {
+    "[project]/src/app/(app)/affiliates/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/ai-analyst/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/creative/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/dashboard/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/ecommerce/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/events/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/imports/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/master-data/listings/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/master-data/products/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/portfolio/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/settings/audit-log/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/settings/members/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/settings/organization/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(auth)/account/password/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(auth)/login/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(status)/forbidden/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(status)/no-access/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/_not-found/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

@@ -1,0 +1,15 @@
+{
+  "node": {
+    "6000ecb570fa86942653a1a3f5eff8bd7330d1aae0": {
+      "workers": {
+        "app/(auth)/account/password/page": {
+          "moduleId": 38039,
+          "async": false
+        }
+      },
+      "exportedName": "changePassword",
+      "filename": "src/app/(auth)/actions.ts"
+    }
+  },
+  "edge": {}
+}

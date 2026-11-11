@@ -1,0 +1,41 @@
+{
+  "status": 200,
+  "headers": {
+    "link": "</_next/static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(status)/layout,_N_T_/(status)/no-access/layout,_N_T_/(status)/no-access/page,_N_T_/no-access"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KHN0YXR1cyk/no-access/__PAGE__"
+  ],
+  "prefetchHints": {
+    "hints": 49216,
+    "slots": {
+      "children": {
+        "hints": 49248,
+        "slots": {
+          "children": {
+            "hints": 49248,
+            "slots": {
+              "children": {
+                "hints": 49312,
+                "slots": null
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "routeCache": {
+    "key": "/route-cache/APP_PAGE/7d3d8eb435b52bf0a11d7294003b0706a920367af6bd4f9c9848a0c2a78cc2dd/$/no-access",
+    "owner": {
+      "kind": "APP_PAGE",
+      "sourceRoute": "/(status)/no-access/page"
+    },
+    "isFallback": false
+  }
+}

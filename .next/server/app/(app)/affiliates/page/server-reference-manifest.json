@@ -1,0 +1,15 @@
+{
+  "node": {
+    "009a8aa8f8d6a2eecfd3ae5f9f3107872fc7e56e48": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 4641,
+          "async": false
+        }
+      },
+      "exportedName": "signOut",
+      "filename": "src/app/(auth)/actions.ts"
+    }
+  },
+  "edge": {}
+}

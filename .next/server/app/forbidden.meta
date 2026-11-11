@@ -1,0 +1,41 @@
+{
+  "status": 200,
+  "headers": {
+    "link": "</_next/static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(status)/layout,_N_T_/(status)/forbidden/layout,_N_T_/(status)/forbidden/page,_N_T_/forbidden"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KHN0YXR1cyk/forbidden/__PAGE__"
+  ],
+  "prefetchHints": {
+    "hints": 49216,
+    "slots": {
+      "children": {
+        "hints": 49248,
+        "slots": {
+          "children": {
+            "hints": 49248,
+            "slots": {
+              "children": {
+                "hints": 49312,
+                "slots": null
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "routeCache": {
+    "key": "/route-cache/APP_PAGE/c758dfa8c0d86d29fe3e15a6f68d387a1c4558f05231d9a1422901ff7cb6904d/$/forbidden",
+    "owner": {
+      "kind": "APP_PAGE",
+      "sourceRoute": "/(status)/forbidden/page"
+    },
+    "isFallback": false
+  }
+}
