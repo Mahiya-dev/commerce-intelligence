@@ -127,16 +127,16 @@ Lakukan di **terminal SSH cPanel** dari Bagian C. Cara lain: buka cPanel, lalu m
 
 5. Kirim ke Claude **teks hasil** `ssh -T git@github.com` saja (bukan isi key).
 
-## Bagian E — Alur deploy (disiapkan Claude setelah A–D selesai)
+## Bagian E — Alur deploy (sudah aktif)
 
-Rekomendasi: **server tidak melakukan build.** `next build` membutuhkan memori besar dan bisa dihentikan oleh batas LVE (CloudLinux) hosting bersama.
+Server **tidak melakukan build**: `next build` membutuhkan memori besar dan bisa dihentikan batas LVE (CloudLinux).
 
-1. Claude push kode, lalu **GitHub Actions** menjalankan tes (MySQL 8.0, MariaDB 10.6/10.11/11.4).
-2. Kalau semua tes lulus di `main`, GitHub Actions membangun paket `standalone` dan menaruhnya di branch `release`.
-3. Anda men-deploy dari terminal cPanel dengan satu perintah, yaitu skrip yang akan disiapkan Claude:
-   `git pull` dari branch `release`, menjalankan migrasi, lalu me-restart aplikasi (`touch tmp/restart.txt`).
+1. Kode masuk ke `main`, lalu **GitHub Actions** menjalankan tes (MySQL 8.0, MariaDB 10.6/10.11/11.4).
+2. Bila semua lulus, job **release** membangun paket `standalone` dan menerbitkannya sebagai commit di branch `release`.
+3. Anda men-deploy dari terminal cPanel dengan satu perintah: `./deploy.sh` (backup DB, pasang kode, migrasi,
+   restart, health check; `--rollback` untuk kembali).
 
-Dengan alur ini, keputusan kapan versi baru tayang tetap di tangan Anda. Claude tidak bisa mengubah produksi secara langsung.
+Langkah lengkap deploy pertama & rilis berikutnya: `docs/deployment.md` §3–4.
 
 ## Checklist yang dikirim ke Claude
 
