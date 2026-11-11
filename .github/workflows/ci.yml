@@ -62,3 +62,62 @@ jobs:
           TEST_DB_PORT: 3306
           TEST_DB_USER: root
           TEST_DB_PASSWORD: root
+
+  release:
+    # Setelah SEMUA tes lulus di main: bangun paket cPanel dan terbitkan sebagai
+    # satu commit baru di branch `release`. Server cPanel menarik branch ini
+    # lewat ./deploy.sh — produksi tidak pernah berubah tanpa perintah manual.
+    name: Paket cPanel → branch release
+    needs: [app, database]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: release
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run package:cpanel
+      - name: Terbitkan ke branch release
+        env:
+          COMMIT_SUBJECT: ${{ github.event.head_commit.message }}
+        run: |
+          set -euo pipefail
+          PKG="$GITHUB_WORKSPACE/deploy/uray-commerce-intelligence"
+          SUBJECT="$(printf '%s' "$COMMIT_SUBJECT" | head -n1)"
+
+          cp scripts/deploy-cpanel.sh "$PKG/deploy.sh"
+          chmod +x "$PKG/deploy.sh"
+          echo "${GITHUB_SHA::7} $SUBJECT" > "$PKG/SOURCE_COMMIT"
+          # File milik server — tidak pernah ikut di-commit/ditimpa.
+          printf '%s\n' .env .env.local tmp/ .deploy/ stderr.log '*.log' > "$PKG/.gitignore"
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          WT="$RUNNER_TEMP/release"
+          if git ls-remote --exit-code --heads origin release >/dev/null; then
+            git fetch --depth=1 origin release
+            git worktree add --detach "$WT" FETCH_HEAD
+          else
+            git worktree add --detach "$WT" HEAD
+            git -C "$WT" checkout -q --orphan release-new
+          fi
+
+          cd "$WT"
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a "$PKG/." .
+          git add -A -f .
+          if git diff --cached --quiet; then
+            echo "Tidak ada perubahan paket."
+            exit 0
+          fi
+          git commit -q -m "release: ${GITHUB_SHA::7} $SUBJECT"
+          git push origin HEAD:refs/heads/release
+          echo "✓ release $(git rev-parse --short HEAD) ← main ${GITHUB_SHA::7}" >> "$GITHUB_STEP_SUMMARY"
