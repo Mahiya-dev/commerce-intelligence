@@ -1,0 +1,11 @@
+﻿channel,id_produk_channel,id_sku_channel,nama_listing,sku_internal,isi_per_listing
+shopee,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,MU-HUTAN-250,1
+shopee,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,MU-HUTAN-500,1
+shopee,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,MU-KLG-500,1
+shopee,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,MU-PKT-KLG-01,1
+shopee,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),MU-HUTAN-500,2
+tiktok_shop,DEMO-TT-2001,DEMO-TT-2001-1,Madu Hutan Uray 500 gram ORIGINAL,MU-HUTAN-500,1
+tiktok_shop,DEMO-TT-2002,,Madu Klanceng Trigona 150ml,MU-KLC-150,1
+tiktok_shop,DEMO-TT-2003,,Propolis Uray Daya Tahan Tubuh,,1
+tokopedia,DEMO-TP-3001,,Madu Randu Murni Uray 500g,MU-RANDU-500,1
+tokopedia,DEMO-TP-3002,,Madu Hutan Uray 1kg,,1

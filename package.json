@@ -1,0 +1,58 @@
+{
+  "name": "uray-commerce-intelligence",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --max-warnings=0",
+    "typecheck": "next typegen && tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "smoke": "node scripts/smoke-test.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run test",
+    "test:integration": "vitest run --config vitest.integration.config.mts",
+    "build:cli": "node scripts/build-cli.mjs",
+    "db:migrate": "npm run build:cli && node dist/cli/migrate.cjs",
+    "db:status": "npm run build:cli && node dist/cli/migrate.cjs --status",
+    "db:bundle": "npm run build:cli && node dist/cli/migrate.cjs --bundle dist/migrations-phpmyadmin.sql",
+    "db:seed-demo": "npm run build:cli && node dist/cli/seed-demo.cjs --with-users",
+    "admin": "node dist/cli/admin.cjs",
+    "package:cpanel": "bash scripts/package-cpanel.sh"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "geist": "^1.9.0",
+    "lucide-react": "^1.66.0",
+    "mysql2": "^3.24.6",
+    "next": "16.4.3",
+    "radix-ui": "^1.8.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "server-only": "^0.0.1",
+    "tailwind-merge": "^3.7.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "esbuild": "^0.28.2",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.3",
+    "prettier": "^3.9.10",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.4.0",
+    "typescript": "^5",
+    "vitest": "^5.0.5"
+  },
+  "engines": {
+    "node": ">=20.12.0"
+  }
+}

@@ -1,0 +1,265 @@
+{
+  "layout": {
+    "sec1": {
+      "Sep 2026|shopee": 14,
+      "Sep 2026|tiktok_shop": 15,
+      "Sep 2026|tokopedia": 16,
+      "Sep 2026|SEMUA": 17,
+      "Okt 2026|shopee": 18,
+      "Okt 2026|tiktok_shop": 19,
+      "Okt 2026|tokopedia": 20,
+      "Okt 2026|SEMUA": 21,
+      "Nov 2026 (MTD)|shopee": 22,
+      "Nov 2026 (MTD)|tiktok_shop": 23,
+      "Nov 2026 (MTD)|tokopedia": 24,
+      "Nov 2026 (MTD)|SEMUA": 25
+    },
+    "sec2": {
+      "shopee": 32,
+      "tiktok_shop": 33,
+      "tokopedia": 34,
+      "SEMUA": 35
+    },
+    "sec3": {
+      "shopee": 40,
+      "tiktok_shop": 41,
+      "tokopedia": 42,
+      "SEMUA": 43
+    },
+    "sec5": {
+      "MU-HUTAN-250": 65,
+      "MU-HUTAN-500": 66,
+      "MU-KLC-150": 67,
+      "MU-KLG-500": 68,
+      "MU-PKT-KLG-01": 69,
+      "MU-RANDU-500": 70,
+      "BELUM DIPETAKAN": 71
+    },
+    "check_row": 61
+  },
+  "expected": {
+    "sec1": {
+      "Sep 2026|shopee": {
+        "F": 30,
+        "H": 310432400,
+        "I": 2253,
+        "J": 137786.24056813138,
+        "M": 0.03397114036278102
+      },
+      "Sep 2026|tiktok_shop": {
+        "F": 30,
+        "H": 220434900,
+        "I": 2206,
+        "J": 99925.15865820489,
+        "M": 0.01894684405355962
+      },
+      "Sep 2026|tokopedia": {
+        "F": 30,
+        "H": 90547900,
+        "I": 606,
+        "J": 149418.97689768978,
+        "M": 0.028461393950779637
+      },
+      "Sep 2026|SEMUA": {
+        "F": 90,
+        "H": 621415200,
+        "I": 5065,
+        "J": 122688.0947680158,
+        "M": 0.024823077375468038
+      },
+      "Okt 2026|shopee": {
+        "F": 31,
+        "H": 346741400,
+        "I": 2428,
+        "J": 142809.47281713344,
+        "M": 0.03252424583400311
+      },
+      "Okt 2026|tiktok_shop": {
+        "F": 31,
+        "H": 247536400,
+        "I": 2479,
+        "J": 99853.32795482049,
+        "M": 0.019406303330149834
+      },
+      "Okt 2026|tokopedia": {
+        "F": 30,
+        "H": 87278000,
+        "I": 571,
+        "J": 152851.13835376533,
+        "M": 0.027676797052978527
+      },
+      "Okt 2026|SEMUA": {
+        "F": 92,
+        "H": 681555800,
+        "I": 5478,
+        "J": 124416.90397955458,
+        "M": 0.024562268803945745
+      },
+      "Nov 2026 (MTD)|shopee": {
+        "F": 10,
+        "H": 110481400,
+        "I": 804,
+        "J": 137414.6766169154,
+        "M": 0.03340118815171784
+      },
+      "Nov 2026 (MTD)|tiktok_shop": {
+        "F": 10,
+        "H": 85839800,
+        "I": 852,
+        "J": 100750.93896713616,
+        "M": 0.020205853056965328
+      },
+      "Nov 2026 (MTD)|tokopedia": {
+        "F": 10,
+        "H": 32862200,
+        "I": 218,
+        "J": 150744.0366972477,
+        "M": 0.026679720964386245
+      },
+      "Nov 2026 (MTD)|SEMUA": {
+        "F": 30,
+        "H": 229183400,
+        "I": 1874,
+        "J": 122296.37139807898,
+        "M": 0.025185463928609826
+      }
+    },
+    "sec2": {
+      "shopee": {
+        "B": 110481400,
+        "C": 123398100,
+        "D": -0.10467503146320734
+      },
+      "tiktok_shop": {
+        "B": 85839800,
+        "C": 87103800,
+        "D": -0.014511422004550911
+      },
+      "tokopedia": {
+        "B": 32862200,
+        "C": 33676200,
+        "D": -0.02417137325470209
+      },
+      "SEMUA": {
+        "B": 229183400,
+        "C": 244178100,
+        "D": -0.06140886508659049
+      }
+    },
+    "sec3": {
+      "shopee": {
+        "B": 345000000,
+        "C": 110481400,
+        "E": 0.9607078260869565,
+        "F": "On Track",
+        "I": 11725930.0,
+        "J": 331444200.0
+      },
+      "tiktok_shop": {
+        "B": 305000000,
+        "C": 85839800,
+        "E": 0.8443259016393442,
+        "F": "Watch",
+        "I": 10958010.0,
+        "J": 257519400.0
+      },
+      "tokopedia": {
+        "B": 160000000,
+        "C": 32862200,
+        "E": 0.61616625,
+        "F": "At Risk",
+        "I": 6356890.0,
+        "J": 98586600.0
+      },
+      "SEMUA": {
+        "B": 810000000,
+        "C": 229183400,
+        "E": 0.8488274074074074,
+        "F": "Watch",
+        "I": 29040830.0,
+        "J": 687550200.0
+      }
+    },
+    "sec5": {
+      "MU-HUTAN-250": {
+        "B": 16422700
+      },
+      "MU-HUTAN-500": {
+        "B": 96427100
+      },
+      "MU-KLG-500": {
+        "B": 21522300
+      },
+      "MU-PKT-KLG-01": {
+        "B": 15963000
+      },
+      "MU-KLC-150": {
+        "B": 23738600
+      },
+      "BELUM DIPETAKAN": {
+        "B": 40916700
+      },
+      "MU-RANDU-500": {
+        "B": 14193000
+      }
+    }
+  },
+  "errors": [
+    {
+      "line": 4,
+      "column": "tanggal",
+      "code": "invalid_date",
+      "severity": "error",
+      "message": "Tanggal tidak valid (31 September tidak ada); gunakan YYYY-MM-DD."
+    },
+    {
+      "line": 5,
+      "column": "channel",
+      "code": "unknown_channel",
+      "severity": "error",
+      "message": "Channel 'lazada' tidak dikenal (shopee | tiktok_shop | tokopedia)."
+    },
+    {
+      "line": 6,
+      "column": "gmv",
+      "code": "negative_value",
+      "severity": "error",
+      "message": "GMV tidak boleh negatif."
+    },
+    {
+      "line": 7,
+      "column": "gmv",
+      "code": "invalid_number",
+      "severity": "error",
+      "message": "Angka tidak valid '1,2jt'; tulis 1200000 tanpa singkatan/pemisah ribuan."
+    },
+    {
+      "line": 8,
+      "column": "tanggal+channel",
+      "code": "duplicate_key",
+      "severity": "error",
+      "message": "Duplikat baris 2 (tanggal + channel sama) dalam satu file."
+    },
+    {
+      "line": 9,
+      "column": "pengunjung",
+      "code": "conversion_over_100",
+      "severity": "peringatan",
+      "message": "Pesanan (50) > pengunjung (20): Conversion Rate > 100%. Periksa sumber data."
+    },
+    {
+      "line": 10,
+      "column": "gmv",
+      "code": "missing_required",
+      "severity": "error",
+      "message": "Kolom wajib 'gmv' kosong."
+    },
+    {
+      "line": 11,
+      "column": "tanggal",
+      "code": "future_date",
+      "severity": "error",
+      "message": "Tanggal di masa depan (setelah tanggal unggah)."
+    }
+  ]
+}

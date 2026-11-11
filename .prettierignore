@@ -1,0 +1,10 @@
+.next
+node_modules
+supabase/.temp
+package-lock.json
+src/types/database.generated.ts
+dist
+deploy
+
+# generated samples (scripts/samples/generate_phase2_samples.py)
+samples/
