@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Ban, CheckCircle2, Info } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Ban, CheckCircle2, DatabaseZap, Info } from "lucide-react";
 import { requireRole } from "@/lib/auth/guards";
 import { requireNavItem } from "@/config/navigation";
 import { formatDateTime, MISSING } from "@/lib/format";
 import { REPORT_TYPE_LABELS, TEMPLATE_LIST } from "@/lib/imports/templates";
 import { getImportBatch } from "@/lib/imports/staging";
+import { previewCommit, type CommitPlan } from "@/lib/imports/commit";
 import { PageHeader } from "@/components/shared/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { cancelImport } from "../actions";
+import { cancelImport, commitImport } from "../actions";
 import { BatchStatusBadge, formatPeriod, SOURCE_LABELS } from "../batch-ui";
 
 export const metadata: Metadata = { title: "Hasil Impor" };
@@ -36,10 +37,92 @@ function Stat({ label, value, tone }: { label: string; value: number | null; ton
   );
 }
 
-export default async function ImportBatchPage({ params }: PageProps<"/imports/[batchId]">) {
+const COMMIT_MESSAGES: Record<string, { tone: "ok" | "bad"; text: string }> = {
+  ok: {
+    tone: "ok",
+    text: "Data tersimpan ke data e-commerce. Dashboard dan halaman E-Commerce sudah memakai data ini.",
+  },
+  invalid_rows: { tone: "bad", text: "Batch ini memiliki baris yang ditolak. Perbaiki file lalu impor ulang." },
+  warnings_not_acknowledged: {
+    tone: "bad",
+    text: "Centang konfirmasi bahwa peringatan sudah ditinjau, lalu simpan lagi.",
+  },
+  unknown_skus: { tone: "bad", text: "Ada SKU internal yang tidak ditemukan di Master Produk (lihat di bawah)." },
+  status: { tone: "bad", text: "Batch ini tidak lagi dapat disimpan (sudah tersimpan atau dibatalkan)." },
+  empty: { tone: "bad", text: "Tidak ada baris valid untuk disimpan." },
+  error: { tone: "bad", text: "Penyimpanan gagal karena gangguan layanan. Tidak ada data yang berubah; coba lagi." },
+};
+
+const PLAN_NOUN: Record<string, string> = {
+  marketplace_sales_daily: "baris kinerja toko harian",
+  marketplace_product_performance: "baris kinerja produk harian",
+  sales_target: "target bulanan",
+  channel_listing_master: "listing",
+};
+
+function CommitPanel({ batchId, plan, warningRows }: { batchId: string; plan: CommitPlan; warningRows: number }) {
+  const noun = PLAN_NOUN[plan.reportType] ?? "baris";
+  const blocked = plan.unknownSkus.length > 0;
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-sm">Simpan ke data e-commerce</CardTitle>
+        <CardDescription>
+          Menyimpan {plan.rows.toLocaleString("id-ID")} {noun} sekaligus (semua atau tidak sama sekali).
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <ul className="list-inside list-disc space-y-1 text-sm">
+          <li>
+            <span className="font-medium tabular-nums">{plan.inserts.toLocaleString("id-ID")}</span> data baru
+          </li>
+          <li>
+            <span className="font-medium tabular-nums">{plan.overwrites.toLocaleString("id-ID")}</span> data yang sudah
+            ada akan <span className="font-medium">ditimpa</span> oleh file ini
+          </li>
+          {plan.newListings > 0 ? (
+            <li>
+              <span className="font-medium tabular-nums">{plan.newListings.toLocaleString("id-ID")}</span> listing baru
+              dibuat sebagai <span className="font-medium">belum dipetakan</span> (tetap dihitung di total channel;
+              petakan lewat impor Master Listing)
+            </li>
+          ) : null}
+        </ul>
+        {blocked ? (
+          <Alert variant="destructive">
+            <AlertTriangle aria-hidden />
+            <AlertDescription>
+              SKU internal berikut tidak ada di Master Produk: {plan.unknownSkus.join(", ")}. Tambahkan SKU tersebut
+              atau perbaiki file, lalu impor ulang.
+            </AlertDescription>
+          </Alert>
+        ) : (
+          <form action={commitImport} className="space-y-3">
+            <input type="hidden" name="batchId" value={batchId} />
+            {warningRows > 0 ? (
+              <label className="flex items-start gap-2 text-sm">
+                <input type="checkbox" name="acknowledgeWarnings" required className="mt-1" />
+                <span>
+                  Saya sudah meninjau {warningRows.toLocaleString("id-ID")} baris dengan peringatan dan datanya benar.
+                </span>
+              </label>
+            ) : null}
+            <Button type="submit">
+              <DatabaseZap aria-hidden /> Simpan ke data e-commerce
+            </Button>
+          </form>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+export default async function ImportBatchPage({ params, searchParams }: PageProps<"/imports/[batchId]">) {
   const item = requireNavItem("/imports");
   const session = await requireRole(item.minRole);
   const { batchId } = await params;
+  const commitParam = (await searchParams).commit;
+  const commitMessage = typeof commitParam === "string" ? COMMIT_MESSAGES[commitParam] : undefined;
   if (!UUID_RE.test(batchId)) notFound();
   const detail = await getImportBatch(session, batchId);
   if (!detail) notFound();
@@ -49,6 +132,8 @@ export default async function ImportBatchPage({ params }: PageProps<"/imports/[b
   const template = TEMPLATE_LIST.find((t) => t.dbReportType === batch.reportType);
   const columns = template?.columns.map((c) => c.name) ?? Object.keys(preview[0]?.normalized ?? {});
   const cancellable = ["uploaded", "validated", "failed"].includes(batch.status);
+  const committable = batch.status === "validated" && (batch.invalidRows ?? 0) === 0 && (batch.validRows ?? 0) > 0;
+  const plan = committable ? await previewCommit(session, batch.id) : null;
 
   return (
     <div className="space-y-6">
@@ -100,16 +185,24 @@ export default async function ImportBatchPage({ params }: PageProps<"/imports/[b
         <Stat label="Valid dengan peringatan" value={warningRows} tone="warn" />
       </div>
 
-      {batch.status === "validated" ? (
+      {commitMessage ? (
+        <Alert variant={commitMessage.tone === "bad" ? "destructive" : "default"}>
+          {commitMessage.tone === "bad" ? <AlertTriangle aria-hidden /> : <CheckCircle2 aria-hidden />}
+          <AlertDescription>{commitMessage.text}</AlertDescription>
+        </Alert>
+      ) : null}
+
+      {batch.status === "validated" && !committable ? (
         <Alert>
           <Info aria-hidden />
           <AlertDescription>
-            Data sudah divalidasi dan tersimpan sebagai staging. Penyimpanan ke data e-commerce (commit) akan aktif
-            setelah tabel fakta penjualan tersedia. Baris yang ditolak tidak akan pernah di-commit; perbaiki file lalu
-            impor ulang.
+            Batch dengan baris yang ditolak tidak dapat disimpan sebagian, karena data harian yang hilang membuat GMV
+            terlihat lebih kecil dari kenyataan. Perbaiki file lalu impor ulang; batch ini dapat dibatalkan.
           </AlertDescription>
         </Alert>
       ) : null}
+
+      {plan ? <CommitPanel batchId={batch.id} plan={plan} warningRows={warningRows} /> : null}
 
       <Card>
         <CardHeader>

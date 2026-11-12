@@ -29,6 +29,9 @@ export type NavItem = {
 
 export type NavSection = { title: string; items: NavItem[] };
 
+/** Latest delivered phase: modules with phase <= CURRENT_PHASE are functional. */
+export const CURRENT_PHASE = 2;
+
 export const NAVIGATION: NavSection[] = [
   {
     title: "Ringkasan",
