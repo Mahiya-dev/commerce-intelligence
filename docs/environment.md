@@ -38,6 +38,67 @@ Akun demo (password `UrayDemo2026!`): `owner.demo@uray.local`, `admin.demo@uray.
 
 Seed DEMO **menolak berjalan** bila database berisi organisasi non-DEMO.
 
+Untuk mengisi dashboard dengan data DEMO: login, buka **Impor Data**, unggah
+`samples/phase-2/Contoh_Data_DEMO_Sep-Nov2026.xlsx`, lalu klik **Simpan ke data e-commerce** di setiap batch (urutan
+yang disarankan ada di [Panduan Pengguna §6](user-guide.md)).
+
+### 3.1 Database di macOS (Homebrew)
+
+```bash
+brew install mariadb
+brew services start mariadb
+```
+
+MariaDB versi Homebrew memakai login **unix socket** untuk `root`: `sudo mariadb` bisa masuk, tetapi aplikasi (yang
+terhubung lewat TCP dengan password) tidak bisa memakai `root`. Buat user khusus aplikasi:
+
+```bash
+sudo mariadb -e "
+CREATE DATABASE IF NOT EXISTS uci_local CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'uci'@'localhost' IDENTIFIED BY 'UciLokal2026';
+CREATE USER IF NOT EXISTS 'uci'@'127.0.0.1' IDENTIFIED BY 'UciLokal2026';
+GRANT ALL PRIVILEGES ON uci_local.* TO 'uci'@'localhost';
+GRANT ALL PRIVILEGES ON uci_local.* TO 'uci'@'127.0.0.1';
+DROP USER IF EXISTS ''@'localhost';
+FLUSH PRIVILEGES;"
+```
+
+Lalu di `.env.local`: `DB_HOST=127.0.0.1`, `DB_USER=uci`, `DB_PASSWORD=UciLokal2026`, `DB_NAME=uci_local`.
+
+| Gejala                                                        | Penyebab                                                                          | Solusi                                                                          |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `ECONNREFUSED ::1:3306`                                       | `DB_HOST=localhost` diresolusi Node ke IPv6, MariaDB hanya mendengar IPv4         | `DB_HOST=127.0.0.1`                                                             |
+| `SHOW DATABASES` hanya menampilkan `information_schema, test` | Login tertangkap user anonim (`''@localhost` / `''@<nama-host>`) bawaan instalasi | Hapus user anonim (`DROP USER ''@'…'`), cek `SELECT user, host FROM mysql.user` |
+| `Can't connect to local server through socket`                | MariaDB belum berjalan                                                            | `brew services restart mariadb`                                                 |
+| `ERROR 1396 … CREATE USER failed`                             | User sudah ada                                                                    | Abaikan; jalankan baris `GRANT`                                                 |
+
+Homebrew bisa memasang MariaDB yang lebih baru dari produksi (mis. 13.x vs 11.4). Untuk uji lokal umumnya aman; CI
+tetap menguji versi produksi.
+
+`git push` dari Mac meminta password? GitHub tidak menerima password akun untuk Git. Pakai GitHub CLI:
+`brew install gh`, `gh auth login` (HTTPS, login lewat browser), lalu push ulang.
+
+### 3.2 Database di Windows
+
+Pasang **MariaDB 11.4** (installer resmi, sudah termasuk HeidiSQL) atau **Laragon** (MySQL 8). **Hindari XAMPP versi
+lama**: biasanya membawa MariaDB 10.4, di bawah versi minimum 10.6. Root di Windows memakai password yang dibuat saat
+instalasi, jadi `DB_USER=root` boleh dipakai untuk lokal. Bila `mysql` tidak dikenali di PowerShell, gunakan
+HeidiSQL atau "MySQL Client (MariaDB)" dari Start Menu.
+
+### 3.3 Tes integrasi di lokal
+
+Tes integrasi membuat dan menghapus database `uci_test_*` sendiri. Buat satu user khusus tes:
+
+```bash
+sudo mariadb -e "
+CREATE USER IF NOT EXISTS 'citest'@'127.0.0.1' IDENTIFIED BY 'citest';
+GRANT ALL ON \`uci\\_test\\_%\`.* TO 'citest'@'127.0.0.1';"
+```
+
+```bash
+TEST_DB_HOST=127.0.0.1 TEST_DB_USER=citest TEST_DB_PASSWORD=citest npm run test:integration
+```
+
 ## 4. Administrasi pengguna (CLI)
 
 Bangun CLI sekali (`npm run build:cli`), lalu (lokal: `npm run admin -- <perintah>`; di cPanel:
