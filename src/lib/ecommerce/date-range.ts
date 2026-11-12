@@ -13,6 +13,10 @@ import { addMonths, daysInMonth, monthEnd, monthStart } from "@/lib/ecommerce/kp
 export const RANGE_PRESETS = ["mtd", "7d", "30d", "90d", "last_month", "custom"] as const;
 export type RangePreset = (typeof RANGE_PRESETS)[number];
 
+/** Presets an organization can choose as its default range (Pengaturan → Organisasi). */
+export type DefaultRange = Exclude<RangePreset, "custom">;
+export const DEFAULT_RANGES = RANGE_PRESETS.filter((p): p is DefaultRange => p !== "custom");
+
 export const RANGE_PRESET_LABELS: Record<RangePreset, string> = {
   mtd: "Bulan ini (MTD)",
   "7d": "7 hari terakhir",
@@ -90,22 +94,34 @@ function presetRange(preset: Exclude<RangePreset, "custom">, asOf: string): Reso
   }
 }
 
-export function resolveRange(input: RangeInput, asOf: string): ResolvedRange {
+/**
+ * `defaultPreset` (organization setting) applies when no range is requested
+ * and when a requested custom range is invalid.
+ */
+export function resolveRange(
+  input: RangeInput,
+  asOf: string,
+  defaultPreset: Exclude<RangePreset, "custom"> = "mtd",
+): ResolvedRange {
   const preset = (RANGE_PRESETS as readonly string[]).includes(input.range ?? "")
     ? (input.range as RangePreset)
     : // Dates without a preset (e.g. a shared link) mean a custom range.
       isIsoDate(input.from) && isIsoDate(input.to)
       ? "custom"
-      : "mtd";
+      : defaultPreset;
   if (preset !== "custom") return presetRange(preset, asOf);
 
-  const fail = (error: string) => ({ ...presetRange("mtd", asOf), error });
-  if (!isIsoDate(input.from) || !isIsoDate(input.to)) return fail("Tanggal tidak valid; menampilkan bulan ini.");
-  if (input.from > input.to) return fail("Tanggal awal setelah tanggal akhir; menampilkan bulan ini.");
+  const fallback = RANGE_PRESET_LABELS[defaultPreset].toLowerCase();
+  const fail = (error: string) => ({
+    ...presetRange(defaultPreset, asOf),
+    error: `${error}; menampilkan ${fallback}.`,
+  });
+  if (!isIsoDate(input.from) || !isIsoDate(input.to)) return fail("Tanggal tidak valid");
+  if (input.from > input.to) return fail("Tanggal awal setelah tanggal akhir");
   if (daysBetween(input.from, input.to) > MAX_RANGE_DAYS) {
-    return fail(`Rentang maksimal ${MAX_RANGE_DAYS} hari; menampilkan bulan ini.`);
+    return fail(`Rentang maksimal ${MAX_RANGE_DAYS} hari`);
   }
-  if (input.from > asOf) return fail(`Belum ada data setelah ${asOf}; menampilkan bulan ini.`);
+  if (input.from > asOf) return fail(`Belum ada data setelah ${asOf}`);
   // Clip to the as-of date so the comparison has the same number of days with data.
   const period = { from: input.from, to: input.to > asOf ? asOf : input.to };
   return { ...build("custom", period, precedingPeriod(period)), ...(input.to > asOf ? { clippedTo: asOf } : {}) };

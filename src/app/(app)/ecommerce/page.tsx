@@ -5,9 +5,9 @@ import { requireRole } from "@/lib/auth/guards";
 import { requireNavItem } from "@/config/navigation";
 import { getEcommerceOverview, getSalesForRange } from "@/lib/data/ecommerce";
 import { RANGE_PRESET_LABELS } from "@/lib/ecommerce/date-range";
-import { STATUS_THRESHOLDS } from "@/lib/ecommerce/kpi";
 import { formatDate, formatIDR, formatNumber, formatPercent, MISSING } from "@/lib/format";
 import { hasRole } from "@/lib/auth/roles";
+import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/shared/page-header";
 import { DemoNotice } from "@/components/shared/demo-badge";
 import { DataSourceLabel } from "@/components/shared/data-source-label";
@@ -27,6 +27,8 @@ const day = (d: string) => formatDate(d, "UTC");
 const period = (from: string, to: string) => (from === to ? day(from) : `${day(from)} – ${day(to)}`);
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
 const NUM = "text-right tabular-nums";
+const WARN = "text-warning-foreground";
+const below = (value: number | null, target: number | null) => value !== null && target !== null && value < target;
 /** Fixed decimals so a column of percentages lines up ("3,40%" not "3,4%"). */
 const pct = (v: number | null, digits: number) =>
   v === null || !Number.isFinite(v)
@@ -85,7 +87,14 @@ export default async function EcommercePage({ searchParams }: PageProps<"/ecomme
 
   const name = new Map(data.channels.map((c) => [c.code, c.name]));
   const { targets, months, incomplete } = data;
-  const { range } = ranged;
+  const { range, kpi } = ranged;
+  const targetNote = [
+    kpi.targetAov !== null ? `target AOV ${formatIDR(kpi.targetAov)}` : null,
+    kpi.targetConversionRate !== null ? `target conversion ${pct(kpi.targetConversionRate, 2)}` : null,
+  ]
+    .filter(Boolean)
+    .join(", ");
+  const targetSentence = targetNote ? `Ditandai bila di bawah ${targetNote}.` : "";
   const skus = ranged.skus ?? [];
   const skuCoverage = ranged.skuCoverage ?? { listingGmv: 0, shopGmv: 0 };
   const skuGap = skuCoverage.shopGmv - skuCoverage.listingGmv;
@@ -151,7 +160,7 @@ export default async function EcommercePage({ searchParams }: PageProps<"/ecomme
           <CardDescription>
             Target bersifat bulanan sehingga tabel ini tidak mengikuti rentang tanggal. Progres = GMV s.d. hari ini ÷
             target yang seharusnya sudah tercapai (target × hari berjalan ÷ hari dalam bulan). On Track ≥{" "}
-            {formatPercent(STATUS_THRESHOLDS.onTrack, 0)}, Watch ≥ {formatPercent(STATUS_THRESHOLDS.watch, 0)}, di
+            {formatPercent(data.kpi.thresholds.onTrack, 0)}, Watch ≥ {formatPercent(data.kpi.thresholds.watch, 0)}, di
             bawahnya At Risk. Forecast = laju harian rata-rata × jumlah hari.
           </CardDescription>
         </CardHeader>
@@ -209,6 +218,7 @@ export default async function EcommercePage({ searchParams }: PageProps<"/ecomme
             Dibandingkan {period(range.compare.from, range.compare.to)}
             {range.preset === "mtd" ? " (MoM periode setara)" : ""}. AOV = GMV ÷ pesanan; conversion rate = pesanan ÷
             pengunjung.
+            {targetSentence ? ` ${targetSentence}` : ""}
           </CardDescription>
         </CardHeader>
         <CardContent className="px-0">
@@ -239,14 +249,16 @@ export default async function EcommercePage({ searchParams }: PageProps<"/ecomme
                   <TableCell className={NUM}>
                     <ChangeText value={r.ordersChange} />
                   </TableCell>
-                  <TableCell className={NUM}>
+                  <TableCell className={cn(NUM, below(r.current.aov, kpi.targetAov) && WARN)}>
                     {formatIDR(r.current.aov === null ? null : Math.round(r.current.aov))}
                   </TableCell>
                   <TableCell className={NUM}>
                     <ChangeText value={r.aovChange} />
                   </TableCell>
                   <TableCell className={NUM}>{formatNumber(r.current.visitors)}</TableCell>
-                  <TableCell className={NUM}>{pct(r.current.conversionRate, 2)}</TableCell>
+                  <TableCell className={cn(NUM, below(r.current.conversionRate, kpi.targetConversionRate) && WARN)}>
+                    {pct(r.current.conversionRate, 2)}
+                  </TableCell>
                   <TableCell className={NUM}>{formatNumber(r.current.units)}</TableCell>
                 </TableRow>
               ))}

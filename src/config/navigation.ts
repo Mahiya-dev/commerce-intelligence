@@ -30,7 +30,7 @@ export type NavItem = {
 export type NavSection = { title: string; items: NavItem[] };
 
 /** Latest delivered phase: modules with phase <= CURRENT_PHASE are functional. */
-export const CURRENT_PHASE = 2;
+export const CURRENT_PHASE = 3;
 
 export const NAVIGATION: NavSection[] = [
   {
@@ -144,7 +144,7 @@ export const NAVIGATION: NavSection[] = [
         icon: Settings2,
         minRole: "admin",
         phase: 1,
-        description: "Profil organisasi, zona waktu dan mata uang.",
+        description: "Profil organisasi, zona waktu dan pengaturan KPI.",
       },
       {
         title: "Pengguna & Akses",

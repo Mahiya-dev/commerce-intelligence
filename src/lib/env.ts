@@ -30,6 +30,13 @@ const envSchema = z.object({
   /** Gemini model id for the AI Analyst. Selected and validated in Phase 6. */
   GEMINI_MODEL: optionalString,
   LOG_LEVEL: optionalString,
+  /**
+   * 32-byte key (base64 or 64 hex chars) that encrypts secrets stored in the
+   * database, e.g. the Groq API key entered by the Owner. Generate with
+   * `openssl rand -base64 32`. Changing it makes stored secrets unreadable
+   * (they must be entered again).
+   */
+  APP_ENCRYPTION_KEY: optionalString,
 });
 
 export type DatabaseConfig = {
@@ -123,4 +130,13 @@ export function isSecureOrigin(): boolean {
 export function getAiConfig(): { apiKey: string; model: string | undefined } | null {
   const env = envSchema.parse(process.env);
   return env.GEMINI_API_KEY ? { apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL } : null;
+}
+
+/** Parsed APP_ENCRYPTION_KEY, or null when missing/invalid (secret storage disabled). */
+export function getEncryptionKey(raw: RawEnv = process.env): Buffer | null {
+  const value = envSchema.parse(raw).APP_ENCRYPTION_KEY;
+  if (!value) return null;
+  if (/^[0-9a-fA-F]{64}$/.test(value)) return Buffer.from(value, "hex");
+  const buf = Buffer.from(value, "base64");
+  return buf.length === 32 && /^[A-Za-z0-9+/]+={0,2}$/.test(value) ? buf : null;
 }

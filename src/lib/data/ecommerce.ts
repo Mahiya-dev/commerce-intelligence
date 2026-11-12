@@ -16,6 +16,7 @@ import {
   type Totals,
 } from "@/lib/ecommerce/kpi";
 import { daysBetween, resolveRange, type RangeInput, type ResolvedRange } from "@/lib/ecommerce/date-range";
+import { getKpiSettings, type KpiSettings } from "@/lib/organization/settings";
 
 /**
  * E-commerce read model: loads committed facts for the caller's organization
@@ -54,6 +55,7 @@ export type EcommerceOverview =
       /** Listing GMV vs shop GMV for the month (product reports may lag the shop report). */
       skuCoverage: { listingGmv: number; shopGmv: number };
       lastImportAt: string | null;
+      kpi: KpiSettings;
     };
 
 const iso = (d: Date | string) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d).slice(0, 10));
@@ -85,7 +87,8 @@ export async function getEcommerceOverview(
     const asOf = iso(latest.d);
     const from = addMonths(asOf, -(months - 1));
 
-    const [channelRows, factRows, targetRows, skuRows, coverage, lastImport] = await Promise.all([
+    const [kpi, channelRows, factRows, targetRows, skuRows, coverage, lastImport] = await Promise.all([
+      getKpiSettings(session),
       queryRows<ChannelInfo>("SELECT code, name FROM channels WHERE kind = 'marketplace' ORDER BY sort_order"),
       queryRows<{
         code: string;
@@ -151,11 +154,13 @@ export async function getEcommerceOverview(
         targetRows.map((t) => ({ channel: t.code, targetGmv: n(t.target_gmv) })),
         channels,
         asOf,
+        kpi.thresholds,
       ),
       incomplete: incompleteChannels(facts, channels, asOf),
       skus,
       skuCoverage: { listingGmv: skus.reduce((s, r) => s + r.gmv, 0), shopGmv: n(coverage?.gmv ?? null) },
       lastImportAt: lastImport?.at ? lastImport.at.toISOString() : null,
+      kpi,
     };
   });
 }
@@ -192,6 +197,7 @@ export type SalesForRange =
       skus?: SkuContribution[];
       /** Listing GMV vs shop GMV in the range (product reports may lag the shop report). */
       skuCoverage?: { listingGmv: number; shopGmv: number };
+      kpi: KpiSettings;
     };
 
 const pctChange = (cur: number | null, prev: number | null) =>
@@ -213,14 +219,17 @@ export async function getSalesForRange(
   const org = session.organization.id;
 
   return guarded("sales_for_range", async () => {
-    const bounds = await queryOne<{ first: Date | string | null; last: Date | string | null }>(
-      `SELECT MIN(fact_date) AS first, MAX(fact_date) AS last
-         FROM sales_daily_facts WHERE organization_id = ? AND fact_date <= ?`,
-      [org, today],
-    );
+    const [bounds, kpi] = await Promise.all([
+      queryOne<{ first: Date | string | null; last: Date | string | null }>(
+        `SELECT MIN(fact_date) AS first, MAX(fact_date) AS last
+           FROM sales_daily_facts WHERE organization_id = ? AND fact_date <= ?`,
+        [org, today],
+      ),
+      getKpiSettings(session),
+    ]);
     if (!bounds?.last || !bounds.first) return { status: "empty" };
     const asOf = iso(bounds.last);
-    const range = resolveRange(input, asOf);
+    const range = resolveRange(input, asOf, kpi.defaultRange);
 
     const [channelRows, factRows, lastImport, skuRows] = await Promise.all([
       queryRows<ChannelInfo>("SELECT code, name FROM channels WHERE kind = 'marketplace' ORDER BY sort_order"),
@@ -304,6 +313,7 @@ export async function getSalesForRange(
         .map((c) => ({ code: c.code, name: c.name, missingDays: expectedDays - c.current.days }))
         .filter((c) => c.missingDays > 0),
       lastImportAt: lastImport?.at ? lastImport.at.toISOString() : null,
+      kpi,
       ...(skuRows ? skuSection(skuRows, current.gmv) : {}),
     };
   });

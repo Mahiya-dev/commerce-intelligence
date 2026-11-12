@@ -322,3 +322,29 @@ function sheetXlsx(rowsXml: string): Buffer {
   eocd.writeUInt32LE(offset, 16);
   return Buffer.concat([...local, cd, eocd]);
 }
+
+describe("chosen report type (Jenis data)", () => {
+  const shopCsv = () => csvTables("data.csv", read("csv/kinerja_toko_harian_DEMO.csv"))[0].table;
+
+  it("validates against the chosen type", () => {
+    const out = validateTable(shopCsv(), { today: TODAY, expectedTemplate: "kinerja_toko_harian" });
+    expect(out.ok && out.result.template.key).toBe("kinerja_toko_harian");
+  });
+
+  it("explains a mismatch and points to the type that does fit", () => {
+    const out = validateTable(shopCsv(), { today: TODAY, expectedTemplate: "target_bulanan" });
+    expect(out.ok).toBe(false);
+    if (out.ok) return;
+    expect(out.message).toMatch(
+      /^File tidak sesuai jenis data "Target Bulanan" — kolom wajib tidak ada: bulan, target_gmv/,
+    );
+    expect(out.message).toMatch(/cocok dengan "Kinerja Toko Harian"/);
+  });
+
+  it("takes only the chosen sheet from a workbook", () => {
+    const buf = read("Contoh_Data_DEMO_Sep-Nov2026.xlsx");
+    expect(xlsxTables(buf, "target_bulanan").map((t) => t.name)).toEqual(["target_bulanan"]);
+    expect(readUploadedFile("demo.xlsx", buf, "master_listing").tables.map((t) => t.name)).toEqual(["master_listing"]);
+    expect(xlsxTables(buf).length).toBe(4);
+  });
+});

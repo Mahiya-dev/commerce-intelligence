@@ -177,6 +177,24 @@ async function plan(db: Queryable, org: string, reportType: string, rows: Row[])
     return { ...base, overwrites, inserts: rows.length - overwrites, newListings: missing.size };
   }
 
+  if (reportType === "touchpoint_performance") {
+    const listings = await existingListings(db, org);
+    const missing = new Set(rows.map((r) => rowListingKey(channels, r)).filter((k) => !listings.has(k)));
+    const dates = rows.map((r) => str(r.tanggal)).sort();
+    const found = await queryRows<{ k1: string; d: Date | string; tp: string }>(
+      `SELECT listing_id AS k1, fact_date AS d, touchpoint AS tp FROM touchpoint_daily_facts
+        WHERE organization_id = ? AND fact_date BETWEEN ? AND ?`,
+      [org, dates[0], dates[dates.length - 1]],
+      db,
+    );
+    const existing = new Set(found.map((r) => `${r.k1}|${iso(r.d)}|${r.tp}`));
+    const overwrites = rows.filter((r) => {
+      const id = listings.get(rowListingKey(channels, r));
+      return id !== undefined && existing.has(`${id}|${str(r.tanggal)}|${str(r.touchpoint)}`);
+    }).length;
+    return { ...base, overwrites, inserts: rows.length - overwrites, newListings: missing.size };
+  }
+
   if (reportType === "sales_target") {
     const months = rows.map((r) => `${str(r.bulan)}-01`).sort();
     const found = await queryRows<{ k1: string; d: Date | string }>(
@@ -222,6 +240,42 @@ async function insertChunks(
   }
 }
 
+/** Listing ids for the rows; listings not seen before are created UNMAPPED. */
+async function ensureListings(
+  conn: PoolConnection,
+  org: string,
+  channels: Map<string, string>,
+  rows: Row[],
+  isDemo: number,
+): Promise<Map<string, string>> {
+  const listings = await existingListings(conn, org);
+  const created: unknown[][] = [];
+  for (const r of rows) {
+    const key = rowListingKey(channels, r);
+    if (listings.has(key)) continue;
+    const id = randomUUID();
+    listings.set(key, id);
+    created.push([
+      id,
+      org,
+      channelOf(channels, r),
+      str(r.id_produk_channel),
+      str(r.id_sku_channel),
+      str(r.nama_listing),
+      isDemo,
+    ]);
+  }
+  await insertChunks(
+    conn,
+    created,
+    `INSERT INTO channel_listings
+       (id, organization_id, channel_id, external_product_id, external_sku_id, listing_name, is_demo)`,
+    "(?, ?, ?, ?, ?, ?, ?)",
+    "",
+  );
+  return listings;
+}
+
 async function writeFacts(
   conn: PoolConnection,
   session: ActiveSession,
@@ -263,32 +317,35 @@ async function writeFacts(
     return;
   }
 
-  if (reportType === "marketplace_product_performance") {
-    const listings = await existingListings(conn, org);
-    const created: unknown[][] = [];
-    for (const r of rows) {
-      const key = rowListingKey(channels, r);
-      if (listings.has(key)) continue;
-      const id = randomUUID();
-      listings.set(key, id);
-      created.push([
-        id,
-        org,
-        channelOf(channels, r),
-        str(r.id_produk_channel),
-        str(r.id_sku_channel),
-        str(r.nama_listing),
-        isDemo,
-      ]);
-    }
+  if (reportType === "touchpoint_performance") {
+    const listings = await ensureListings(conn, org, channels, rows, isDemo);
     await insertChunks(
       conn,
-      created,
-      `INSERT INTO channel_listings
-         (id, organization_id, channel_id, external_product_id, external_sku_id, listing_name, is_demo)`,
-      "(?, ?, ?, ?, ?, ?, ?)",
-      "",
+      rows.map((r) => [
+        org,
+        listings.get(rowListingKey(channels, r)),
+        str(r.tanggal),
+        str(r.touchpoint),
+        channelOf(channels, r),
+        num(r.gmv),
+        num(r.pesanan),
+        num(r.unit_terjual),
+        num(r.biaya),
+        batchId,
+        isDemo,
+      ]),
+      `INSERT INTO touchpoint_daily_facts
+         (organization_id, listing_id, fact_date, touchpoint, channel_id, gmv, orders, units_sold, cost,
+          source_batch_id, is_demo)`,
+      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      `ON DUPLICATE KEY UPDATE gmv = VALUES(gmv), orders = VALUES(orders), units_sold = VALUES(units_sold),
+         cost = VALUES(cost), source_batch_id = VALUES(source_batch_id), is_demo = VALUES(is_demo)`,
     );
+    return;
+  }
+
+  if (reportType === "marketplace_product_performance") {
+    const listings = await ensureListings(conn, org, channels, rows, isDemo);
     await insertChunks(
       conn,
       rows.map((r) => [

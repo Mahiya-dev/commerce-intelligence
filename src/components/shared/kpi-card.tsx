@@ -10,11 +10,14 @@ export function KpiCard({
   label,
   value,
   hint,
+  hintTone,
   icon: Icon,
 }: {
   label: string;
   value: string | null;
   hint?: string;
+  /** "warning" highlights the hint (e.g. below the organization's KPI target). */
+  hintTone?: "warning";
   icon?: LucideIcon;
 }) {
   return (
@@ -31,7 +34,11 @@ export function KpiCard({
         >
           {value ?? MISSING}
         </p>
-        {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
+        {hint ? (
+          <p className={hintTone === "warning" ? "text-xs text-warning-foreground" : "text-xs text-muted-foreground"}>
+            {hint}
+          </p>
+        ) : null}
       </CardContent>
     </Card>
   );

@@ -1,6 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Boxes, Link2, PackageSearch, ShoppingCart, Target, TrendingUp, Users, Wallet } from "lucide-react";
+import {
+  ArrowRight,
+  Boxes,
+  Link2,
+  MousePointerClick,
+  PackageSearch,
+  ShoppingCart,
+  Target,
+  TrendingUp,
+  Users,
+  Wallet,
+} from "lucide-react";
+import { DEFAULT_KPI_SETTINGS } from "@/lib/organization/settings";
 import { requireRole } from "@/lib/auth/guards";
 import { getMasterDataSummary } from "@/lib/data/master-data";
 import { CURRENT_PHASE, NAVIGATION } from "@/config/navigation";
@@ -26,6 +38,10 @@ const period = (from: string, to: string) =>
   from === to ? formatDate(from, "UTC") : `${formatDate(from, "UTC")} – ${formatDate(to, "UTC")}`;
 
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
+const below = (value: number | null, target: number | null) => value !== null && target !== null && value < target;
+/** " · target X (di bawah)" — empty when no target is set. */
+const benchmark = (value: number | null, target: number | null, fmt: (v: number) => string) =>
+  target === null ? "" : ` · target ${fmt(target)}${below(value, target) ? " (di bawah)" : ""}`;
 
 export default async function DashboardPage({ searchParams }: PageProps<"/dashboard">) {
   const session = await requireRole("viewer");
@@ -41,6 +57,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   const r = ranged.status === "ok" ? ranged : null;
   const vs = r ? `vs ${period(r.range.compare.from, r.range.compare.to)}` : "";
   const target = ok?.targets.all ?? null;
+  const kpi = r?.kpi ?? DEFAULT_KPI_SETTINGS;
 
   const modules = NAVIGATION.flatMap((s) => s.items).filter((i) => i.href !== "/dashboard");
 
@@ -84,7 +101,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
             Rentang dipotong s.d. {formatDate(r.range.clippedTo, "UTC")} (data terakhir) agar perbandingan setara.
           </p>
         ) : null}
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           <KpiCard
             label="GMV"
             value={r ? formatIDR(r.current.gmv, { compact: true }) : null}
@@ -102,10 +119,22 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
             value={r ? formatIDR(r.current.aov === null ? null : Math.round(r.current.aov)) : null}
             hint={
               r
-                ? `${formatChange(r.aovChange)} · Conversion rate ${formatPercent(r.current.conversionRate, 2)}`
+                ? `${formatChange(r.aovChange)} ${vs}${benchmark(r.current.aov, kpi.targetAov, formatIDR)}`
                 : "Belum ada data penjualan"
             }
+            hintTone={r && below(r.current.aov, kpi.targetAov) ? "warning" : undefined}
             icon={TrendingUp}
+          />
+          <KpiCard
+            label="Conversion rate"
+            value={r ? formatPercent(r.current.conversionRate, 2) : null}
+            hint={
+              r
+                ? `${formatChange(r.conversionChange)} ${vs}${benchmark(r.current.conversionRate, kpi.targetConversionRate, (v) => formatPercent(v, 2))}`
+                : "Belum ada data penjualan"
+            }
+            hintTone={r && below(r.current.conversionRate, kpi.targetConversionRate) ? "warning" : undefined}
+            icon={MousePointerClick}
           />
           <KpiCard
             label={ok ? `Target ${monthLabel(ok.month)}` : "Pencapaian Target"}

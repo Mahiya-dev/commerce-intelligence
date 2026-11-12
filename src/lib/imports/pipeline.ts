@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import type { ActiveSession } from "@/lib/auth/sessions";
 import { MAX_ROWS, type SourceTable } from "@/lib/imports/sources";
+import type { TemplateKey } from "@/lib/imports/templates";
 import { stageImport, type StageSource } from "@/lib/imports/staging";
 import { todayInTimeZone, validateTable } from "@/lib/imports/validate";
 
@@ -33,6 +34,8 @@ export async function importTables(
     source: Omit<StageSource, "sha256">;
     contentSha256: string;
     tables: SourceTable[];
+    /** Report type chosen by the user (undefined = auto-detect). */
+    expectedTemplate?: TemplateKey;
     ipAddress?: string | null;
     now?: Date;
   },
@@ -46,7 +49,12 @@ export async function importTables(
       result.rejected.push({ tableName: t.name, message: `Melebihi ${MAX_ROWS.toLocaleString("id-ID")} baris.` });
       continue;
     }
-    const outcome = validateTable(t.table, { today, nameHint: t.name, excelDates: t.excelDates });
+    const outcome = validateTable(t.table, {
+      today,
+      nameHint: t.name,
+      excelDates: t.excelDates,
+      expectedTemplate: input.expectedTemplate,
+    });
     if (!outcome.ok) {
       result.rejected.push({ tableName: t.name, message: outcome.message });
       continue;

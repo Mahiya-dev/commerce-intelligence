@@ -15,11 +15,15 @@ import { DEMO_ORG_SLUG, DEMO_USERS } from "@/lib/master-data/demo-seed";
  *
  * Call after seedDemo({ withUsers: true }) — it refuses non-demo databases.
  */
+/** Paths relative to the samples directory, in import order. */
 export const DEMO_SALES_FILES = [
-  "master_listing_DEMO.csv",
-  "target_bulanan_DEMO.csv",
-  "kinerja_toko_harian_DEMO.csv",
-  "kinerja_produk_harian_DEMO.csv",
+  "phase-2/csv/master_listing_DEMO.csv",
+  "phase-2/csv/target_bulanan_DEMO.csv",
+  "phase-3/csv/kinerja_toko_harian_HISTORI_DEMO.csv",
+  "phase-2/csv/kinerja_toko_harian_DEMO.csv",
+  "phase-3/csv/kinerja_produk_harian_HISTORI_DEMO.csv",
+  "phase-2/csv/kinerja_produk_harian_DEMO.csv",
+  "phase-3/csv/kinerja_touchpoint_DEMO.csv",
 ] as const;
 
 export type DemoSalesResult = { file: string; outcome: "committed" | "already_committed" }[];
@@ -62,12 +66,13 @@ async function demoOwnerSession(): Promise<ActiveSession> {
   };
 }
 
-export async function seedDemoSales(csvDir: string, now: Date = new Date()): Promise<DemoSalesResult> {
+export async function seedDemoSales(samplesDir: string, now: Date = new Date()): Promise<DemoSalesResult> {
   const session = await demoOwnerSession();
   const result: DemoSalesResult = [];
 
-  for (const file of DEMO_SALES_FILES) {
-    const buf = readFileSync(join(csvDir, file));
+  for (const path of DEMO_SALES_FILES) {
+    const file = path.split("/").pop()!;
+    const buf = readFileSync(join(samplesDir, path));
     const { kind, tables } = readUploadedFile(file, buf);
     const staged = await importTables(session, {
       source: { kind: "file_upload", ref: null, fileName: file, mimeType: MIME_TYPES[kind], sizeBytes: buf.length },

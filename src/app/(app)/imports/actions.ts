@@ -11,6 +11,7 @@ import { fetchSheetCsv, GoogleSheetsError, parseSheetUrl } from "@/lib/imports/g
 import { importTables, sha256, type PipelineResult } from "@/lib/imports/pipeline";
 import { csvTables, ImportInputError, MAX_FILE_BYTES, MIME_TYPES, readUploadedFile } from "@/lib/imports/sources";
 import { cancelImportBatch } from "@/lib/imports/staging";
+import { isTemplateKey } from "@/lib/imports/templates";
 import { commitImportBatch } from "@/lib/imports/commit";
 
 const NOT_CONFIGURED: ImportFormState = {
@@ -54,8 +55,13 @@ export async function submitImport(_prev: ImportFormState, formData: FormData): 
       if (file.size > MAX_FILE_BYTES) {
         return { status: "error", fieldErrors: { file: [`Ukuran file maksimal ${MAX_FILE_BYTES / 1024 / 1024} MB.`] } };
       }
+      const reportType = String(formData.get("reportType") ?? "auto");
+      if (reportType !== "auto" && !isTemplateKey(reportType)) {
+        return { status: "error", fieldErrors: { reportType: ["Pilih jenis data."] } };
+      }
+      const expectedTemplate = reportType === "auto" ? undefined : reportType;
       const buf = Buffer.from(await file.arrayBuffer());
-      const { kind, tables } = readUploadedFile(file.name, buf);
+      const { kind, tables } = readUploadedFile(file.name, buf, expectedTemplate);
       const result = await importTables(session, {
         source: {
           kind: "file_upload",
@@ -66,6 +72,7 @@ export async function submitImport(_prev: ImportFormState, formData: FormData): 
         },
         contentSha256: sha256(buf),
         tables,
+        expectedTemplate,
         ipAddress,
       });
       revalidatePath("/imports");

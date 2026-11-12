@@ -1,7 +1,7 @@
 /**
  * Seeds DEMO master data (+ demo users with --with-users) into a database.
  * With --with-sales, also imports and commits the DEMO sales CSVs
- * (samples/phase-2/csv, or --samples <dir>) through the real import pipeline.
+ * (samples/phase-2 + samples/phase-3, or --samples <dir>) through the real import pipeline.
  * Refuses to run when non-demo organizations exist. NEVER run in production.
  *
  *   node dist/cli/seed-demo.cjs [--with-users] [--with-sales [--samples <dir>]]
@@ -19,7 +19,7 @@ async function main() {
     options: {
       "with-users": { type: "boolean", default: false },
       "with-sales": { type: "boolean", default: false },
-      samples: { type: "string", default: "samples/phase-2/csv" },
+      samples: { type: "string", default: "samples" },
     },
   });
   // Sales are imported as the demo owner, so they need the demo users.

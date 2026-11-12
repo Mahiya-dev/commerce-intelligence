@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AlertCircle, CheckCircle2, FileSpreadsheet, Info, Loader2, PlugZap, Sheet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { INITIAL_IMPORT_STATE } from "@/lib/imports/form-state";
+import { TEMPLATE_LIST, TEMPLATES, type TemplateKey } from "@/lib/imports/templates";
 import { submitImport } from "./actions";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,16 @@ import { Label } from "@/components/ui/label";
 
 export type ImportMethod = "file" | "google_sheets" | "api";
 export type ApiPlatform = "tiktok_shop" | "tokopedia" | "shopee";
+type ReportTypeChoice = "auto" | TemplateKey;
+
+const REPORT_PURPOSE: Record<TemplateKey, string> = {
+  kinerja_toko_harian: "GMV, pesanan, unit dan pengunjung per channel per hari.",
+  kinerja_produk_harian: "Kinerja per listing/SKU marketplace per hari.",
+  target_bulanan: "Target GMV (dan pesanan) per channel per bulan.",
+  master_listing: "Pemetaan listing marketplace ke SKU internal.",
+  kinerja_touchpoint:
+    "GMV, pesanan dan biaya per listing per touchpoint (organik, iklan, afiliasi, live, video) per hari.",
+};
 
 const METHODS: {
   value: ImportMethod;
@@ -68,6 +79,7 @@ function FieldError({ id, errors }: { id: string; errors?: string[] }) {
 export function ImportSourcePicker({ apiConfigured = false }: { apiConfigured?: boolean }) {
   const [method, setMethod] = useState<ImportMethod>("file");
   const [platform, setPlatform] = useState<ApiPlatform>("tiktok_shop");
+  const [reportType, setReportType] = useState<ReportTypeChoice>("auto");
   const [state, action, pending] = useActionState(submitImport, INITIAL_IMPORT_STATE);
   const apiBlocked = method === "api" && !apiConfigured;
   const fileErrors = state.fieldErrors?.file;
@@ -114,24 +126,63 @@ export function ImportSourcePicker({ apiConfigured = false }: { apiConfigured?: 
           </fieldset>
 
           {method === "file" ? (
-            <div className="grid gap-2">
-              <Label htmlFor="import-file">File laporan</Label>
-              <Input
-                id="import-file"
-                name="file"
-                type="file"
-                required
-                disabled={pending}
-                accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
-                aria-invalid={fileErrors?.length ? true : undefined}
-                aria-describedby={fileErrors?.length ? "import-file-error" : undefined}
-              />
-              <FieldError id="import-file-error" errors={fileErrors} />
-              <p className="text-xs text-muted-foreground">
-                Maks. 10 MB. Gunakan Template Standar Impor: kinerja_toko_harian, kinerja_produk_harian, target_bulanan
-                atau master_listing. Workbook .xlsx boleh berisi beberapa sheet bernama sesuai jenis laporan; setiap
-                sheet menjadi satu batch.
-              </p>
+            <div className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="report-type">Jenis data</Label>
+                <select
+                  id="report-type"
+                  name="reportType"
+                  value={reportType}
+                  onChange={(e) => setReportType(e.target.value as ReportTypeChoice)}
+                  disabled={pending}
+                  className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive sm:max-w-sm dark:bg-input/30"
+                  aria-invalid={state.fieldErrors?.reportType?.length ? true : undefined}
+                  aria-describedby="report-type-hint"
+                >
+                  <option value="auto">Deteksi otomatis</option>
+                  {TEMPLATE_LIST.map((t) => (
+                    <option key={t.key} value={t.key}>
+                      {t.title}
+                    </option>
+                  ))}
+                </select>
+                <FieldError id="report-type-error" errors={state.fieldErrors?.reportType} />
+                <p id="report-type-hint" className="text-xs text-muted-foreground">
+                  {reportType === "auto" ? (
+                    <>
+                      Jenis dikenali dari baris header. Workbook .xlsx boleh berisi beberapa sheet bernama sesuai jenis
+                      data (mis. <code>kinerja_toko_harian</code>); setiap sheet menjadi satu batch.
+                    </>
+                  ) : (
+                    <>
+                      {REPORT_PURPOSE[reportType]} Kolom wajib:{" "}
+                      {TEMPLATES[reportType].columns
+                        .filter((c) => c.required)
+                        .map((c) => c.name)
+                        .join(", ")}
+                      . Untuk .xlsx, hanya sheet <code>{reportType}</code> yang diambil (atau sheet pertama bila tidak
+                      ada).
+                    </>
+                  )}
+                </p>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="import-file">File laporan</Label>
+                <Input
+                  id="import-file"
+                  name="file"
+                  type="file"
+                  required
+                  disabled={pending}
+                  accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
+                  aria-invalid={fileErrors?.length ? true : undefined}
+                  aria-describedby={fileErrors?.length ? "import-file-error" : undefined}
+                />
+                <FieldError id="import-file-error" errors={fileErrors} />
+                <p className="text-xs text-muted-foreground">
+                  .xlsx atau .csv, maks. 10 MB, mengikuti Template Standar Impor.
+                </p>
+              </div>
             </div>
           ) : null}
 

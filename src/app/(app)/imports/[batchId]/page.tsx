@@ -58,6 +58,7 @@ const PLAN_NOUN: Record<string, string> = {
   marketplace_product_performance: "baris kinerja produk harian",
   sales_target: "target bulanan",
   channel_listing_master: "listing",
+  touchpoint_performance: "baris kinerja touchpoint harian",
 };
 
 function CommitPanel({ batchId, plan, warningRows }: { batchId: string; plan: CommitPlan; warningRows: number }) {

@@ -6,10 +6,22 @@
 export const MARKETPLACE_CHANNELS = ["shopee", "tiktok_shop", "tokopedia"] as const;
 export type MarketplaceChannel = (typeof MARKETPLACE_CHANNELS)[number];
 
+/** Where a sale came from (kinerja_touchpoint). */
+export const TOUCHPOINTS = ["organik", "iklan", "afiliasi", "live", "video"] as const;
+export type Touchpoint = (typeof TOUCHPOINTS)[number];
+export const TOUCHPOINT_LABELS: Record<Touchpoint, string> = {
+  organik: "Organik",
+  iklan: "Iklan",
+  afiliasi: "Afiliasi",
+  live: "Live",
+  video: "Video",
+};
+
 export type ColumnType =
   | "date" // YYYY-MM-DD
   | "month" // YYYY-MM
   | "channel"
+  | "touchpoint"
   | "text"
   | "integer"; // whole number, no separators/abbreviations
 
@@ -25,11 +37,16 @@ export type ColumnSpec = {
   notFuture?: boolean;
 };
 
-export type TemplateKey = "kinerja_toko_harian" | "kinerja_produk_harian" | "target_bulanan" | "master_listing";
+export type TemplateKey =
+  "kinerja_toko_harian" | "kinerja_produk_harian" | "target_bulanan" | "master_listing" | "kinerja_touchpoint";
 
 /** import_batches.report_type values. */
 export type DbReportType =
-  "marketplace_sales_daily" | "marketplace_product_performance" | "sales_target" | "channel_listing_master";
+  | "marketplace_sales_daily"
+  | "marketplace_product_performance"
+  | "sales_target"
+  | "channel_listing_master"
+  | "touchpoint_performance";
 
 export type TemplateSpec = {
   key: TemplateKey;
@@ -112,6 +129,25 @@ export const TEMPLATES: Record<TemplateKey, TemplateSpec> = {
       { name: "isi_per_listing", label: "Isi per listing", type: "integer", required: true, min: 1 },
     ],
   },
+  kinerja_touchpoint: {
+    key: "kinerja_touchpoint",
+    title: "Kinerja Touchpoint Harian",
+    dbReportType: "touchpoint_performance",
+    keyColumns: ["tanggal", "channel", "id_produk_channel", "id_sku_channel", "touchpoint"],
+    periodColumn: "tanggal",
+    columns: [
+      { name: "tanggal", label: "Tanggal", type: "date", required: true, notFuture: true },
+      { name: "channel", label: "Channel", type: "channel", required: true },
+      { name: "id_produk_channel", label: "ID produk channel", type: "text", required: true, maxLength: ID },
+      { name: "id_sku_channel", label: "ID SKU channel", type: "text", required: false, maxLength: ID },
+      { name: "nama_listing", label: "Nama listing", type: "text", required: true, maxLength: 255 },
+      { name: "touchpoint", label: "Touchpoint", type: "touchpoint", required: true },
+      { name: "gmv", label: "GMV", type: "integer", required: true },
+      { name: "pesanan", label: "Pesanan", type: "integer", required: true },
+      { name: "unit_terjual", label: "Unit terjual", type: "integer", required: true },
+      { name: "biaya", label: "Biaya", type: "integer", required: false },
+    ],
+  },
 };
 
 export const TEMPLATE_LIST = Object.values(TEMPLATES);
@@ -119,3 +155,7 @@ export const TEMPLATE_LIST = Object.values(TEMPLATES);
 export const REPORT_TYPE_LABELS: Record<string, string> = Object.fromEntries(
   TEMPLATE_LIST.map((t) => [t.dbReportType, t.title]),
 );
+
+export function isTemplateKey(v: unknown): v is TemplateKey {
+  return typeof v === "string" && Object.hasOwn(TEMPLATES, v);
+}
