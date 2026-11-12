@@ -5,11 +5,21 @@ import { AuthorizationError } from "@/lib/data/master-data";
 import { queryOne, queryRows } from "@/lib/db/pool";
 import type { ActiveSession } from "@/lib/auth/sessions";
 import {
-  getGroqApiKey,
-  getGroqCredentialStatus,
-  removeGroqCredential,
-  saveGroqCredential,
+  getAiApiKey,
+  getAiCredentialStatus,
+  removeAiCredential,
+  saveAiCredential,
 } from "@/lib/organization/ai-credentials";
+
+const getGroqApiKey = (s: ActiveSession) =>
+  getAiApiKey(s, "groq").then((k) => (k ? { apiKey: k.apiKey, model: k.model } : null));
+const getGroqCredentialStatus = (s: ActiveSession) => getAiCredentialStatus(s, "groq");
+const saveGroqCredential = (
+  s: ActiveSession,
+  input: { apiKey: string; model: string },
+  opts?: { fetchImpl?: typeof fetch },
+) => saveAiCredential(s, "groq", input, opts);
+const removeGroqCredential = (s: ActiveSession) => removeAiCredential(s, "groq");
 import { sessionFor, setupTestDatabase } from "./helpers";
 
 // Test-only values; Groq is never contacted (fetch is stubbed).
@@ -52,7 +62,7 @@ describe("Groq API key", () => {
   it("rejects a key Groq does not accept and stores nothing", async () => {
     const r = await saveGroqCredential(owner, { apiKey: KEY_A, model: "" }, { fetchImpl: models(401) });
     expect(r).toMatchObject({ ok: false, field: "apiKey" });
-    expect(await getGroqCredentialStatus(admin)).toEqual({ configured: false });
+    expect(await getGroqCredentialStatus(admin)).toMatchObject({ configured: false });
   });
 
   it("stores the key encrypted; status shows only a hint", async () => {
@@ -84,7 +94,7 @@ describe("Groq API key", () => {
   it("audit entries never contain the key", async () => {
     await saveGroqCredential(owner, { apiKey: KEY_B, model: "" }, { fetchImpl: models() });
     expect(await removeGroqCredential(owner)).toBe(true);
-    expect(await getGroqCredentialStatus(admin)).toEqual({ configured: false });
+    expect(await getGroqCredentialStatus(admin)).toMatchObject({ configured: false });
 
     const rows = await queryRows<{ action: string; old_data: unknown; new_data: unknown }>(
       "SELECT action, old_data, new_data FROM audit_logs WHERE entity_type = 'ai_credential' ORDER BY id",
@@ -98,5 +108,46 @@ describe("Groq API key", () => {
     const dump = JSON.stringify(rows);
     expect(dump).not.toContain(KEY_A);
     expect(dump).not.toContain(KEY_B);
+  });
+});
+
+describe("Gemini API key", () => {
+  const GKEY = "AIzaTEST_GEMINI_000000000000000000";
+  const gemini = (status = 200) =>
+    (async () =>
+      new Response(
+        JSON.stringify({ models: [{ name: "models/gemini-test", supportedGenerationMethods: ["generateContent"] }] }),
+        { status },
+      )) as unknown as typeof fetch;
+
+  it("is stored separately from the Groq key, encrypted, with its own audit trail", async () => {
+    expect(
+      await saveAiCredential(owner, "gemini", { apiKey: GKEY, model: "nope" }, { fetchImpl: gemini() }),
+    ).toMatchObject({
+      ok: false,
+      field: "model",
+    });
+    expect(
+      await saveAiCredential(owner, "gemini", { apiKey: GKEY, model: "gemini-test" }, { fetchImpl: gemini() }),
+    ).toMatchObject({
+      ok: true,
+    });
+    expect(await getAiCredentialStatus(admin, "gemini")).toMatchObject({ configured: true, model: "gemini-test" });
+    expect(await getAiApiKey(analyst, "gemini")).toEqual({
+      apiKey: GKEY,
+      model: "gemini-test",
+      source: "organization",
+    });
+    const raw = await queryOne<{ encrypted_key: string }>(
+      "SELECT encrypted_key FROM organization_ai_credentials WHERE provider = 'gemini'",
+    );
+    expect(raw!.encrypted_key).not.toContain(GKEY);
+    expect(await removeAiCredential(owner, "gemini")).toBe(true);
+    expect(
+      await saveAiCredential(owner, "gemini", { apiKey: GKEY, model: "" }, { fetchImpl: gemini(400) }),
+    ).toMatchObject({
+      ok: false,
+      field: "apiKey",
+    });
   });
 });

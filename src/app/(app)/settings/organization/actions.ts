@@ -7,7 +7,13 @@ import { getClientIp } from "@/lib/auth/session";
 import { isDatabaseConfigured } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { organizationSettingsSchema, updateOrganizationSettings } from "@/lib/organization/settings";
-import { groqCredentialSchema, removeGroqCredential, saveGroqCredential } from "@/lib/organization/ai-credentials";
+import {
+  AI_PROVIDER_LABELS,
+  aiCredentialSchema,
+  isAiProvider,
+  removeAiCredential,
+  saveAiCredential,
+} from "@/lib/organization/ai-credentials";
 import type { FormState } from "@/lib/auth/schemas";
 
 export async function saveOrganizationSettings(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -46,14 +52,16 @@ export async function saveOrganizationSettings(_prev: FormState, formData: FormD
   return { status: "success", message: "Pengaturan organisasi disimpan." };
 }
 
-export type GroqFormState = FormState & { models?: string[] };
+export type AiKeyFormState = FormState & { models?: string[] };
 
-export async function saveGroqKey(_prev: GroqFormState, formData: FormData): Promise<GroqFormState> {
+export async function saveAiKey(_prev: AiKeyFormState, formData: FormData): Promise<AiKeyFormState> {
   const session = await requireRole("owner");
   if (!isDatabaseConfigured()) {
     return { status: "error", message: "Database belum dikonfigurasi. Lihat docs/environment.md." };
   }
-  const parsed = groqCredentialSchema.safeParse({
+  const provider = formData.get("provider");
+  if (!isAiProvider(provider)) return { status: "error", message: "Provider AI tidak dikenal." };
+  const parsed = aiCredentialSchema.safeParse({
     apiKey: String(formData.get("apiKey") ?? ""),
     model: String(formData.get("model") ?? ""),
   });
@@ -64,7 +72,7 @@ export async function saveGroqKey(_prev: GroqFormState, formData: FormData): Pro
     };
   }
   try {
-    const result = await saveGroqCredential(session, parsed.data, { ipAddress: await getClientIp() });
+    const result = await saveAiCredential(session, provider, parsed.data, { ipAddress: await getClientIp() });
     if (!result.ok) {
       return result.field
         ? { status: "error", fieldErrors: { [result.field]: [result.message] }, models: result.models }
@@ -73,18 +81,19 @@ export async function saveGroqKey(_prev: GroqFormState, formData: FormData): Pro
     revalidatePath("/settings/organization");
     return {
       status: "success",
-      message: `API Key Groq tersimpan dan terverifikasi (${result.hint}).`,
+      message: `API Key ${AI_PROVIDER_LABELS[provider]} tersimpan dan terverifikasi (${result.hint}).`,
       models: result.models,
     };
   } catch (error) {
     // Never log the form data: it contains the API key.
-    logger.error("organization.groq_key.error", { error: error instanceof Error ? error.name : "unknown" });
+    logger.error("organization.ai_key.error", { provider, error: error instanceof Error ? error.name : "unknown" });
     return { status: "error", message: "API Key gagal disimpan. Coba lagi beberapa saat lagi." };
   }
 }
 
-export async function removeGroqKey(): Promise<void> {
+export async function removeAiKey(formData: FormData): Promise<void> {
   const session = await requireRole("owner");
-  await removeGroqCredential(session, await getClientIp());
+  const provider = formData.get("provider");
+  if (isAiProvider(provider)) await removeAiCredential(session, provider, await getClientIp());
   revalidatePath("/settings/organization");
 }

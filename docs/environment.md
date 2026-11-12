@@ -7,19 +7,20 @@
 
 ## 2. Variabel environment (semuanya server-side)
 
-| Variabel              | Wajib      | Keterangan                                                                             |
-| --------------------- | ---------- | -------------------------------------------------------------------------------------- |
-| `DB_HOST`             | Ya         | `localhost` di cPanel (aplikasi & database di server yang sama)                        |
-| `DB_PORT`             | Tidak      | Default `3306`                                                                         |
-| `DB_USER`             | Ya         | Dari cPanel → MySQL® Databases, mis. `maduuray_app`                                    |
-| `DB_PASSWORD`         | Ya         | Password user database (karakter khusus aman — tidak perlu URL-encode)                 |
-| `DB_NAME`             | Ya         | mis. `maduuray_uci`                                                                    |
-| `DB_CONNECTION_LIMIT` | Tidak      | Ukuran pool per proses (default 5; hosting bersama membatasi koneksi)                  |
-| `DATABASE_URL`        | Alternatif | `mysql://user:pass@host:3306/db` (ganti `DB_*`; karakter khusus harus di-encode)       |
-| `APP_URL`             | Disarankan | Origin publik, mis. `https://intel.maduuray.com`. `https://` → cookie Secure `__Host-` |
-| `GEMINI_API_KEY`      | Fase 6     | Kunci Google AI Studio untuk AI Analyst                                                |
-| `GEMINI_MODEL`        | Fase 6     | ID model Gemini, ditetapkan di Fase 6                                                  |
-| `LOG_LEVEL`           | Tidak      | `debug` / `info` (default) / `warn` / `error`                                          |
+| Variabel              | Wajib      | Keterangan                                                                                                                                                                   |
+| --------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DB_HOST`             | Ya         | `localhost` di cPanel (aplikasi & database di server yang sama)                                                                                                              |
+| `DB_PORT`             | Tidak      | Default `3306`                                                                                                                                                               |
+| `DB_USER`             | Ya         | Dari cPanel → MySQL® Databases, mis. `maduuray_app`                                                                                                                          |
+| `DB_PASSWORD`         | Ya         | Password user database (karakter khusus aman — tidak perlu URL-encode)                                                                                                       |
+| `DB_NAME`             | Ya         | mis. `maduuray_uci`                                                                                                                                                          |
+| `DB_CONNECTION_LIMIT` | Tidak      | Ukuran pool per proses (default 5; hosting bersama membatasi koneksi)                                                                                                        |
+| `DATABASE_URL`        | Alternatif | `mysql://user:pass@host:3306/db` (ganti `DB_*`; karakter khusus harus di-encode)                                                                                             |
+| `APP_URL`             | Disarankan | Origin publik, mis. `https://intel.mahiya.com`. `https://` → cookie Secure `__Host-`                                                                                         |
+| `APP_ENCRYPTION_KEY`  | Disarankan | 32 byte (base64), mengenkripsi API Key AI (Gemini/Groq) yang diisi Owner di dashboard. Buat: `openssl rand -base64 32`. Jika berubah/hilang, key tersimpan harus diisi ulang |
+| `GEMINI_API_KEY`      | Opsional   | Kunci Google AI Studio cadangan tingkat server. Utamakan mengisinya di Pengaturan → Organisasi (terenkripsi, per organisasi)                                                 |
+| `GEMINI_MODEL`        | Opsional   | ID model Gemini cadangan untuk `GEMINI_API_KEY` (mis. dipilih dari daftar model saat key diuji)                                                                              |
+| `LOG_LEVEL`           | Tidak      | `debug` / `info` (default) / `warn` / `error`                                                                                                                                |
 
 Tidak ada variabel `NEXT_PUBLIC_*`: satu build dapat dipakai di server mana pun hanya dengan mengubah env.
 

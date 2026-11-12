@@ -2,32 +2,51 @@
 
 import { useActionState } from "react";
 import { AlertCircle, CheckCircle2, KeyRound, Loader2, Trash2 } from "lucide-react";
-import { removeGroqKey, saveGroqKey, type GroqFormState } from "./actions";
+import { removeAiKey, saveAiKey, type AiKeyFormState } from "./actions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const INITIAL: GroqFormState = { status: "idle" };
+const INITIAL: AiKeyFormState = { status: "idle" };
+
+const COPY = {
+  gemini: {
+    label: "API Key Gemini",
+    placeholder: "AIza…",
+    where: "Buat di aistudio.google.com → Get API key. Gunakan proyek berbayar untuk data bisnis asli.",
+    vendor: "Google",
+  },
+  groq: {
+    label: "API Key Groq",
+    placeholder: "gsk_…",
+    where: "Buat di console.groq.com → API Keys.",
+    vendor: "Groq",
+  },
+} as const;
 
 /**
- * Owner-only Groq API key form. The stored key is never sent to the browser:
- * the field starts empty; leaving it empty keeps the stored key (e.g. to
- * change only the model).
+ * Owner-only AI API key form (Gemini or Groq). The stored key is never sent to
+ * the browser: the field starts empty; leaving it empty keeps the stored key
+ * (e.g. to change only the model).
  */
-export function GroqKeyForm({
+export function AiKeyForm({
+  provider,
   configured,
   hint,
   model,
   disabled,
 }: {
+  provider: "gemini" | "groq";
   configured: boolean;
   hint: string | null;
   model: string | null;
   /** True when APP_ENCRYPTION_KEY is missing on the server. */
   disabled: boolean;
 }) {
-  const [state, action, pending] = useActionState(saveGroqKey, INITIAL);
+  const [state, action, pending] = useActionState(saveAiKey, INITIAL);
+  const copy = COPY[provider];
+  const id = (s: string) => `${provider}-${s}`;
   const keyErrors = state.fieldErrors?.apiKey;
   const modelErrors = state.fieldErrors?.model;
   const models = state.models ?? [];
@@ -35,57 +54,58 @@ export function GroqKeyForm({
   return (
     <div className="grid gap-4">
       <form action={action} className="grid gap-4" noValidate autoComplete="off">
+        <input type="hidden" name="provider" value={provider} />
         <div className="grid gap-2">
-          <Label htmlFor="groq-api-key">
-            <KeyRound className="size-3.5" aria-hidden /> API Key Groq
+          <Label htmlFor={id("api-key")}>
+            <KeyRound className="size-3.5" aria-hidden /> {copy.label}
           </Label>
           <Input
-            id="groq-api-key"
+            id={id("api-key")}
             name="apiKey"
             type="password"
             autoComplete="off"
             spellCheck={false}
             disabled={disabled || pending}
-            placeholder={configured ? `Tersimpan (${hint}) — kosongkan untuk tetap memakai key ini` : "gsk_…"}
+            placeholder={configured ? `Tersimpan (${hint}) — kosongkan untuk tetap memakai key ini` : copy.placeholder}
             aria-invalid={keyErrors?.length ? true : undefined}
-            aria-describedby={keyErrors?.length ? "groq-api-key-error" : "groq-api-key-hint"}
+            aria-describedby={keyErrors?.length ? id("api-key-error") : id("api-key-hint")}
           />
           {keyErrors?.length ? (
-            <p id="groq-api-key-error" className="text-xs text-destructive">
+            <p id={id("api-key-error")} className="text-xs text-destructive">
               {keyErrors[0]}
             </p>
           ) : (
-            <p id="groq-api-key-hint" className="text-xs text-muted-foreground">
-              Buat di console.groq.com → API Keys. Key diuji ke Groq sebelum disimpan, disimpan terenkripsi, dan tidak
-              pernah ditampilkan lagi.
+            <p id={id("api-key-hint")} className="text-xs text-muted-foreground">
+              {copy.where} Key diuji ke {copy.vendor} sebelum disimpan, disimpan terenkripsi, dan tidak pernah
+              ditampilkan lagi.
             </p>
           )}
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="groq-model">Model (opsional)</Label>
+          <Label htmlFor={id("model")}>Model (opsional)</Label>
           <Input
-            id="groq-model"
+            id={id("model")}
             name="model"
-            list="groq-models"
+            list={id("models")}
             defaultValue={model ?? ""}
             spellCheck={false}
             disabled={disabled || pending}
             placeholder="Kosongkan bila belum ditentukan"
             aria-invalid={modelErrors?.length ? true : undefined}
-            aria-describedby={modelErrors?.length ? "groq-model-error" : "groq-model-hint"}
+            aria-describedby={modelErrors?.length ? id("model-error") : id("model-hint")}
           />
-          <datalist id="groq-models">
+          <datalist id={id("models")}>
             {models.map((m) => (
               <option key={m} value={m} />
             ))}
           </datalist>
           {modelErrors?.length ? (
-            <p id="groq-model-error" className="text-xs text-destructive">
+            <p id={id("model-error")} className="text-xs text-destructive">
               {modelErrors[0]}
             </p>
           ) : (
-            <p id="groq-model-hint" className="text-xs text-muted-foreground">
+            <p id={id("model-hint")} className="text-xs text-muted-foreground">
               {models.length
                 ? `${models.length} model tersedia untuk key ini — pilih dari saran saat mengetik.`
                 : "Daftar model muncul setelah key diuji."}
@@ -116,13 +136,16 @@ export function GroqKeyForm({
 
       {configured ? (
         <form
-          action={removeGroqKey}
+          action={removeAiKey}
           onSubmit={(e) => {
-            if (!confirm("Hapus API Key Groq? AI Analyst tidak dapat memakai Groq sampai key baru disimpan.")) {
+            if (
+              !confirm(`Hapus ${copy.label}? AI Analyst tidak dapat memakai provider ini sampai key baru disimpan.`)
+            ) {
               e.preventDefault();
             }
           }}
         >
+          <input type="hidden" name="provider" value={provider} />
           <Button type="submit" variant="outline" size="sm" disabled={pending}>
             <Trash2 aria-hidden /> Hapus key
           </Button>

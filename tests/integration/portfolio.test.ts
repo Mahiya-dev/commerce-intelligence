@@ -39,13 +39,13 @@ describe("Phase 3 DEMO data", () => {
       12,
     );
     expect(await count("SELECT COUNT(*) AS n FROM touchpoint_daily_facts")).toBe(13447);
-    // Touchpoints reconcile exactly with product facts.
+    // Touchpoints reconcile exactly with product facts (a zero-sales day has no touchpoint rows).
     expect(
       await count(
         `SELECT COUNT(*) AS n FROM listing_daily_facts f
           LEFT JOIN (SELECT listing_id, fact_date, SUM(gmv) AS gmv FROM touchpoint_daily_facts GROUP BY listing_id, fact_date) t
             ON t.listing_id = f.listing_id AND t.fact_date = f.fact_date
-          WHERE t.gmv IS NULL OR t.gmv <> f.gmv`,
+          WHERE COALESCE(t.gmv, 0) <> f.gmv`,
       ),
     ).toBe(0);
   });

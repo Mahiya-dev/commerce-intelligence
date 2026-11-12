@@ -10,9 +10,11 @@ import { PageHeader } from "@/components/shared/page-header";
 import { DemoNotice } from "@/components/shared/demo-badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { OrganizationSettingsForm } from "./organization-settings-form";
-import { GroqKeyForm } from "./groq-key-form";
+import { AiKeyForm } from "./ai-key-form";
 import {
-  getGroqCredentialStatus,
+  AI_PROVIDER_LABELS,
+  AI_PROVIDERS,
+  getAiCredentialStatus,
   isSecretStorageConfigured,
   type AiCredentialStatus,
 } from "@/lib/organization/ai-credentials";
@@ -61,9 +63,14 @@ export default async function OrganizationSettingsPage() {
   const { organization, role } = session;
   const isOwner = can(role, "organization:manage");
   const dbReady = isDatabaseConfigured();
-  const [kpi, groq]: [KpiSettings, AiCredentialStatus] = dbReady
-    ? await Promise.all([getKpiSettings(session), getGroqCredentialStatus(session)])
-    : [DEFAULT_KPI_SETTINGS, { configured: false }];
+  const [kpi, gemini, groq]: [KpiSettings, AiCredentialStatus, AiCredentialStatus] = dbReady
+    ? await Promise.all([
+        getKpiSettings(session),
+        getAiCredentialStatus(session, "gemini"),
+        getAiCredentialStatus(session, "groq"),
+      ])
+    : [DEFAULT_KPI_SETTINGS, { configured: false, envFallback: false }, { configured: false, envFallback: false }];
+  const ai = { gemini, groq };
   const secretsReady = isSecretStorageConfigured();
 
   const fixedRows: [string, string][] = [
@@ -141,55 +148,74 @@ export default async function OrganizationSettingsPage() {
         </>
       )}
 
-      <Card className="max-w-2xl">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-sm">
-            <Bot className="size-4" aria-hidden /> Integrasi AI · Groq
-            {groq.configured ? <Badge variant="success">Terpasang</Badge> : <Badge variant="outline">Belum</Badge>}
-          </CardTitle>
-          <CardDescription>
-            Provider AI Analyst (Fase 6). API Key disimpan terenkripsi di server dan hanya dipakai dari server.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          {!secretsReady ? (
-            <Alert variant="warning">
-              <Info aria-hidden />
-              <AlertDescription>
-                Penyimpanan rahasia belum aktif: admin server perlu mengisi <code>APP_ENCRYPTION_KEY</code> (32 byte,
-                mis. hasil <code>openssl rand -base64 32</code>) di environment lalu me-restart aplikasi.
-              </AlertDescription>
-            </Alert>
-          ) : null}
-          {groq.configured ? (
-            <Rows
-              rows={[
-                ["API Key", groq.hint],
-                ["Model", groq.model ?? MISSING],
-                [
-                  "Terakhir diuji",
-                  groq.lastVerifiedAt ? formatDateTime(groq.lastVerifiedAt, organization.timezone) : MISSING,
-                ],
-                [
-                  "Diubah",
-                  `${formatDateTime(groq.updatedAt, organization.timezone)}${groq.updatedBy ? ` oleh ${groq.updatedBy}` : ""}`,
-                ],
-              ]}
-            />
-          ) : null}
-          {isOwner ? (
-            <GroqKeyForm
-              key={groq.configured ? groq.updatedAt : "none"}
-              configured={groq.configured}
-              hint={groq.configured ? groq.hint : null}
-              model={groq.configured ? groq.model : null}
-              disabled={!secretsReady || !dbReady}
-            />
-          ) : (
-            <p className="text-sm text-muted-foreground">Hanya Owner yang dapat menambah atau mengganti API Key.</p>
-          )}
-        </CardContent>
-      </Card>
+      {!secretsReady ? (
+        <Alert variant="warning" className="max-w-2xl">
+          <Info aria-hidden />
+          <AlertDescription>
+            Penyimpanan API Key belum aktif: admin server perlu mengisi <code>APP_ENCRYPTION_KEY</code> (32 byte, mis.
+            hasil <code>openssl rand -base64 32</code>) di environment lalu me-restart aplikasi.
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      {AI_PROVIDERS.map((provider) => {
+        const st = ai[provider];
+        return (
+          <Card key={provider} className="max-w-2xl">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <Bot className="size-4" aria-hidden /> Integrasi AI · {AI_PROVIDER_LABELS[provider]}
+                {st.configured ? (
+                  <Badge variant="success">Terpasang</Badge>
+                ) : !st.configured && st.envFallback ? (
+                  <Badge variant="outline">Memakai key server</Badge>
+                ) : (
+                  <Badge variant="outline">Belum</Badge>
+                )}
+              </CardTitle>
+              <CardDescription>
+                {provider === "gemini"
+                  ? "Provider utama AI Analyst (Fase 6)."
+                  : "Provider alternatif AI Analyst (Fase 6)."}{" "}
+                API Key disimpan terenkripsi di server dan hanya dipakai dari server.
+                {provider === "gemini" && !st.configured && st.envFallback
+                  ? " Saat ini dipakai GEMINI_API_KEY dari environment server; key yang disimpan di sini akan diutamakan."
+                  : ""}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+              {st.configured ? (
+                <Rows
+                  rows={[
+                    ["API Key", st.hint],
+                    ["Model", st.model ?? MISSING],
+                    [
+                      "Terakhir diuji",
+                      st.lastVerifiedAt ? formatDateTime(st.lastVerifiedAt, organization.timezone) : MISSING,
+                    ],
+                    [
+                      "Diubah",
+                      `${formatDateTime(st.updatedAt, organization.timezone)}${st.updatedBy ? ` oleh ${st.updatedBy}` : ""}`,
+                    ],
+                  ]}
+                />
+              ) : null}
+              {isOwner ? (
+                <AiKeyForm
+                  key={st.configured ? st.updatedAt : "none"}
+                  provider={provider}
+                  configured={st.configured}
+                  hint={st.configured ? st.hint : null}
+                  model={st.configured ? st.model : null}
+                  disabled={!secretsReady || !dbReady}
+                />
+              ) : (
+                <p className="text-sm text-muted-foreground">Hanya Owner yang dapat menambah atau mengganti API Key.</p>
+              )}
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 }

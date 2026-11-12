@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { decryptSecret, encryptSecret, secretHint, SecretBoxError } from "@/lib/crypto/secret-box";
 import { getEncryptionKey } from "@/lib/env";
 import { GROQ_API_BASE, verifyGroqKey } from "@/lib/ai/groq";
-import { groqCredentialSchema } from "@/lib/organization/ai-credentials";
+import { aiCredentialSchema, isAiProvider } from "@/lib/organization/ai-credentials";
+import { GEMINI_API_BASE, verifyGeminiKey } from "@/lib/ai/gemini";
 
 const FAKE_KEY = "gsk_test_0123456789abcdefWXYZ";
 
@@ -77,15 +78,57 @@ describe("verifyGroqKey", () => {
   });
 });
 
-describe("groqCredentialSchema", () => {
+describe("aiCredentialSchema", () => {
   it("allows an empty key (keep stored key) and validates format", () => {
-    expect(groqCredentialSchema.safeParse({ apiKey: "", model: "" }).success).toBe(true);
-    expect(groqCredentialSchema.safeParse({ apiKey: `  ${FAKE_KEY}  `, model: "model-a" }).data).toEqual({
+    expect(aiCredentialSchema.safeParse({ apiKey: "", model: "" }).success).toBe(true);
+    expect(aiCredentialSchema.safeParse({ apiKey: `  ${FAKE_KEY}  `, model: "model-a" }).data).toEqual({
       apiKey: FAKE_KEY,
       model: "model-a",
     });
-    expect(groqCredentialSchema.safeParse({ apiKey: "has spaces in it 123456", model: "" }).success).toBe(false);
-    expect(groqCredentialSchema.safeParse({ apiKey: "short", model: "" }).success).toBe(false);
-    expect(groqCredentialSchema.safeParse({ apiKey: "", model: "bad model!" }).success).toBe(false);
+    expect(aiCredentialSchema.safeParse({ apiKey: "has spaces in it 123456", model: "" }).success).toBe(false);
+    expect(aiCredentialSchema.safeParse({ apiKey: "short", model: "" }).success).toBe(false);
+    expect(aiCredentialSchema.safeParse({ apiKey: "", model: "bad model!" }).success).toBe(false);
+  });
+});
+
+describe("verifyGeminiKey", () => {
+  const GKEY = "AIzaTEST_0123456789abcdefghijklmnopq";
+
+  it("sends the key in a header (never the URL) and returns generateContent models, paginated", async () => {
+    const calls: string[] = [];
+    const fake = (async (url: RequestInfo | URL, init?: RequestInit) => {
+      calls.push(String(url));
+      expect(String(url)).not.toContain(GKEY);
+      expect(new Headers(init?.headers).get("x-goog-api-key")).toBe(GKEY);
+      const second = String(url).includes("pageToken=");
+      const body = second
+        ? { models: [{ name: "models/gemini-b", supportedGenerationMethods: ["generateContent"] }] }
+        : {
+            models: [
+              { name: "models/gemini-a", supportedGenerationMethods: ["generateContent", "countTokens"] },
+              { name: "models/embedding-x", supportedGenerationMethods: ["embedContent"] },
+            ],
+            nextPageToken: "p2",
+          };
+      return new Response(JSON.stringify(body), { status: 200 });
+    }) as unknown as typeof fetch;
+    expect(await verifyGeminiKey(GKEY, { fetchImpl: fake })).toEqual({ ok: true, models: ["gemini-a", "gemini-b"] });
+    expect(calls).toHaveLength(2);
+    expect(calls[0].startsWith(`${GEMINI_API_BASE}/models`)).toBe(true);
+  });
+
+  it.each([
+    [400, "invalid_key"],
+    [403, "invalid_key"],
+    [429, "rate_limited"],
+    [503, "error"],
+  ])("maps HTTP %i to %s", async (status, reason) => {
+    const fake = (async () => new Response("{}", { status })) as unknown as typeof fetch;
+    expect(await verifyGeminiKey(GKEY, { fetchImpl: fake })).toMatchObject({ ok: false, reason });
+  });
+
+  it("knows the providers", () => {
+    expect(isAiProvider("gemini")).toBe(true);
+    expect(isAiProvider("openai")).toBe(false);
   });
 });
