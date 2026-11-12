@@ -24,19 +24,13 @@ terdekat dengan Singapura. Alternatif MySQL-kompatibel lain (mis. TiDB Cloud) be
 
 ## 2. Isi database dengan migrasi + data DEMO (dari laptop)
 
-Buat file **`.env.vercel`** di folder proyek (sudah diabaikan git — jangan di-commit):
+Buat **`.env.vercel`** (diabaikan git, izin 600) dengan skrip — skrip menanyakan host, port, user dan password
+(tidak ditampilkan) lalu mengambil CA certificate dari clipboard (Aiven → Connection information → CA certificate →
+Show → copy):
 
 ```bash
-DB_HOST=<host>
-DB_PORT=<port>
-DB_USER=<user>
-DB_PASSWORD=<password>
-DB_NAME=defaultdb
-DB_SSL=true
-DB_SSL_CA="<isi ca.pem dalam satu baris, ganti setiap baris baru dengan \n>"
+npm run vercel:env:create
 ```
-
-Satu baris CA bisa dibuat dengan: `awk 'NF {printf "%s\\n", $0}' ca.pem`.
 
 Lalu (terminal baru: `source ~/.nvm/nvm.sh` dulu):
 
@@ -52,16 +46,19 @@ Skrip `*:vercel` hanya memakai `.env.vercel` (tidak mencampur `.env.local`).
 
 1. vercel.com → **Add New… → Project** → pilih repo **commerce-intelligence** → **Import**.
 2. Framework terdeteksi otomatis (**Next.js**). Biarkan perintah build bawaan.
-3. **Environment Variables** (Production dan Preview):
+3. **Environment Variables** (Production dan Preview) — kirim dari `.env.vercel` tanpa menampilkan nilainya
+   (jalankan sendiri; juga mengisi `DB_CONNECTION_LIMIT=2` dan `APP_URL`):
 
-   | Variabel                                                  | Nilai                                                                          |
-   | --------------------------------------------------------- | ------------------------------------------------------------------------------ |
-   | `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` | sama seperti `.env.vercel`                                                     |
-   | `DB_SSL`                                                  | `true`                                                                         |
-   | `DB_SSL_CA`                                               | isi CA satu baris (sama seperti `.env.vercel`)                                 |
-   | `DB_CONNECTION_LIMIT`                                     | `2` (banyak instance serverless × pool kecil)                                  |
-   | `APP_ENCRYPTION_KEY`                                      | kunci baru: `openssl rand -base64 32` (jangan pakai kunci laptop/cPanel)       |
-   | `APP_URL`                                                 | `https://<nama-proyek>.vercel.app` (isi setelah tahu domainnya, lalu redeploy) |
+   ```bash
+   npm run vercel:env:push
+   ```
+
+   `APP_ENCRYPTION_KEY` dibuat sekali, langsung di Vercel:
+
+   ```bash
+   openssl rand -base64 32 | tr -d '\n' | vercel env add APP_ENCRYPTION_KEY --environment production --sensitive
+   openssl rand -base64 32 | tr -d '\n' | vercel env add APP_ENCRYPTION_KEY --environment preview --sensitive --yes
+   ```
 
 4. **Deploy**. Production Vercel memakai branch `main`; fitur Fase 3–5 baru ada di `main` setelah PR #4 di-merge.
    Sebelum itu, buka deployment preview milik branch `feat/phase-4-5` (tab _Deployments_).

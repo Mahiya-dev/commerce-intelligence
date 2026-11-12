@@ -24,6 +24,8 @@
     "db:migrate:vercel": "npm run build:cli && UCI_SKIP_DOTENV=1 node --env-file=.env.vercel dist/cli/migrate.cjs",
     "db:status:vercel": "npm run build:cli && UCI_SKIP_DOTENV=1 node --env-file=.env.vercel dist/cli/migrate.cjs --status",
     "db:seed-demo-sales:vercel": "npm run build:cli && UCI_SKIP_DOTENV=1 node --env-file=.env.vercel dist/cli/seed-demo.cjs --with-users --with-sales",
+    "vercel:env:create": "bash scripts/vercel/make-env.sh",
+    "vercel:env:push": "bash scripts/vercel/push-env.sh",
     "admin": "node dist/cli/admin.cjs",
     "package:cpanel": "bash scripts/package-cpanel.sh"
   },
