@@ -11,6 +11,7 @@ import { fetchSheetCsv, GoogleSheetsError, parseSheetUrl } from "@/lib/imports/g
 import { importTables, sha256, type PipelineResult } from "@/lib/imports/pipeline";
 import { csvTables, ImportInputError, MAX_FILE_BYTES, MIME_TYPES, readUploadedFile } from "@/lib/imports/sources";
 import { cancelImportBatch } from "@/lib/imports/staging";
+import { commitImportBatch } from "@/lib/imports/commit";
 
 const NOT_CONFIGURED: ImportFormState = {
   status: "error",
@@ -127,4 +128,30 @@ export async function cancelImport(formData: FormData): Promise<void> {
   logger.info("imports.cancel", { batchId, outcome });
   revalidatePath("/imports");
   redirect("/imports");
+}
+
+/**
+ * Commits a validated batch into the fact tables, then returns to the batch
+ * page with the outcome in ?commit= (rendered by the page).
+ */
+export async function commitImport(formData: FormData): Promise<void> {
+  const session = await requireRole("analyst");
+  const batchId = String(formData.get("batchId") ?? "");
+  if (!/^[0-9a-f-]{36}$/.test(batchId)) redirect("/imports");
+  let result: string;
+  try {
+    const outcome = await commitImportBatch(session, batchId, {
+      acknowledgeWarnings: formData.get("acknowledgeWarnings") === "on",
+      ipAddress: await getClientIp(),
+    });
+    result = outcome.status === "committed" ? "ok" : outcome.status === "not_found" ? "not_found" : outcome.reason;
+  } catch (error) {
+    logger.error("imports.commit.error", { batchId, error });
+    result = "error";
+  }
+  if (result === "not_found") redirect("/imports");
+  revalidatePath("/imports");
+  revalidatePath("/dashboard");
+  revalidatePath("/ecommerce");
+  redirect(`/imports/${batchId}?commit=${result}`);
 }

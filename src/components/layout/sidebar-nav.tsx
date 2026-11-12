@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { getNavigationForRole, findNavItem } from "@/config/navigation";
+import { CURRENT_PHASE, getNavigationForRole, findNavItem } from "@/config/navigation";
 import type { AppRole } from "@/lib/auth/roles";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +35,7 @@ export function SidebarNav({ role, onNavigate }: { role: AppRole; onNavigate?: (
                   >
                     <Icon className="size-4 shrink-0" aria-hidden />
                     <span className="truncate">{item.title}</span>
-                    {item.phase > 1 ? (
+                    {item.phase > CURRENT_PHASE ? (
                       <span className="ml-auto text-[10px] text-muted-foreground tabular-nums">F{item.phase}</span>
                     ) : null}
                   </Link>

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/shared/demo-badge";
+import { CURRENT_PHASE } from "@/config/navigation";
 
 export function PageHeader({
   title,
@@ -22,7 +23,7 @@ export function PageHeader({
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">{title}</h1>
           {isDemo ? <DemoBadge /> : null}
-          {phase && phase > 1 ? <Badge variant="outline">Tersedia di Fase {phase}</Badge> : null}
+          {phase && phase > CURRENT_PHASE ? <Badge variant="outline">Tersedia di Fase {phase}</Badge> : null}
         </div>
         {description ? <p className="max-w-3xl text-sm text-muted-foreground">{description}</p> : null}
       </div>

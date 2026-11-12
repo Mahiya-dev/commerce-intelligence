@@ -1,0 +1,158 @@
+import { queryOne, queryRows } from "@/lib/db/pool";
+import type { ActiveSession } from "@/lib/auth/sessions";
+import { hasRole } from "@/lib/auth/roles";
+import { AuthorizationError, DataAccessError } from "@/lib/data/master-data";
+import { logger } from "@/lib/logger";
+import { todayInTimeZone } from "@/lib/imports/validate";
+import {
+  addMonths,
+  incompleteChannels,
+  momEquivalent,
+  monthlySummary,
+  monthStart,
+  targetScorecard,
+  type DailyFact,
+} from "@/lib/ecommerce/kpi";
+
+/**
+ * E-commerce read model: loads committed facts for the caller's organization
+ * and hands them to the pure KPI functions in src/lib/ecommerce/kpi.ts.
+ * Tenant isolation: every query is scoped to session.organization.id.
+ *
+ * The as-of date is the latest date with shop data on or before "today" in
+ * the organization's timezone; the reporting month is that date's month. So
+ * the dashboard shows the most recent complete picture instead of an empty
+ * current month while reports are still being uploaded.
+ */
+
+export type ChannelInfo = { code: string; name: string };
+
+export type SkuContribution = {
+  /** null = listing not mapped to an internal SKU yet. */
+  sku: string | null;
+  name: string | null;
+  gmv: number;
+  /** Internal SKU units (listing units × units per listing). */
+  units: number;
+};
+
+export type EcommerceOverview =
+  | { status: "empty" }
+  | {
+      status: "ok";
+      asOf: string;
+      month: string;
+      channels: ChannelInfo[];
+      months: ReturnType<typeof monthlySummary>;
+      mom: ReturnType<typeof momEquivalent>;
+      targets: ReturnType<typeof targetScorecard>;
+      incomplete: ReturnType<typeof incompleteChannels>;
+      skus: SkuContribution[];
+      /** Listing GMV vs shop GMV for the month (product reports may lag the shop report). */
+      skuCoverage: { listingGmv: number; shopGmv: number };
+      lastImportAt: string | null;
+    };
+
+const iso = (d: Date | string) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d).slice(0, 10));
+const n = (v: string | number | null) => (v === null ? 0 : Number(v));
+
+async function guarded<T>(operation: string, fn: () => Promise<T>): Promise<T> {
+  try {
+    return await fn();
+  } catch (error) {
+    if (error instanceof AuthorizationError) throw error;
+    logger.error("data.query_failed", { operation, error });
+    throw new DataAccessError(operation);
+  }
+}
+
+export async function getEcommerceOverview(
+  session: ActiveSession,
+  { today = todayInTimeZone(session.organization.timezone), months = 3 }: { today?: string; months?: number } = {},
+): Promise<EcommerceOverview> {
+  if (!hasRole(session.role, "viewer")) throw new AuthorizationError("viewer");
+  const org = session.organization.id;
+
+  return guarded("ecommerce_overview", async () => {
+    const latest = await queryOne<{ d: Date | string | null }>(
+      "SELECT MAX(fact_date) AS d FROM sales_daily_facts WHERE organization_id = ? AND fact_date <= ?",
+      [org, today],
+    );
+    if (!latest?.d) return { status: "empty" };
+    const asOf = iso(latest.d);
+    const from = addMonths(asOf, -(months - 1));
+
+    const [channelRows, factRows, targetRows, skuRows, coverage, lastImport] = await Promise.all([
+      queryRows<ChannelInfo>("SELECT code, name FROM channels WHERE kind = 'marketplace' ORDER BY sort_order"),
+      queryRows<{
+        code: string;
+        fact_date: Date | string;
+        gmv: string | number;
+        orders: number;
+        units_sold: number;
+        visitors: number;
+      }>(
+        `SELECT c.code, f.fact_date, f.gmv, f.orders, f.units_sold, f.visitors
+           FROM sales_daily_facts f JOIN channels c ON c.id = f.channel_id
+          WHERE f.organization_id = ? AND f.fact_date BETWEEN ? AND ?`,
+        [org, from, asOf],
+      ),
+      queryRows<{ code: string; target_gmv: string | number }>(
+        `SELECT c.code, t.target_gmv
+           FROM sales_targets t JOIN channels c ON c.id = t.channel_id
+          WHERE t.organization_id = ? AND t.target_month = ?`,
+        [org, monthStart(asOf)],
+      ),
+      queryRows<{ sku: string | null; name: string | null; gmv: string | number; units: string | number }>(
+        `SELECT v.sku, v.name, SUM(f.gmv) AS gmv, SUM(f.units_sold * l.units_per_listing) AS units
+           FROM listing_daily_facts f
+           JOIN channel_listings l ON l.organization_id = f.organization_id AND l.id = f.listing_id
+           LEFT JOIN product_variants v ON v.organization_id = l.organization_id AND v.id = l.variant_id
+          WHERE f.organization_id = ? AND f.fact_date BETWEEN ? AND ?
+          GROUP BY v.sku, v.name
+          ORDER BY gmv DESC`,
+        [org, monthStart(asOf), asOf],
+      ),
+      queryOne<{ gmv: string | number | null }>(
+        `SELECT SUM(gmv) AS gmv FROM sales_daily_facts
+          WHERE organization_id = ? AND fact_date BETWEEN ? AND ?`,
+        [org, monthStart(asOf), asOf],
+      ),
+      queryOne<{ at: Date | null }>(
+        `SELECT MAX(committed_at) AS at FROM import_batches
+          WHERE organization_id = ? AND status = 'committed'`,
+        [org],
+      ),
+    ]);
+
+    const channels = channelRows.map((c) => c.code);
+    const facts: DailyFact[] = factRows.map((r) => ({
+      channel: r.code,
+      date: iso(r.fact_date),
+      gmv: n(r.gmv),
+      orders: r.orders,
+      units: r.units_sold,
+      visitors: r.visitors,
+    }));
+    const skus = skuRows.map((r) => ({ sku: r.sku, name: r.name, gmv: n(r.gmv), units: n(r.units) }));
+
+    return {
+      status: "ok",
+      asOf,
+      month: asOf.slice(0, 7),
+      channels: channelRows,
+      months: monthlySummary(facts, channels, asOf, months),
+      mom: momEquivalent(facts, channels, asOf),
+      targets: targetScorecard(
+        facts,
+        targetRows.map((t) => ({ channel: t.code, targetGmv: n(t.target_gmv) })),
+        channels,
+        asOf,
+      ),
+      incomplete: incompleteChannels(facts, channels, asOf),
+      skus,
+      skuCoverage: { listingGmv: skus.reduce((s, r) => s + r.gmv, 0), shopGmv: n(coverage?.gmv ?? null) },
+      lastImportAt: lastImport?.at ? lastImport.at.toISOString() : null,
+    };
+  });
+}
