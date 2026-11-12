@@ -31,7 +31,8 @@ export type IssueCode =
   | "invalid_format"
   | "duplicate_key"
   | "conversion_over_100"
-  | "cancelled_exceeds_total";
+  | "cancelled_exceeds_total"
+  | "exceeds_impressions";
 
 export type RowIssue = {
   column: string;
@@ -235,6 +236,12 @@ function parseCell(raw: string, col: ColumnSpec, opts: ValidateOptions): { value
           issue: issue(col.name, "too_long", `${col.label} melebihi ${col.maxLength} karakter.`),
         };
       }
+      if (col.pattern && !col.pattern.re.test(value)) {
+        return {
+          value: null,
+          issue: issue(col.name, "invalid_format", `${col.label} '${value}' tidak valid (${col.pattern.hint}).`),
+        };
+      }
       if (col.name === "sku_internal" && !SKU_RE.test(value)) {
         return {
           value: null,
@@ -250,6 +257,22 @@ function parseCell(raw: string, col: ColumnSpec, opts: ValidateOptions): { value
 function crossChecks(template: TemplateSpec, v: Record<string, CellValue>): RowIssue[] {
   const out: RowIssue[] = [];
   const num = (k: string) => (typeof v[k] === "number" ? (v[k] as number) : null);
+  if (template.key === "meta_ads_harian") {
+    const imp = num("impresi");
+    const pairs: [string, string][] = [
+      ["klik", "Klik tautan"],
+      ["jangkauan", "Jangkauan"],
+    ];
+    for (const [col, label] of pairs) {
+      const x = num(col);
+      if (x !== null && imp !== null && x > imp) {
+        out.push(
+          issue(col, "exceeds_impressions", `${label} (${x}) > impresi (${imp}). Periksa sumber data.`, "warning"),
+        );
+      }
+    }
+    return out;
+  }
   const visitorsCol =
     template.key === "kinerja_toko_harian"
       ? "pengunjung"

@@ -25,8 +25,13 @@ export type KpiSettings = {
   defaultRange: DefaultRange;
   /** Portfolio matrix thresholds (Phase 3). */
   portfolio: PortfolioThresholds;
+  /** HSL allocation: target stock = velocity (units/day over windowDays) × coverDays. */
+  allocation: AllocationSettings;
   updatedAt: string | null;
 };
+
+export type AllocationSettings = { coverDays: number; windowDays: number };
+export const DEFAULT_ALLOCATION_SETTINGS: AllocationSettings = { coverDays: 14, windowDays: 14 };
 
 /**
  * high share  = SKU GMV share ≥ shareFactor × (1 ÷ active SKUs)
@@ -41,6 +46,7 @@ export const DEFAULT_KPI_SETTINGS: KpiSettings = {
   targetAov: null,
   defaultRange: "mtd",
   portfolio: { ...DEFAULT_PORTFOLIO_THRESHOLDS },
+  allocation: { ...DEFAULT_ALLOCATION_SETTINGS },
   updatedAt: null,
 };
 
@@ -52,6 +58,8 @@ type SettingsRow = {
   default_range: string;
   portfolio_share_factor: string | number;
   portfolio_growth_threshold: string | number;
+  allocation_cover_days: number;
+  velocity_window_days: number;
   updated_at: Date;
 };
 
@@ -68,12 +76,14 @@ function mapRow(row: SettingsRow | null): KpiSettings {
       shareFactor: Number(row.portfolio_share_factor),
       growthThreshold: Number(row.portfolio_growth_threshold),
     },
+    allocation: { coverDays: Number(row.allocation_cover_days), windowDays: Number(row.velocity_window_days) },
     updatedAt: row.updated_at.toISOString(),
   };
 }
 
 const SELECT_SETTINGS = `SELECT on_track_threshold, watch_threshold, target_conversion_rate, target_aov,
-         default_range, portfolio_share_factor, portfolio_growth_threshold, updated_at
+         default_range, portfolio_share_factor, portfolio_growth_threshold,
+         allocation_cover_days, velocity_window_days, updated_at
     FROM organization_kpi_settings WHERE organization_id = ?`;
 
 export async function getKpiSettings(session: ActiveSession, db: Queryable = getPool()): Promise<KpiSettings> {
@@ -256,5 +266,42 @@ export async function updateOrganizationSettings(
         ipAddress,
       });
     }
+  });
+}
+
+// ---- HSL allocation settings (admin, "allocations:approve") ----------------------
+
+export const allocationSettingsSchema = z.object({
+  coverDays: z.coerce.number().int("Bilangan bulat.").min(1, "Minimal 1 hari.").max(90, "Maksimal 90 hari."),
+  windowDays: z.coerce.number().int("Bilangan bulat.").min(7, "Minimal 7 hari.").max(90, "Maksimal 90 hari."),
+});
+
+export async function updateAllocationSettings(
+  session: ActiveSession,
+  input: z.output<typeof allocationSettingsSchema>,
+  ipAddress: string | null = null,
+): Promise<void> {
+  if (!can(session.role, "allocations:approve")) throw new AuthorizationError("admin");
+  const org = session.organization.id;
+  await withTransaction(async (conn) => {
+    const before = mapRow(await queryOne<SettingsRow>(`${SELECT_SETTINGS} FOR UPDATE`, [org], conn)).allocation;
+    await execute(
+      `INSERT INTO organization_kpi_settings (organization_id, allocation_cover_days, velocity_window_days, updated_by)
+       VALUES (?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE allocation_cover_days = VALUES(allocation_cover_days),
+         velocity_window_days = VALUES(velocity_window_days), updated_by = VALUES(updated_by)`,
+      [org, input.coverDays, input.windowDays, session.user.id],
+      conn,
+    );
+    await writeAudit(conn, {
+      organizationId: org,
+      actorUserId: session.user.id,
+      action: "organization.allocation_settings_updated",
+      entityType: "organization",
+      entityId: org,
+      oldData: before,
+      newData: input,
+      ipAddress,
+    });
   });
 }

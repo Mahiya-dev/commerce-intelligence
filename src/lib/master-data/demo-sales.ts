@@ -3,9 +3,12 @@ import { join } from "node:path";
 import { queryOne } from "@/lib/db/pool";
 import type { ActiveSession } from "@/lib/auth/sessions";
 import { importTables, sha256 } from "@/lib/imports/pipeline";
-import { MIME_TYPES, readUploadedFile } from "@/lib/imports/sources";
+import { csvTables, MIME_TYPES, readUploadedFile } from "@/lib/imports/sources";
+import { assetSchema, linkAdAsset, saveAsset } from "@/lib/creative/manage";
 import { commitImportBatch } from "@/lib/imports/commit";
 import { DEMO_ORG_SLUG, DEMO_USERS } from "@/lib/master-data/demo-seed";
+import { seedDemoEvents } from "@/lib/master-data/demo-events";
+import { seedDemoAffiliates } from "@/lib/master-data/demo-affiliates";
 
 /**
  * Fills the DEMO organization with sales data by running the four DEMO CSV
@@ -24,7 +27,12 @@ export const DEMO_SALES_FILES = [
   "phase-3/csv/kinerja_produk_harian_HISTORI_DEMO.csv",
   "phase-2/csv/kinerja_produk_harian_DEMO.csv",
   "phase-3/csv/kinerja_touchpoint_DEMO.csv",
+  "phase-4/csv/meta_ads_harian_DEMO.csv",
+  "phase-5/csv/penjualan_hsl_DEMO.csv",
 ] as const;
+
+/** Creative asset library (metadata + example links), linked to the DEMO Meta ads. */
+export const DEMO_CREATIVE_ASSETS = "phase-4/csv/creative_assets_DEMO.csv";
 
 export type DemoSalesResult = { file: string; outcome: "committed" | "already_committed" }[];
 
@@ -66,6 +74,43 @@ async function demoOwnerSession(): Promise<ActiveSession> {
   };
 }
 
+/** Inserts DEMO creative assets (skipped when an asset with the same name exists) and links their ads. */
+async function seedDemoCreativeAssets(session: ActiveSession, samplesDir: string): Promise<number> {
+  const [t] = csvTables(DEMO_CREATIVE_ASSETS, readFileSync(join(samplesDir, DEMO_CREATIVE_ASSETS)));
+  const [header, ...rows] = t.table;
+  const col = (r: string[], name: string) => r[header.findIndex((h) => h.replace(/^\uFEFF/, "") === name)] ?? "";
+  let created = 0;
+  for (const r of rows.filter((x) => x.some(Boolean))) {
+    const name = col(r, "nama");
+    const existing = await queryOne<{ id: string }>(
+      "SELECT id FROM creative_assets WHERE organization_id = ? AND name = ?",
+      [session.organization.id, name],
+    );
+    let id = existing?.id;
+    if (!id) {
+      const res = await saveAsset(
+        session,
+        assetSchema.parse({
+          name,
+          format: col(r, "format"),
+          url: col(r, "url"),
+          thumbnailUrl: "",
+          sku: col(r, "sku"),
+          notes: col(r, "catatan"),
+        }),
+        { isDemo: true },
+      );
+      if (!res.ok) throw new Error(`Aset DEMO '${name}': ${res.message}`);
+      id = res.id;
+      created++;
+    }
+    for (const adId of col(r, "ad_ids").split(";").filter(Boolean)) {
+      await linkAdAsset(session, adId, id);
+    }
+  }
+  return created;
+}
+
 export async function seedDemoSales(samplesDir: string, now: Date = new Date()): Promise<DemoSalesResult> {
   const session = await demoOwnerSession();
   const result: DemoSalesResult = [];
@@ -98,5 +143,14 @@ export async function seedDemoSales(samplesDir: string, now: Date = new Date()):
     }
     result.push({ file, outcome: "committed" });
   }
+  const assets = await seedDemoCreativeAssets(session, samplesDir);
+  result.push({ file: DEMO_CREATIVE_ASSETS.split("/").pop()!, outcome: assets ? "committed" : "already_committed" });
+  const events = await seedDemoEvents(session);
+  result.push({ file: "event DEMO (Fase 5)", outcome: events ? "committed" : "already_committed" });
+  const allocations = await seedDemoAffiliates(session, samplesDir);
+  result.push({
+    file: "stok & alokasi afiliasi DEMO (Fase 5)",
+    outcome: allocations ? "committed" : "already_committed",
+  });
   return result;
 }

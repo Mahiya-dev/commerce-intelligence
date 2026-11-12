@@ -35,10 +35,18 @@ export type ColumnSpec = {
   maxLength?: number;
   /** Date column that must not be after the upload date. */
   notFuture?: boolean;
+  /** Text format rule (checked after trimming). */
+  pattern?: { re: RegExp; hint: string };
 };
 
 export type TemplateKey =
-  "kinerja_toko_harian" | "kinerja_produk_harian" | "target_bulanan" | "master_listing" | "kinerja_touchpoint";
+  | "kinerja_toko_harian"
+  | "kinerja_produk_harian"
+  | "target_bulanan"
+  | "master_listing"
+  | "kinerja_touchpoint"
+  | "meta_ads_harian"
+  | "penjualan_hsl";
 
 /** import_batches.report_type values. */
 export type DbReportType =
@@ -46,7 +54,9 @@ export type DbReportType =
   | "marketplace_product_performance"
   | "sales_target"
   | "channel_listing_master"
-  | "touchpoint_performance";
+  | "touchpoint_performance"
+  | "meta_ads_performance"
+  | "shopee_hsl_affiliate";
 
 export type TemplateSpec = {
   key: TemplateKey;
@@ -146,6 +156,58 @@ export const TEMPLATES: Record<TemplateKey, TemplateSpec> = {
       { name: "pesanan", label: "Pesanan", type: "integer", required: true },
       { name: "unit_terjual", label: "Unit terjual", type: "integer", required: true },
       { name: "biaya", label: "Biaya", type: "integer", required: false },
+    ],
+  },
+  meta_ads_harian: {
+    key: "meta_ads_harian",
+    title: "Performa Iklan Meta Harian",
+    dbReportType: "meta_ads_performance",
+    keyColumns: ["tanggal", "ad_id"],
+    periodColumn: "tanggal",
+    columns: [
+      { name: "tanggal", label: "Tanggal", type: "date", required: true, notFuture: true },
+      {
+        name: "ad_id",
+        label: "Ad ID",
+        type: "text",
+        required: true,
+        maxLength: 32,
+        pattern: { re: /^[0-9A-Za-z_-]{1,32}$/, hint: "Ad ID asli dari Meta (angka), simpan sebagai teks" },
+      },
+      { name: "nama_iklan", label: "Nama iklan", type: "text", required: true, maxLength: 255 },
+      { name: "nama_kampanye", label: "Nama kampanye", type: "text", required: false, maxLength: 255 },
+      { name: "nama_adset", label: "Nama ad set", type: "text", required: false, maxLength: 255 },
+      { name: "spend", label: "Spend", type: "integer", required: true },
+      { name: "impresi", label: "Impresi", type: "integer", required: true },
+      { name: "jangkauan", label: "Jangkauan", type: "integer", required: false },
+      { name: "klik", label: "Klik tautan", type: "integer", required: true },
+      { name: "pembelian", label: "Pembelian", type: "integer", required: true },
+      { name: "nilai_pembelian", label: "Nilai pembelian", type: "integer", required: true },
+    ],
+  },
+  penjualan_hsl: {
+    key: "penjualan_hsl",
+    title: "Penjualan Afiliasi Shopee HSL",
+    dbReportType: "shopee_hsl_affiliate",
+    keyColumns: ["tanggal", "username_afiliasi", "id_produk_channel", "id_sku_channel"],
+    periodColumn: "tanggal",
+    columns: [
+      { name: "tanggal", label: "Tanggal", type: "date", required: true, notFuture: true },
+      {
+        name: "username_afiliasi",
+        label: "Username afiliasi",
+        type: "text",
+        required: true,
+        maxLength: 64,
+        pattern: { re: /^[A-Za-z0-9._-]{2,64}$/, hint: "username Shopee: huruf, angka, titik, garis bawah" },
+      },
+      { name: "nama_afiliasi", label: "Nama afiliasi", type: "text", required: false, maxLength: 200 },
+      { name: "id_produk_channel", label: "ID produk Shopee", type: "text", required: true, maxLength: ID },
+      { name: "id_sku_channel", label: "ID SKU Shopee", type: "text", required: false, maxLength: ID },
+      { name: "nama_listing", label: "Nama listing", type: "text", required: true, maxLength: 255 },
+      { name: "unit_terjual", label: "Unit terjual", type: "integer", required: true },
+      { name: "gmv", label: "GMV", type: "integer", required: true },
+      { name: "komisi", label: "Komisi", type: "integer", required: false },
     ],
   },
 };

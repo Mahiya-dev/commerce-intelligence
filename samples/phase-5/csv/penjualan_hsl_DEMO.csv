@@ -1,0 +1,1035 @@
+﻿tanggal,username_afiliasi,nama_afiliasi,id_produk_channel,id_sku_channel,nama_listing,unit_terjual,gmv,komisi
+2026-08-01,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,312500,25000
+2026-08-01,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,310400,24800
+2026-08-01,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,467400,46700
+2026-08-01,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,582500,58200
+2026-08-01,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,576800,57700
+2026-08-01,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89700,6300
+2026-08-01,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,311400,28000
+2026-08-02,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156600,12500
+2026-08-02,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93300,7500
+2026-08-02,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,319700,25600
+2026-08-02,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,610800,61100
+2026-08-02,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,297000,29700
+2026-08-02,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92400,8300
+2026-08-02,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,479200,47900
+2026-08-02,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,586400,58600
+2026-08-02,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90000,6300
+2026-08-02,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,482300,43400
+2026-08-02,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,301600,27100
+2026-08-03,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,307900,24600
+2026-08-03,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180100,14400
+2026-08-03,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158200,15800
+2026-08-03,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,308100,30800
+2026-08-03,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,161100,14500
+2026-08-03,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92600,9300
+2026-08-03,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160600,16100
+2026-08-03,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,605000,60500
+2026-08-03,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145400,10200
+2026-08-03,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158300,14200
+2026-08-03,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,3,431600,38800
+2026-08-03,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,318500,28700
+2026-08-04,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,314900,25200
+2026-08-04,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,314900,25200
+2026-08-04,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,88700,7100
+2026-08-04,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158000,15800
+2026-08-04,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,150300,15000
+2026-08-04,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159100,14300
+2026-08-04,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,88700,8900
+2026-08-04,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,788800,78900
+2026-08-04,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,184700,12900
+2026-08-04,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,292300,20500
+2026-08-04,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,311400,28000
+2026-08-04,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,293400,26400
+2026-08-05,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,279400,22400
+2026-08-05,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,310600,31100
+2026-08-05,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,302900,30300
+2026-08-05,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92300,8300
+2026-08-05,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,469600,42300
+2026-08-05,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156700,15700
+2026-08-05,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,302600,30300
+2026-08-05,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90000,6300
+2026-08-05,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,150600,10500
+2026-08-05,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,607500,54700
+2026-08-05,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151200,13600
+2026-08-05,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,3,953900,85900
+2026-08-06,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91100,7300
+2026-08-06,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,317800,28600
+2026-08-06,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90300,9000
+2026-08-06,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,317300,31700
+2026-08-06,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,287200,28700
+2026-08-06,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,614100,55300
+2026-08-06,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144000,13000
+2026-08-07,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,317900,25400
+2026-08-07,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,316600,25300
+2026-08-07,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,179800,14400
+2026-08-07,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,3,942500,94200
+2026-08-07,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,304200,27400
+2026-08-07,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92200,9200
+2026-08-07,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,476700,47700
+2026-08-07,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,866500,86600
+2026-08-07,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92400,6500
+2026-08-07,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154700,13900
+2026-08-07,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,3,429500,38700
+2026-08-08,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,636200,50900
+2026-08-08,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153600,12300
+2026-08-08,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152400,15200
+2026-08-08,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,313100,31300
+2026-08-08,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,286100,28600
+2026-08-08,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156900,14100
+2026-08-08,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,270400,27000
+2026-08-08,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,787200,78700
+2026-08-08,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,302900,30300
+2026-08-08,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,271500,19000
+2026-08-08,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147000,10300
+2026-08-08,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,8,1220900,109900
+2026-08-08,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147100,13200
+2026-08-08,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,318500,28700
+2026-08-09,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,322100,25800
+2026-08-09,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,266500,21300
+2026-08-09,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,475700,38100
+2026-08-09,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,474700,47500
+2026-08-09,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155800,14000
+2026-08-09,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90600,9100
+2026-08-09,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,797100,79700
+2026-08-09,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,183900,12900
+2026-08-09,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160000,14400
+2026-08-09,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,299000,26900
+2026-08-10,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159400,12800
+2026-08-10,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,467800,46800
+2026-08-10,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,316800,31700
+2026-08-10,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,296400,29600
+2026-08-10,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,184800,18500
+2026-08-10,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,461700,46200
+2026-08-10,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,590300,59000
+2026-08-10,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89400,6300
+2026-08-10,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144800,10100
+2026-08-10,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,316700,28500
+2026-08-10,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147400,13300
+2026-08-11,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,183500,14700
+2026-08-11,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160500,12800
+2026-08-11,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154100,15400
+2026-08-11,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,312300,31200
+2026-08-11,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,88300,7900
+2026-08-11,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152700,13700
+2026-08-11,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93400,9300
+2026-08-11,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,480100,48000
+2026-08-11,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,274100,19200
+2026-08-11,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151200,10600
+2026-08-11,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155300,14000
+2026-08-12,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93200,7500
+2026-08-12,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159000,12700
+2026-08-12,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,146000,14600
+2026-08-12,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,305100,30500
+2026-08-12,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,288100,28800
+2026-08-12,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,151800,13700
+2026-08-12,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,601000,60100
+2026-08-12,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91100,6400
+2026-08-12,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149300,10500
+2026-08-12,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,459200,41300
+2026-08-12,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,301900,27200
+2026-08-13,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155900,12500
+2026-08-13,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90200,7200
+2026-08-13,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,303700,30400
+2026-08-13,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144700,14500
+2026-08-13,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,317500,31800
+2026-08-13,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,303800,30400
+2026-08-13,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152500,13700
+2026-08-13,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,610100,61000
+2026-08-13,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,183000,12800
+2026-08-13,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148100,10400
+2026-08-13,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,458900,41300
+2026-08-13,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,633800,57000
+2026-08-14,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,321000,25700
+2026-08-14,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,302700,24200
+2026-08-14,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,4,356300,28500
+2026-08-14,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,319500,25600
+2026-08-14,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,310100,31000
+2026-08-14,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148800,14900
+2026-08-14,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,317000,31700
+2026-08-14,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93200,8400
+2026-08-14,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92500,9200
+2026-08-14,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154600,15500
+2026-08-14,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,298800,29900
+2026-08-14,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93200,6500
+2026-08-14,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159500,14400
+2026-08-14,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,3,451500,40600
+2026-08-15,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,317300,25400
+2026-08-15,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,186900,15000
+2026-08-15,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152300,12200
+2026-08-15,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160400,16000
+2026-08-15,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147700,14800
+2026-08-15,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,305800,30600
+2026-08-15,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,182700,16400
+2026-08-15,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154100,15400
+2026-08-15,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,572900,57300
+2026-08-15,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157400,14200
+2026-08-15,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,143600,12900
+2026-08-15,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,609000,54800
+2026-08-16,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,4,365200,29200
+2026-08-16,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156400,12500
+2026-08-16,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160100,16000
+2026-08-16,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,318700,31900
+2026-08-16,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,4,356800,25000
+2026-08-16,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154400,13900
+2026-08-16,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149300,13400
+2026-08-17,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156200,12500
+2026-08-17,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,268900,21500
+2026-08-17,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,317000,25400
+2026-08-17,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159000,15900
+2026-08-17,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149700,15000
+2026-08-17,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,641800,64200
+2026-08-17,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156300,14100
+2026-08-17,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,291000,29100
+2026-08-17,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159600,14400
+2026-08-18,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,307500,24600
+2026-08-18,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,88500,7100
+2026-08-18,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159100,14300
+2026-08-18,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181800,18200
+2026-08-18,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,459600,46000
+2026-08-18,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,88500,6200
+2026-08-18,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,761700,68600
+2026-08-19,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160900,12900
+2026-08-19,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,313400,25100
+2026-08-19,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,177800,14200
+2026-08-19,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153300,12300
+2026-08-19,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153200,15300
+2026-08-19,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,299200,29900
+2026-08-19,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90100,8100
+2026-08-19,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,303600,27300
+2026-08-19,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181800,18200
+2026-08-19,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,614400,61400
+2026-08-19,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,895600,89600
+2026-08-19,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,273800,19200
+2026-08-19,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,313100,28200
+2026-08-19,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149800,13500
+2026-08-19,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,3,946900,85200
+2026-08-20,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,307400,24600
+2026-08-20,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,265400,21200
+2026-08-20,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,320100,25600
+2026-08-20,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,469500,47000
+2026-08-20,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,3,920200,92000
+2026-08-20,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,317000,28500
+2026-08-20,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,611500,61200
+2026-08-20,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,297400,29700
+2026-08-20,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,300100,21000
+2026-08-20,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,308900,27800
+2026-08-21,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,459200,36700
+2026-08-21,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,308100,24600
+2026-08-21,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,88900,7100
+2026-08-21,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160000,12800
+2026-08-21,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152800,15300
+2026-08-21,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151900,15200
+2026-08-21,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152600,13700
+2026-08-21,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92100,9200
+2026-08-21,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,312100,31200
+2026-08-21,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145300,10200
+2026-08-21,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,319600,28800
+2026-08-22,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156100,12500
+2026-08-22,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89300,7100
+2026-08-22,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,316500,25300
+2026-08-22,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153500,15400
+2026-08-22,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,306800,30700
+2026-08-22,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,185000,16600
+2026-08-22,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,176800,17700
+2026-08-22,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155400,15500
+2026-08-22,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,297100,29700
+2026-08-22,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152800,13800
+2026-08-22,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,299500,27000
+2026-08-23,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,305700,24500
+2026-08-23,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,177400,14200
+2026-08-23,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153900,12300
+2026-08-23,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,319600,32000
+2026-08-23,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,288600,28900
+2026-08-23,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,306700,30700
+2026-08-23,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,298800,29900
+2026-08-23,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158900,15900
+2026-08-23,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,187600,13100
+2026-08-23,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,321400,28900
+2026-08-23,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148600,13400
+2026-08-24,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,176800,14100
+2026-08-24,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153900,15400
+2026-08-24,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,595400,59500
+2026-08-24,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180900,18100
+2026-08-24,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,466600,46700
+2026-08-24,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,274300,19200
+2026-08-24,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152800,13800
+2026-08-25,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160400,12800
+2026-08-25,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156100,12500
+2026-08-25,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,310000,31000
+2026-08-25,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145800,14600
+2026-08-25,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,151700,13700
+2026-08-25,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,272500,27200
+2026-08-25,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154000,15400
+2026-08-25,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89500,6300
+2026-08-25,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,146400,10200
+2026-08-25,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,161100,14500
+2026-08-25,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149000,13400
+2026-08-25,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,304700,27400
+2026-08-26,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157900,12600
+2026-08-26,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90700,7300
+2026-08-26,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155600,12400
+2026-08-26,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,317200,31700
+2026-08-26,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,314200,31400
+2026-08-26,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,290600,29100
+2026-08-26,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159500,14400
+2026-08-26,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,804700,80500
+2026-08-26,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,602700,60300
+2026-08-26,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90800,6400
+2026-08-26,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,150600,10500
+2026-08-26,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159300,14300
+2026-08-26,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,290100,26100
+2026-08-27,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153800,12300
+2026-08-27,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,303700,24300
+2026-08-27,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157700,15800
+2026-08-27,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147000,14700
+2026-08-27,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93400,8400
+2026-08-27,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,306400,27600
+2026-08-27,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91500,9200
+2026-08-27,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,634200,63400
+2026-08-27,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,320900,28900
+2026-08-27,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,314000,28300
+2026-08-28,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181200,14500
+2026-08-28,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157000,12600
+2026-08-28,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,319500,32000
+2026-08-28,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,309100,30900
+2026-08-28,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,874700,87500
+2026-08-28,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,313600,28200
+2026-08-28,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93200,9300
+2026-08-28,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,6,916400,91600
+2026-08-28,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,294600,29500
+2026-08-28,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,479300,43100
+2026-08-29,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159100,12700
+2026-08-29,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181300,14500
+2026-08-29,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152100,12200
+2026-08-29,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,296500,29600
+2026-08-29,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,310600,31100
+2026-08-29,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89800,8100
+2026-08-29,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,620900,55900
+2026-08-29,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,4,354300,35400
+2026-08-29,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,463600,46400
+2026-08-29,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93400,6500
+2026-08-29,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,457900,41200
+2026-08-29,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,304000,27400
+2026-08-30,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,182900,14600
+2026-08-30,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,468500,37500
+2026-08-30,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153900,15400
+2026-08-30,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,315700,31600
+2026-08-30,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,457100,41100
+2026-08-30,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90900,9100
+2026-08-30,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,296100,29600
+2026-08-30,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93700,6600
+2026-08-30,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,146600,10300
+2026-08-30,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,303700,27300
+2026-08-31,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156000,12500
+2026-08-31,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,310900,24900
+2026-08-31,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89400,7200
+2026-08-31,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,318600,25500
+2026-08-31,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160300,16000
+2026-08-31,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,320400,32000
+2026-08-31,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,902500,90200
+2026-08-31,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92000,8300
+2026-08-31,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,309800,27900
+2026-08-31,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,183600,18400
+2026-08-31,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,464000,46400
+2026-08-31,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,281400,19700
+2026-08-31,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,314200,28300
+2026-08-31,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145300,13100
+2026-09-01,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,4,369800,29600
+2026-09-01,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,313700,31400
+2026-09-01,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,287200,28700
+2026-09-01,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,187200,16800
+2026-09-01,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152400,13700
+2026-09-01,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160900,16100
+2026-09-01,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,290100,29000
+2026-09-01,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,316700,28500
+2026-09-02,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,303800,24300
+2026-09-02,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,271700,21700
+2026-09-02,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,457000,36600
+2026-09-02,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155300,15500
+2026-09-02,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,314200,31400
+2026-09-02,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,294100,29400
+2026-09-02,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89400,8000
+2026-09-02,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90300,9000
+2026-09-02,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158700,15900
+2026-09-02,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,297700,29800
+2026-09-02,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91600,6400
+2026-09-02,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,483400,43500
+2026-09-02,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144400,13000
+2026-09-03,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,309900,24800
+2026-09-03,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,184200,14700
+2026-09-03,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155800,15600
+2026-09-03,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147500,14800
+2026-09-03,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154200,13900
+2026-09-03,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,479700,48000
+2026-09-03,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,290700,29100
+2026-09-03,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180800,12700
+2026-09-03,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,315500,28400
+2026-09-03,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,307300,27700
+2026-09-04,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,311100,24900
+2026-09-04,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,315900,25300
+2026-09-04,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180200,14400
+2026-09-04,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153100,12200
+2026-09-04,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,306500,30600
+2026-09-04,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149200,14900
+2026-09-04,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180000,18000
+2026-09-04,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,455500,45600
+2026-09-04,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,911300,91100
+2026-09-04,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,462500,41600
+2026-09-04,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,3,438900,39500
+2026-09-05,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156500,12500
+2026-09-05,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89600,7200
+2026-09-05,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,303900,24300
+2026-09-05,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153500,15400
+2026-09-05,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,146600,14700
+2026-09-05,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,319600,32000
+2026-09-05,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,578500,57800
+2026-09-05,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89100,8900
+2026-09-05,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,313300,31300
+2026-09-05,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,179300,12600
+2026-09-05,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158600,14300
+2026-09-05,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,288000,25900
+2026-09-06,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,461000,36900
+2026-09-06,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,318200,25500
+2026-09-06,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,176900,14200
+2026-09-06,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,463900,46400
+2026-09-06,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158800,14300
+2026-09-06,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,274100,27400
+2026-09-06,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,305800,30600
+2026-09-06,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,297800,29800
+2026-09-06,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148000,10400
+2026-09-06,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,306400,27600
+2026-09-06,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151700,13700
+2026-09-07,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,151800,12100
+2026-09-07,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,320100,25600
+2026-09-07,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,186300,14900
+2026-09-07,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,306100,24500
+2026-09-07,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144400,14400
+2026-09-07,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,605300,60500
+2026-09-07,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,302000,30200
+2026-09-07,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,319600,28800
+2026-09-07,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91700,9200
+2026-09-07,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159200,15900
+2026-09-07,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89600,6300
+2026-09-07,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147300,10300
+2026-09-07,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,319900,28800
+2026-09-07,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,4,598200,53800
+2026-09-07,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,612700,55100
+2026-09-08,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155300,12400
+2026-09-08,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,271600,21700
+2026-09-08,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159500,12800
+2026-09-08,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,287500,28800
+2026-09-08,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,308400,30800
+2026-09-08,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92400,8300
+2026-09-08,kopi.pagi,Kopi Pagi ID,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,308100,27700
+2026-09-08,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,275000,27500
+2026-09-08,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,789300,78900
+2026-09-08,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,146300,10200
+2026-09-08,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,315300,28400
+2026-09-08,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,3,442300,39800
+2026-09-08,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,320600,28900
+2026-09-09,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156900,12600
+2026-09-09,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,309600,24800
+2026-09-09,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91600,7300
+2026-09-09,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,473400,37900
+2026-09-09,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153600,15400
+2026-09-09,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,300200,30000
+2026-09-09,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91300,9100
+2026-09-09,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,314000,31400
+2026-09-09,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,291400,29100
+2026-09-09,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92900,6500
+2026-09-09,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145400,10200
+2026-09-09,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158600,14300
+2026-09-10,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,304600,24400
+2026-09-10,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,632500,50600
+2026-09-10,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181300,14500
+2026-09-10,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,478800,38300
+2026-09-10,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,293500,29400
+2026-09-10,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,320800,32100
+2026-09-10,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,579000,57900
+2026-09-10,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89300,8900
+2026-09-10,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,472500,47200
+2026-09-10,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,572400,57200
+2026-09-10,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180800,12700
+2026-09-10,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156800,14100
+2026-09-10,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,3,451500,40600
+2026-09-11,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156300,12500
+2026-09-11,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,270000,21600
+2026-09-11,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157500,12600
+2026-09-11,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,469900,47000
+2026-09-11,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,305800,30600
+2026-09-11,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90600,9100
+2026-09-11,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,784000,78400
+2026-09-11,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,293900,29400
+2026-09-11,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148900,10400
+2026-09-11,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,313900,28300
+2026-09-11,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145000,13000
+2026-09-12,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158000,12600
+2026-09-12,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,183700,14700
+2026-09-12,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,316300,25300
+2026-09-12,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,316400,31600
+2026-09-12,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,635500,63600
+2026-09-12,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,182400,18200
+2026-09-12,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,315700,31600
+2026-09-12,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,288300,28800
+2026-09-12,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93200,6500
+2026-09-12,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156200,14100
+2026-09-12,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,302400,27200
+2026-09-13,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154600,12400
+2026-09-13,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93300,7500
+2026-09-13,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,482400,38600
+2026-09-13,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155900,15600
+2026-09-13,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,594100,59400
+2026-09-13,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,184000,18400
+2026-09-13,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,617200,61700
+2026-09-13,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,298000,29800
+2026-09-13,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93000,6500
+2026-09-13,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154000,13900
+2026-09-13,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,303800,27300
+2026-09-14,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152300,12200
+2026-09-14,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90200,9000
+2026-09-14,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,624800,62500
+2026-09-14,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,301300,30100
+2026-09-14,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156100,14000
+2026-09-14,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,288700,26000
+2026-09-15,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,320500,25600
+2026-09-15,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,618700,49500
+2026-09-15,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,304000,30400
+2026-09-15,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,299500,30000
+2026-09-15,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,274500,27400
+2026-09-15,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,304300,30400
+2026-09-15,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,295000,29500
+2026-09-15,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90200,6300
+2026-09-15,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,4,591800,41400
+2026-09-15,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,319000,28700
+2026-09-16,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158100,12600
+2026-09-16,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,303900,24300
+2026-09-16,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181000,14500
+2026-09-16,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153600,12300
+2026-09-16,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,306000,30600
+2026-09-16,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,592600,59300
+2026-09-16,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,312400,31200
+2026-09-16,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),4,1180600,118100
+2026-09-16,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,641700,57800
+2026-09-17,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155500,12400
+2026-09-17,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,3,433800,43400
+2026-09-17,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,311900,31200
+2026-09-17,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,296300,29600
+2026-09-17,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180900,18100
+2026-09-17,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,10,1540700,154100
+2026-09-17,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,884000,88400
+2026-09-17,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91300,6400
+2026-09-17,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,775300,69800
+2026-09-17,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148300,13300
+2026-09-17,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,621100,55900
+2026-09-18,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,305400,24400
+2026-09-18,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180900,14500
+2026-09-18,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,599000,59900
+2026-09-18,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,186400,18600
+2026-09-18,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,642600,64300
+2026-09-18,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,598300,59800
+2026-09-18,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148800,13400
+2026-09-18,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,309100,27800
+2026-09-19,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152100,12200
+2026-09-19,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,4,353700,28300
+2026-09-19,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,469700,37600
+2026-09-19,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,310000,31000
+2026-09-19,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,584300,58400
+2026-09-19,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180400,18000
+2026-09-19,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,459100,45900
+2026-09-19,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91100,6400
+2026-09-19,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144600,13000
+2026-09-20,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92600,7400
+2026-09-20,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158400,12700
+2026-09-20,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89500,9000
+2026-09-20,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,482300,48200
+2026-09-20,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,593100,59300
+2026-09-20,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,179700,12600
+2026-09-20,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,634400,57100
+2026-09-20,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,320200,28800
+2026-09-21,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,316400,25300
+2026-09-21,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,182800,14600
+2026-09-21,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157800,15800
+2026-09-21,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,143600,14400
+2026-09-21,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,642300,64200
+2026-09-21,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93700,9400
+2026-09-21,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,615700,61600
+2026-09-21,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,575000,57500
+2026-09-21,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91700,6400
+2026-09-21,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,299600,27000
+2026-09-22,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,315100,25200
+2026-09-22,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,319100,25500
+2026-09-22,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159100,12700
+2026-09-22,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159200,15900
+2026-09-22,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,176700,17700
+2026-09-22,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,303400,30300
+2026-09-22,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,303400,30300
+2026-09-22,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,185700,13000
+2026-09-22,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,466300,42000
+2026-09-22,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149500,13500
+2026-09-22,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,621000,55900
+2026-09-23,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,459700,36800
+2026-09-23,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156400,15600
+2026-09-23,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,612600,61300
+2026-09-23,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,183300,18300
+2026-09-23,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,634800,63500
+2026-09-23,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92000,6400
+2026-09-23,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,310200,27900
+2026-09-23,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151000,13600
+2026-09-24,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,304600,24400
+2026-09-24,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181400,14500
+2026-09-24,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,298700,29900
+2026-09-24,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93700,9400
+2026-09-24,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,481600,48200
+2026-09-24,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93800,6600
+2026-09-24,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148000,10400
+2026-09-24,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160200,14400
+2026-09-24,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,294900,26500
+2026-09-25,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,313100,25000
+2026-09-25,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157200,15700
+2026-09-25,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144100,14400
+2026-09-25,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91600,9200
+2026-09-25,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,6,910300,91000
+2026-09-25,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,300500,30000
+2026-09-25,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,184000,12900
+2026-09-25,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155900,14000
+2026-09-25,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151500,13600
+2026-09-26,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157800,12600
+2026-09-26,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180300,14400
+2026-09-26,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,315100,25200
+2026-09-26,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,293300,29300
+2026-09-26,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92800,9300
+2026-09-26,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,617900,61800
+2026-09-26,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,286200,28600
+2026-09-26,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181200,12700
+2026-09-26,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,628700,56600
+2026-09-26,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,5,719200,64700
+2026-09-27,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,473600,37900
+2026-09-27,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,88800,7100
+2026-09-27,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,474700,38000
+2026-09-27,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,608900,60900
+2026-09-27,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,185600,18600
+2026-09-27,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,616500,61600
+2026-09-27,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93300,6500
+2026-09-27,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,301900,21100
+2026-09-27,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,307000,27600
+2026-09-27,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151400,13600
+2026-09-28,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158000,12600
+2026-09-28,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,186000,14900
+2026-09-28,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,294000,29400
+2026-09-28,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,474000,47400
+2026-09-28,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,296600,29700
+2026-09-28,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,3,450500,31500
+2026-09-28,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144700,13000
+2026-09-29,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152800,12200
+2026-09-29,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92400,7400
+2026-09-29,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,317400,31700
+2026-09-29,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,315700,31600
+2026-09-29,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92700,9300
+2026-09-29,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,6,934800,93500
+2026-09-29,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,295800,29600
+2026-09-29,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90000,6300
+2026-09-29,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,150400,10500
+2026-09-29,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158600,14300
+2026-09-29,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,146300,13200
+2026-09-29,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,606800,54600
+2026-09-30,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,307000,24600
+2026-09-30,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157800,15800
+2026-09-30,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,307700,30800
+2026-09-30,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,298500,29800
+2026-09-30,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89900,9000
+2026-09-30,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,472900,47300
+2026-09-30,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,288100,28800
+2026-09-30,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93200,6500
+2026-09-30,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156300,14100
+2026-09-30,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,3,438000,39400
+2026-10-01,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,319800,25600
+2026-10-01,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90000,7200
+2026-10-01,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90000,9000
+2026-10-01,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,635500,63600
+2026-10-01,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,302400,30200
+2026-10-01,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149600,10500
+2026-10-01,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,463000,41700
+2026-10-02,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,319800,25600
+2026-10-02,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,320700,25700
+2026-10-02,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,185400,18500
+2026-10-02,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,479800,48000
+2026-10-02,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,573900,57400
+2026-10-02,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,296800,20800
+2026-10-02,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,307100,27600
+2026-10-03,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160100,12800
+2026-10-03,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,308100,24600
+2026-10-03,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93400,7500
+2026-10-03,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,177700,17800
+2026-10-03,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,626100,62600
+2026-10-03,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,286600,28700
+2026-10-03,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93000,6500
+2026-10-03,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,608300,54700
+2026-10-04,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,179800,14400
+2026-10-04,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,793200,63500
+2026-10-04,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,575600,57600
+2026-10-04,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,275000,27500
+2026-10-04,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152400,15200
+2026-10-04,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,594600,59500
+2026-10-04,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181300,12700
+2026-10-04,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,476000,42800
+2026-10-04,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147000,13200
+2026-10-04,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,313600,28200
+2026-10-05,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,306700,24500
+2026-10-05,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89200,7100
+2026-10-05,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154300,15400
+2026-10-05,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,315800,31600
+2026-10-05,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,265300,26500
+2026-10-05,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,313300,31300
+2026-10-05,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,891900,89200
+2026-10-05,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90400,6300
+2026-10-05,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,802700,72200
+2026-10-05,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,292100,26300
+2026-10-06,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,625500,50000
+2026-10-06,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159700,16000
+2026-10-06,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,317100,31700
+2026-10-06,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,576600,57700
+2026-10-06,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89900,9000
+2026-10-06,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,478700,47900
+2026-10-06,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,289000,28900
+2026-10-06,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,315700,28400
+2026-10-07,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181400,14500
+2026-10-07,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,308600,24700
+2026-10-07,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147200,14700
+2026-10-07,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,308400,30800
+2026-10-07,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,583400,58300
+2026-10-07,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,268500,26800
+2026-10-07,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,620000,62000
+2026-10-07,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,297600,29800
+2026-10-07,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92200,6500
+2026-10-07,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,616800,55500
+2026-10-07,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,320500,28800
+2026-10-08,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155600,12400
+2026-10-08,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,319400,25600
+2026-10-08,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93400,7500
+2026-10-08,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154000,15400
+2026-10-08,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144200,14400
+2026-10-08,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,314300,31400
+2026-10-08,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,291000,29100
+2026-10-08,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92500,9200
+2026-10-08,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,611100,61100
+2026-10-08,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,899400,89900
+2026-10-08,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,273900,19200
+2026-10-08,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160200,14400
+2026-10-09,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160000,12800
+2026-10-09,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,88400,7100
+2026-10-09,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,308000,24600
+2026-10-09,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,309800,31000
+2026-10-09,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91900,9200
+2026-10-09,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,6,916600,91700
+2026-10-09,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,600900,60100
+2026-10-09,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93600,6600
+2026-10-09,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151300,10600
+2026-10-09,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155300,14000
+2026-10-09,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144900,13000
+2026-10-10,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,320800,25700
+2026-10-10,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,185800,14900
+2026-10-10,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,312500,31200
+2026-10-10,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,3,949900,95000
+2026-10-10,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,4,373700,37400
+2026-10-10,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,307300,30700
+2026-10-10,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,604800,60500
+2026-10-10,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,178700,12500
+2026-10-10,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145600,10200
+2026-10-10,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160400,14400
+2026-10-10,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,146700,13200
+2026-10-10,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,636500,57300
+2026-10-11,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,306300,24500
+2026-10-11,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,185900,14900
+2026-10-11,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89100,8900
+2026-10-11,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,462900,46300
+2026-10-11,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,289600,29000
+2026-10-11,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151900,10600
+2026-10-11,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160000,14400
+2026-10-11,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145800,13100
+2026-10-11,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,304700,27400
+2026-10-12,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89600,7200
+2026-10-12,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,461700,36900
+2026-10-12,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,270300,27000
+2026-10-12,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160800,16100
+2026-10-12,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,583800,58400
+2026-10-12,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,143300,12900
+2026-10-12,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,641400,57700
+2026-10-13,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,316000,25300
+2026-10-13,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156400,12500
+2026-10-13,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,320400,32000
+2026-10-13,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,293200,29300
+2026-10-13,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,185900,18600
+2026-10-13,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,7,1121300,112100
+2026-10-13,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154100,13900
+2026-10-13,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,3,922300,83000
+2026-10-14,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160800,16100
+2026-10-14,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,290100,29000
+2026-10-14,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93700,9400
+2026-10-14,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,10,1571200,157100
+2026-10-14,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,902900,90300
+2026-10-14,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145100,10200
+2026-10-14,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153500,13800
+2026-10-14,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,287200,25800
+2026-10-15,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,464200,37100
+2026-10-15,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,312000,25000
+2026-10-15,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89500,7200
+2026-10-15,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154700,15500
+2026-10-15,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,314600,31500
+2026-10-15,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,182600,18300
+2026-10-15,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,616300,61600
+2026-10-15,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,603800,60400
+2026-10-15,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93100,6500
+2026-10-15,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,150900,10600
+2026-10-15,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156200,14100
+2026-10-16,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158600,12700
+2026-10-16,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,273200,21900
+2026-10-16,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152100,12200
+2026-10-16,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145600,14600
+2026-10-16,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,286200,28600
+2026-10-16,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,186900,18700
+2026-10-16,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,308800,30900
+2026-10-16,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),5,1516200,151600
+2026-10-16,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,319000,28700
+2026-10-16,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151000,13600
+2026-10-17,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,308500,24700
+2026-10-17,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,266000,21300
+2026-10-17,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,315800,25300
+2026-10-17,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148400,14800
+2026-10-17,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,265600,26600
+2026-10-17,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,642100,64200
+2026-10-17,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,289800,29000
+2026-10-17,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90700,6300
+2026-10-17,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,314500,28300
+2026-10-17,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145500,13100
+2026-10-18,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,640600,51200
+2026-10-18,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89100,7100
+2026-10-18,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,457100,36600
+2026-10-18,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,480000,48000
+2026-10-18,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,290100,29000
+2026-10-18,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,177900,17800
+2026-10-18,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,6,937300,93700
+2026-10-18,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93500,6500
+2026-10-18,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,151900,13700
+2026-10-18,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147600,13300
+2026-10-19,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159400,12800
+2026-10-19,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91200,7300
+2026-10-19,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,320800,25700
+2026-10-19,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155200,15500
+2026-10-19,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149800,15000
+2026-10-19,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,297100,29700
+2026-10-19,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,628100,62800
+2026-10-19,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,290100,29000
+2026-10-19,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148800,10400
+2026-10-19,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,304400,27400
+2026-10-20,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,315500,25200
+2026-10-20,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,271700,21700
+2026-10-20,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154100,12300
+2026-10-20,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,317000,31700
+2026-10-20,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,615200,61500
+2026-10-20,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,592100,59200
+2026-10-20,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,177200,17700
+2026-10-20,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,7,1079700,108000
+2026-10-20,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,303700,30400
+2026-10-20,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89100,6200
+2026-10-20,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,317900,28600
+2026-10-21,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,151900,12200
+2026-10-21,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,306000,24500
+2026-10-21,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159700,16000
+2026-10-21,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,275800,27600
+2026-10-21,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,481700,48200
+2026-10-21,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,179100,12500
+2026-10-21,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155000,14000
+2026-10-21,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,143600,12900
+2026-10-22,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,318800,25500
+2026-10-22,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,310600,24800
+2026-10-22,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159500,16000
+2026-10-22,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147600,14800
+2026-10-22,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,304600,30500
+2026-10-22,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,273200,27300
+2026-10-22,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,803800,80400
+2026-10-22,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,298900,29900
+2026-10-22,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,88600,6200
+2026-10-22,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,643400,57900
+2026-10-22,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,309200,27800
+2026-10-23,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,469300,37500
+2026-10-23,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,3,952900,76200
+2026-10-23,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,316000,25300
+2026-10-23,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,317500,31800
+2026-10-23,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,186400,18600
+2026-10-23,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,779600,78000
+2026-10-23,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),4,1202000,120200
+2026-10-23,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,314100,28300
+2026-10-23,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,303200,27300
+2026-10-23,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,635000,57200
+2026-10-24,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154300,12300
+2026-10-24,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,185400,14800
+2026-10-24,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,307200,24600
+2026-10-24,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153200,15300
+2026-10-24,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,295200,29500
+2026-10-24,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91100,9100
+2026-10-24,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,10,1589900,159000
+2026-10-24,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,302800,30300
+2026-10-24,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93200,6500
+2026-10-24,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,637300,57400
+2026-10-24,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,4,603200,54300
+2026-10-24,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,320400,28800
+2026-10-25,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160300,12800
+2026-10-25,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,315700,25300
+2026-10-25,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,766900,76700
+2026-10-25,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,585800,58600
+2026-10-25,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93200,6500
+2026-10-25,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154600,13900
+2026-10-26,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,315100,25200
+2026-10-26,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93800,7500
+2026-10-26,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,306200,24500
+2026-10-26,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,314200,31400
+2026-10-26,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,294800,29500
+2026-10-26,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,4,356400,35600
+2026-10-26,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,7,1111800,111200
+2026-10-26,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,288700,28900
+2026-10-26,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,460400,41400
+2026-10-26,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145600,13100
+2026-10-27,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,266000,21300
+2026-10-27,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,294400,29400
+2026-10-27,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93300,9300
+2026-10-27,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,11,1685500,168600
+2026-10-27,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),4,1212400,121200
+2026-10-27,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,281300,19700
+2026-10-27,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,301000,21100
+2026-10-27,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,478700,43100
+2026-10-27,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,150800,13600
+2026-10-27,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,302500,27200
+2026-10-28,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154600,12400
+2026-10-28,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,161000,12900
+2026-10-28,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,308700,30900
+2026-10-28,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,461600,46200
+2026-10-28,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,290400,29000
+2026-10-28,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,298500,26900
+2026-10-29,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,465400,37200
+2026-10-29,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,303700,24300
+2026-10-29,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,265500,21200
+2026-10-29,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,321100,25700
+2026-10-29,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148400,14800
+2026-10-29,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,303500,30400
+2026-10-29,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89200,8900
+2026-10-29,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,625000,62500
+2026-10-29,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,887700,88800
+2026-10-29,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89300,6300
+2026-10-29,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,303700,27300
+2026-10-29,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151900,13700
+2026-10-30,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158700,12700
+2026-10-30,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,182000,18200
+2026-10-30,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,10,1566100,156600
+2026-10-30,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,905200,90500
+2026-10-30,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,312000,28100
+2026-10-30,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,150300,13500
+2026-10-31,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,154900,12400
+2026-10-31,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92200,7400
+2026-10-31,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,477600,38200
+2026-10-31,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,305800,30600
+2026-10-31,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,296100,29600
+2026-10-31,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,177700,17800
+2026-10-31,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,6,966100,96600
+2026-10-31,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,600100,60000
+2026-10-31,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,181600,12700
+2026-10-31,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,301800,27200
+2026-10-31,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,306200,27600
+2026-11-01,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156900,12600
+2026-11-01,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,4,371300,29700
+2026-11-01,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,468600,37500
+2026-11-01,healthy.dina,Healthy Dina,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149000,14900
+2026-11-01,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,320900,32100
+2026-11-01,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,301100,30100
+2026-11-01,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,88600,8900
+2026-11-01,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,798000,79800
+2026-11-01,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,593400,59300
+2026-11-01,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,788200,70900
+2026-11-01,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151000,13600
+2026-11-01,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,319300,28700
+2026-11-02,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,153500,12300
+2026-11-02,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90700,7300
+2026-11-02,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157000,12600
+2026-11-02,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158600,15900
+2026-11-02,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,618800,61900
+2026-11-02,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,295900,29600
+2026-11-02,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,274500,27400
+2026-11-02,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,802300,80200
+2026-11-02,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,297400,29700
+2026-11-02,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93700,6600
+2026-11-02,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,290200,20300
+2026-11-02,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,781000,70300
+2026-11-02,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,147800,13300
+2026-11-03,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156200,12500
+2026-11-03,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92100,7400
+2026-11-03,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,160100,12800
+2026-11-03,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,179300,17900
+2026-11-03,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,8,1224700,122500
+2026-11-03,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),5,1472300,147200
+2026-11-03,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,151600,10600
+2026-11-03,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,469400,42200
+2026-11-04,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,152500,12200
+2026-11-04,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,304000,24300
+2026-11-04,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93800,7500
+2026-11-04,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,304000,30400
+2026-11-04,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,303500,30400
+2026-11-04,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,91300,9100
+2026-11-04,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,764400,76400
+2026-11-04,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,579700,58000
+2026-11-04,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,149400,10500
+2026-11-04,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159300,14300
+2026-11-04,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,148500,13400
+2026-11-05,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,316100,25300
+2026-11-05,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,303500,24300
+2026-11-05,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,265100,21200
+2026-11-05,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155600,12400
+2026-11-05,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,290300,29000
+2026-11-05,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,92800,9300
+2026-11-05,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,6,929700,93000
+2026-11-05,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,599800,60000
+2026-11-05,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,93200,6500
+2026-11-05,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,159100,14300
+2026-11-05,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,150400,13500
+2026-11-06,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,155000,12400
+2026-11-06,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,314600,25200
+2026-11-06,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,186800,14900
+2026-11-06,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,467400,37400
+2026-11-06,ibu.cerdas,Ibu Cerdas,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,3,944100,94400
+2026-11-06,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,89500,9000
+2026-11-06,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,5,774400,77400
+2026-11-06,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),2,581700,58200
+2026-11-06,resep.nenek,Resep Nenek,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,1,90000,6300
+2026-11-06,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,313700,28200
+2026-11-06,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,287400,25900
+2026-11-07,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,269400,21600
+2026-11-07,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,618700,49500
+2026-11-07,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,890000,89000
+2026-11-07,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,6,536500,53600
+2026-11-07,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,10,1518300,151800
+2026-11-07,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),3,866900,86700
+2026-11-07,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,316200,28500
+2026-11-08,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,4,640100,51200
+2026-11-08,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,305100,24400
+2026-11-08,healthy.dina,Healthy Dina,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,157300,15700
+2026-11-08,ibu.cerdas,Ibu Cerdas,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,302900,30300
+2026-11-08,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,3,269600,27000
+2026-11-08,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,308900,30900
+2026-11-08,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,300900,30100
+2026-11-08,resep.nenek,Resep Nenek,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,2,297800,20800
+2026-11-08,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,480500,43200
+2026-11-09,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,2,303700,24300
+2026-11-09,ayah.fit,Ayah Fit,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,1,316900,25400
+2026-11-09,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,180900,14500
+2026-11-09,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156300,12500
+2026-11-09,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,8,1272200,127200
+2026-11-09,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),1,287100,28700
+2026-11-09,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,158000,14200
+2026-11-09,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,144500,13000
+2026-11-09,sehat.bersama,Sehat Bersama,DEMO-SP-1003,,Paket Keluarga Sehat Madu Uray,2,611100,55000
+2026-11-10,ayah.fit,Ayah Fit,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,1,156500,12500
+2026-11-10,dapur.sehat,Dapur Sehat Bunda,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,186100,14900
+2026-11-10,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-A,Madu Hutan Asli Uray 250gr,2,182600,18300
+2026-11-10,madu.mama,Mama Madu,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,6,938900,93900
+2026-11-10,madu.mama,Mama Madu,DEMO-SP-1004,,Madu Hutan 500gr Isi 2 (Hemat),5,1509600,151000
+2026-11-10,sehat.bersama,Sehat Bersama,DEMO-SP-1001,DEMO-SP-1001-B,Madu Hutan Asli Uray 500gr,3,459700,41400
+2026-11-10,sehat.bersama,Sehat Bersama,DEMO-SP-1002,,Madu Kelengkeng Uray 500gr,1,145000,13000

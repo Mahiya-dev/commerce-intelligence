@@ -59,6 +59,8 @@ const PLAN_NOUN: Record<string, string> = {
   sales_target: "target bulanan",
   channel_listing_master: "listing",
   touchpoint_performance: "baris kinerja touchpoint harian",
+  meta_ads_performance: "baris performa iklan Meta harian",
+  shopee_hsl_affiliate: "baris penjualan afiliasi HSL",
 };
 
 function CommitPanel({ batchId, plan, warningRows }: { batchId: string; plan: CommitPlan; warningRows: number }) {

@@ -20,7 +20,16 @@ const PAD = { top: 16, right: 8, bottom: 28, left: 56 };
  * Single-series column chart (one hue, so no legend — the card title names it).
  * Null values are gaps ("no data"), never zero-height bars.
  */
-export function ColumnChart({ data, label }: { data: ColumnDatum[]; label: string }) {
+export function ColumnChart({
+  data,
+  label,
+  valueLabel = "GMV",
+}: {
+  data: ColumnDatum[];
+  label: string;
+  /** Name of the plotted measure in the tooltip (rupiah). */
+  valueLabel?: string;
+}) {
   const { containerRef, tip, show, hide } = useChartTooltip();
   const max = Math.max(0, ...data.map((d) => d.value ?? 0));
   const ticks = niceTicks(max);
@@ -53,7 +62,7 @@ export function ColumnChart({ data, label }: { data: ColumnDatum[]; label: strin
           const labelled = d === last || d === peak;
           const content = {
             title: d.partial ? `${d.label} (MTD)` : d.label,
-            rows: [{ label: "GMV", value: d.value === null ? "—" : rupiahCompact(d.value) }, ...(d.details ?? [])],
+            rows: [{ label: valueLabel, value: d.value === null ? "—" : rupiahCompact(d.value) }, ...(d.details ?? [])],
           };
           return (
             <g key={d.key}>

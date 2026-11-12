@@ -6,6 +6,7 @@ import { can } from "@/lib/auth/roles";
 import type { ActiveSession } from "@/lib/auth/sessions";
 import { AuthorizationError } from "@/lib/data/master-data";
 import { logger } from "@/lib/logger";
+import { parseAdName } from "@/lib/creative/creative";
 import type { CellValue } from "@/lib/imports/validate";
 import type { BatchStatus } from "@/lib/imports/staging";
 
@@ -133,7 +134,20 @@ async function existingDateKeys(
 const iso = (d: Date | string) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d).slice(0, 10));
 
 /** Builds the commit plan without writing anything (also used for the preview). */
-async function plan(db: Queryable, org: string, reportType: string, rows: Row[]): Promise<CommitPlan> {
+/** HSL reports are always Shopee; listing helpers need the channel on each row. */
+const withShopee = (rows: Row[]): Row[] => rows.map((r) => ({ ...r, channel: "shopee" }));
+
+async function existingAffiliates(db: Queryable, org: string): Promise<Map<string, string>> {
+  const rows = await queryRows<{ id: string; username: string }>(
+    "SELECT id, username FROM affiliates WHERE organization_id = ?",
+    [org],
+    db,
+  );
+  return new Map(rows.map((r) => [r.username.toLowerCase(), r.id]));
+}
+
+async function plan(db: Queryable, org: string, reportType: string, inputRows: Row[]): Promise<CommitPlan> {
+  const rows = reportType === "shopee_hsl_affiliate" ? withShopee(inputRows) : inputRows;
   const channels = await channelIds(db);
   const base: CommitPlan = {
     reportType,
@@ -193,6 +207,39 @@ async function plan(db: Queryable, org: string, reportType: string, rows: Row[])
       return id !== undefined && existing.has(`${id}|${str(r.tanggal)}|${str(r.touchpoint)}`);
     }).length;
     return { ...base, overwrites, inserts: rows.length - overwrites, newListings: missing.size };
+  }
+
+  if (reportType === "shopee_hsl_affiliate") {
+    const listings = await existingListings(db, org);
+    const affiliates = await existingAffiliates(db, org);
+    const missing = new Set(rows.map((r) => rowListingKey(channels, r)).filter((k) => !listings.has(k)));
+    const dates = rows.map((r) => str(r.tanggal)).sort();
+    const found = await queryRows<{ a: string; l: string; d: Date | string }>(
+      `SELECT affiliate_id AS a, listing_id AS l, fact_date AS d FROM hsl_sales_facts
+        WHERE organization_id = ? AND fact_date BETWEEN ? AND ?`,
+      [org, dates[0], dates[dates.length - 1]],
+      db,
+    );
+    const existing = new Set(found.map((r) => `${r.a}|${r.l}|${iso(r.d)}`));
+    const overwrites = rows.filter((r) => {
+      const a = affiliates.get(str(r.username_afiliasi).toLowerCase());
+      const l = listings.get(rowListingKey(channels, r));
+      return a && l && existing.has(`${a}|${l}|${str(r.tanggal)}`);
+    }).length;
+    return { ...base, overwrites, inserts: rows.length - overwrites, newListings: missing.size };
+  }
+
+  if (reportType === "meta_ads_performance") {
+    const dates = rows.map((r) => str(r.tanggal)).sort();
+    const found = await queryRows<{ k1: string; d: Date | string }>(
+      `SELECT ad_id AS k1, fact_date AS d FROM meta_ad_daily_facts
+        WHERE organization_id = ? AND fact_date BETWEEN ? AND ?`,
+      [org, dates[0], dates[dates.length - 1]],
+      db,
+    );
+    const existing = new Set(found.map((r) => `${r.k1}|${iso(r.d)}`));
+    const overwrites = rows.filter((r) => existing.has(`${str(r.ad_id)}|${str(r.tanggal)}`)).length;
+    return { ...base, overwrites, inserts: rows.length - overwrites };
   }
 
   if (reportType === "sales_target") {
@@ -281,11 +328,54 @@ async function writeFacts(
   session: ActiveSession,
   batchId: string,
   reportType: string,
-  rows: Row[],
+  inputRows: Row[],
   isDemo: number,
 ) {
   const org = session.organization.id;
   const channels = await channelIds(conn);
+  const rows = reportType === "shopee_hsl_affiliate" ? withShopee(inputRows) : inputRows;
+
+  if (reportType === "shopee_hsl_affiliate") {
+    const listings = await ensureListings(conn, org, channels, rows, isDemo);
+    const affiliates = await existingAffiliates(conn, org);
+    const created: unknown[][] = [];
+    for (const r of rows) {
+      const username = str(r.username_afiliasi);
+      if (affiliates.has(username.toLowerCase())) continue;
+      const id = randomUUID();
+      affiliates.set(username.toLowerCase(), id);
+      created.push([id, org, username, str(r.nama_afiliasi) || username, isDemo]);
+    }
+    await insertChunks(
+      conn,
+      created,
+      "INSERT INTO affiliates (id, organization_id, username, name, is_demo)",
+      "(?, ?, ?, ?, ?)",
+      "",
+    );
+    await insertChunks(
+      conn,
+      rows.map((r) => [
+        org,
+        affiliates.get(str(r.username_afiliasi).toLowerCase()),
+        listings.get(rowListingKey(channels, r)),
+        str(r.tanggal),
+        channelOf(channels, r),
+        num(r.unit_terjual),
+        num(r.gmv),
+        num(r.komisi),
+        batchId,
+        isDemo,
+      ]),
+      `INSERT INTO hsl_sales_facts
+         (organization_id, affiliate_id, listing_id, fact_date, channel_id, units_sold, gmv, commission,
+          source_batch_id, is_demo)`,
+      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      `ON DUPLICATE KEY UPDATE units_sold = VALUES(units_sold), gmv = VALUES(gmv), commission = VALUES(commission),
+         source_batch_id = VALUES(source_batch_id), is_demo = VALUES(is_demo)`,
+    );
+    return;
+  }
 
   if (reportType === "marketplace_sales_daily") {
     await insertChunks(
@@ -312,6 +402,74 @@ async function writeFacts(
       `ON DUPLICATE KEY UPDATE gmv = VALUES(gmv), orders = VALUES(orders), units_sold = VALUES(units_sold),
          visitors = VALUES(visitors), buyers = VALUES(buyers), cancelled_orders = VALUES(cancelled_orders),
          cancelled_gmv = VALUES(cancelled_gmv), returned_gmv = VALUES(returned_gmv),
+         source_batch_id = VALUES(source_batch_id), is_demo = VALUES(is_demo)`,
+    );
+    return;
+  }
+
+  if (reportType === "meta_ads_performance") {
+    // Latest name per ad (an ad can be renamed during the period).
+    const latest = new Map<string, Row>();
+    for (const r of rows) {
+      const cur = latest.get(str(r.ad_id));
+      if (!cur || str(r.tanggal) >= str(cur.tanggal)) latest.set(str(r.ad_id), r);
+    }
+    const ads = [...latest.values()];
+    await insertChunks(
+      conn,
+      ads.map((r) => [
+        org,
+        str(r.ad_id),
+        str(r.nama_iklan),
+        str(r.nama_kampanye) || null,
+        str(r.nama_adset) || null,
+        isDemo,
+      ]),
+      "INSERT INTO meta_ads (organization_id, ad_id, ad_name, campaign_name, adset_name, is_demo)",
+      "(?, ?, ?, ?, ?, ?)",
+      `ON DUPLICATE KEY UPDATE ad_name = VALUES(ad_name), campaign_name = VALUES(campaign_name),
+         adset_name = VALUES(adset_name)`,
+    );
+    // Parsed classification; rows corrected by a user (source = 'manual') are kept.
+    await insertChunks(
+      conn,
+      ads.map((r) => {
+        const p = parseAdName(str(r.nama_iklan));
+        return [org, str(r.ad_id), p.product, p.hook, p.angle, p.format, p.batch, p.version, p.status];
+      }),
+      `INSERT INTO creative_classifications
+         (organization_id, ad_id, product, hook, angle, format, batch, version, parse_status)`,
+      "(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      `ON DUPLICATE KEY UPDATE
+         product = IF(source = 'manual', product, VALUES(product)),
+         hook = IF(source = 'manual', hook, VALUES(hook)),
+         angle = IF(source = 'manual', angle, VALUES(angle)),
+         format = IF(source = 'manual', format, VALUES(format)),
+         batch = IF(source = 'manual', batch, VALUES(batch)),
+         version = IF(source = 'manual', version, VALUES(version)),
+         parse_status = IF(source = 'manual', parse_status, VALUES(parse_status))`,
+    );
+    await insertChunks(
+      conn,
+      rows.map((r) => [
+        org,
+        str(r.ad_id),
+        str(r.tanggal),
+        num(r.spend),
+        num(r.impresi),
+        num(r.jangkauan),
+        num(r.klik),
+        num(r.pembelian),
+        num(r.nilai_pembelian),
+        batchId,
+        isDemo,
+      ]),
+      `INSERT INTO meta_ad_daily_facts
+         (organization_id, ad_id, fact_date, spend, impressions, reach, link_clicks, purchases, purchase_value,
+          source_batch_id, is_demo)`,
+      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      `ON DUPLICATE KEY UPDATE spend = VALUES(spend), impressions = VALUES(impressions), reach = VALUES(reach),
+         link_clicks = VALUES(link_clicks), purchases = VALUES(purchases), purchase_value = VALUES(purchase_value),
          source_batch_id = VALUES(source_batch_id), is_demo = VALUES(is_demo)`,
     );
     return;
