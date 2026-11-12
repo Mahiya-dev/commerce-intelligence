@@ -173,6 +173,24 @@ describe("xlsx reader", () => {
     expect(fromXl.result.rows.map((r) => r.normalized)).toEqual(fromCsv.result.rows.map((r) => r.normalized));
   });
 
+  it("rejects crafted row numbers before allocating rows", () => {
+    // 1 KB file claiming row 300,000,000: used to pad 300M arrays and crash the process (OOM).
+    const crafted = sheetXlsx(
+      '<row r="1"><c r="A1"><v>1</v></c></row><row r="300000000"><c r="A300000000"><v>1</v></c></row>',
+    );
+    expect(() => readXlsx(crafted)).toThrow(/nomor baris/);
+    expect(() => readUploadedFile("a.xlsx", crafted)).toThrow(ImportInputError);
+  });
+
+  it("ignores formatted-but-empty rows and caps rows with data", () => {
+    const trailing = sheetXlsx('<row r="1"><c r="A1"><v>1</v></c></row><row r="1048576" ht="15"/>');
+    expect(readXlsx(trailing).sheets[0].rows).toEqual([["1"]]);
+    const far = sheetXlsx('<row r="1"><c r="A1"><v>1</v></c></row><row r="60000"><c r="A60000"><v>2</v></c></row>');
+    expect(readXlsx(far).sheets[0].rows).toHaveLength(60_000);
+    expect(() => readXlsx(far, { maxRows: 51_000 })).toThrow(/melewati baris/);
+    expect(() => xlsxTables(far)).toThrow(ImportInputError);
+  });
+
   it("rejects the empty template workbook (example rows must be deleted, otherwise fine)", () => {
     // The template ships with one grey example row per sheet; it must parse without crashing.
     const tables = xlsxTables(read("Template_Standar_Impor.xlsx"));
@@ -263,3 +281,44 @@ describe("todayInTimeZone", () => {
     expect(todayInTimeZone("UTC", now)).toBe("2026-11-10");
   });
 });
+
+/** Minimal single-sheet .xlsx (stored, uncompressed ZIP) around the given <sheetData> rows. */
+function sheetXlsx(rowsXml: string): Buffer {
+  const files: [string, string][] = [
+    ["xl/workbook.xml", '<workbook><sheets><sheet name="data" r:id="rId1"/></sheets></workbook>'],
+    [
+      "xl/_rels/workbook.xml.rels",
+      '<Relationships><Relationship Id="rId1" Target="worksheets/sheet1.xml"/></Relationships>',
+    ],
+    ["xl/worksheets/sheet1.xml", `<worksheet><sheetData>${rowsXml}</sheetData></worksheet>`],
+  ];
+  const local: Buffer[] = [];
+  const central: Buffer[] = [];
+  let offset = 0;
+  for (const [name, text] of files) {
+    const nameBuf = Buffer.from(name);
+    const data = Buffer.from(text);
+    const lh = Buffer.alloc(30);
+    lh.writeUInt32LE(0x04034b50, 0);
+    lh.writeUInt32LE(data.length, 18);
+    lh.writeUInt32LE(data.length, 22);
+    lh.writeUInt16LE(nameBuf.length, 26);
+    const ch = Buffer.alloc(46);
+    ch.writeUInt32LE(0x02014b50, 0);
+    ch.writeUInt32LE(data.length, 20);
+    ch.writeUInt32LE(data.length, 24);
+    ch.writeUInt16LE(nameBuf.length, 28);
+    ch.writeUInt32LE(offset, 42);
+    local.push(lh, nameBuf, data);
+    central.push(ch, nameBuf);
+    offset += 30 + nameBuf.length + data.length;
+  }
+  const cd = Buffer.concat(central);
+  const eocd = Buffer.alloc(22);
+  eocd.writeUInt32LE(0x06054b50, 0);
+  eocd.writeUInt16LE(files.length, 8);
+  eocd.writeUInt16LE(files.length, 10);
+  eocd.writeUInt32LE(cd.length, 12);
+  eocd.writeUInt32LE(offset, 16);
+  return Buffer.concat([...local, cd, eocd]);
+}

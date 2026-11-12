@@ -23,7 +23,11 @@ export type XlsxSheet = {
 export type XlsxWorkbook = { sheets: XlsxSheet[]; date1904: boolean };
 
 const MAX_ENTRY_BYTES = 64 * 1024 * 1024;
+/** Cap on all inflated entries together, so many large sheets cannot exhaust memory. */
+const MAX_TOTAL_BYTES = 128 * 1024 * 1024;
 const MAX_COLUMNS = 200;
+/** Excel's own row limit; a row number above it can only come from a crafted file. */
+export const EXCEL_MAX_ROWS = 1_048_576;
 
 type ZipEntry = { name: string; method: number; compressedSize: number; localOffset: number };
 
@@ -57,17 +61,20 @@ function readZipEntries(buf: Buffer): Map<string, ZipEntry> {
   return entries;
 }
 
-function readEntry(buf: Buffer, entry: ZipEntry): string {
+function readEntry(buf: Buffer, entry: ZipEntry, maxBytes: number): string {
   const o = entry.localOffset;
   if (o + 30 > buf.length || buf.readUInt32LE(o) !== 0x04034b50) {
     throw new XlsxReadError("File .xlsx rusak (local header tidak valid).");
   }
   const start = o + 30 + buf.readUInt16LE(o + 26) + buf.readUInt16LE(o + 28);
   const data = buf.subarray(start, start + entry.compressedSize);
-  if (entry.method === 0) return data.toString("utf8");
+  if (entry.method === 0) {
+    if (data.length > maxBytes) throw new XlsxReadError("Isi .xlsx terlalu besar atau rusak.");
+    return data.toString("utf8");
+  }
   if (entry.method !== 8) throw new XlsxReadError("Kompresi .xlsx tidak didukung.");
   try {
-    return inflateRawSync(data, { maxOutputLength: MAX_ENTRY_BYTES }).toString("utf8");
+    return inflateRawSync(data, { maxOutputLength: maxBytes }).toString("utf8");
   } catch {
     throw new XlsxReadError("Isi .xlsx terlalu besar atau rusak.");
   }
@@ -125,11 +132,16 @@ function resolvePath(target: string): string {
   return parts.join("/");
 }
 
-function parseSheet(xml: string, shared: string[]): string[][] {
+function parseSheet(xml: string, shared: string[], maxRows: number): string[][] {
   const rows: string[][] = [];
   let nextRow = 1;
   for (const rm of xml.matchAll(/<row\b([^>]*?)(?:\/>|>([\s\S]*?)<\/row>)/g)) {
     const r = Number(attr(rm[1], "r") ?? nextRow);
+    // Rows are padded up to r below, so r must be checked before any allocation:
+    // a tiny crafted file with r="300000000" would otherwise exhaust memory.
+    if (!Number.isInteger(r) || r < 1 || r > EXCEL_MAX_ROWS) {
+      throw new XlsxReadError("File .xlsx rusak (nomor baris tidak valid).");
+    }
     nextRow = r + 1;
     const cells: string[] = [];
     let nextCol = 0;
@@ -150,17 +162,26 @@ function parseSheet(xml: string, shared: string[]): string[][] {
       while (cells.length < col) cells.push("");
       cells[col] = value;
     }
+    // Formatted-but-empty rows (common far below the data) are not materialized.
+    if (cells.every((c) => c === "")) continue;
+    if (r > maxRows) {
+      throw new XlsxReadError(`Sheet berisi data melewati baris ${maxRows.toLocaleString("id-ID")}.`);
+    }
     while (rows.length < r - 1) rows.push([]);
     rows[r - 1] = cells;
   }
   return rows;
 }
 
-export function readXlsx(buf: Buffer): XlsxWorkbook {
+export function readXlsx(buf: Buffer, { maxRows = EXCEL_MAX_ROWS }: { maxRows?: number } = {}): XlsxWorkbook {
   const entries = readZipEntries(buf);
+  let budget = MAX_TOTAL_BYTES;
   const get = (path: string) => {
     const e = entries.get(path);
-    return e ? readEntry(buf, e) : undefined;
+    if (!e) return undefined;
+    const text = readEntry(buf, e, Math.max(1, Math.min(MAX_ENTRY_BYTES, budget)));
+    budget -= Buffer.byteLength(text);
+    return text;
   };
 
   const workbook = get("xl/workbook.xml");
@@ -186,7 +207,7 @@ export function readXlsx(buf: Buffer): XlsxWorkbook {
     const path = relId ? relTargets.get(relId) : undefined;
     const xml = path ? get(path) : undefined;
     if (!xml) continue;
-    sheets.push({ name, rows: parseSheet(xml, shared) });
+    sheets.push({ name, rows: parseSheet(xml, shared, maxRows) });
   }
   return { sheets, date1904 };
 }

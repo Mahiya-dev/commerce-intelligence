@@ -70,7 +70,8 @@ const hasData = (rows: string[][]) => rows.slice(1).some((r) => r.some((c) => c.
 export function xlsxTables(buf: Buffer): SourceTable[] {
   let wb;
   try {
-    wb = readXlsx(buf);
+    // Header + MAX_ROWS data rows, with headroom for title/blank rows above the header.
+    wb = readXlsx(buf, { maxRows: MAX_ROWS + 1_000 });
   } catch (error) {
     if (error instanceof XlsxReadError) throw new ImportInputError(error.message);
     throw error;
