@@ -4,26 +4,42 @@ import { ArrowRight, Boxes, Link2, PackageSearch, ShoppingCart, Target, Trending
 import { requireRole } from "@/lib/auth/guards";
 import { getMasterDataSummary } from "@/lib/data/master-data";
 import { CURRENT_PHASE, NAVIGATION } from "@/config/navigation";
-import { getEcommerceOverview } from "@/lib/data/ecommerce";
-import { formatDate, formatIDR, formatNumber, formatPercent } from "@/lib/format";
-import { formatChange, TARGET_STATUS_LABEL } from "@/components/shared/target-status-badge";
+import { getEcommerceOverview, getSalesForRange } from "@/lib/data/ecommerce";
+import { RANGE_PRESET_LABELS } from "@/lib/ecommerce/date-range";
+import { formatDate, formatIDR, formatNumber, formatPercent, MISSING } from "@/lib/format";
+import { ChangeText, formatChange, TARGET_STATUS_LABEL } from "@/components/shared/target-status-badge";
+import { DateRangeFilter } from "@/components/shared/date-range-filter";
 import { PageHeader } from "@/components/shared/page-header";
 import { DemoNotice } from "@/components/shared/demo-badge";
 import { DataSourceLabel } from "@/components/shared/data-source-label";
 import { KpiCard } from "@/components/shared/kpi-card";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
-export default async function DashboardPage() {
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+const monthLabel = (ym: string) => `${MONTHS[Number(ym.slice(5, 7)) - 1]} ${ym.slice(0, 4)}`;
+
+const period = (from: string, to: string) =>
+  from === to ? formatDate(from, "UTC") : `${formatDate(from, "UTC")} – ${formatDate(to, "UTC")}`;
+
+const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
+
+export default async function DashboardPage({ searchParams }: PageProps<"/dashboard">) {
   const session = await requireRole("viewer");
   const { organization } = session;
-  const [summary, sales] = await Promise.all([getMasterDataSummary(session), getEcommerceOverview(session)]);
+  const sp = await searchParams;
+  const rangeInput = { range: first(sp.range), from: first(sp.from), to: first(sp.to) };
+  const [summary, sales, ranged] = await Promise.all([
+    getMasterDataSummary(session),
+    getEcommerceOverview(session),
+    getSalesForRange(session, rangeInput),
+  ]);
   const ok = sales.status === "ok" ? sales : null;
-  const vsLastMonth = ok
-    ? `vs ${formatDate(ok.mom.previous.from, "UTC")} – ${formatDate(ok.mom.previous.to, "UTC")}`
-    : "";
+  const r = ranged.status === "ok" ? ranged : null;
+  const vs = r ? `vs ${period(r.range.compare.from, r.range.compare.to)}` : "";
   const target = ok?.targets.all ?? null;
 
   const modules = NAVIGATION.flatMap((s) => s.items).filter((i) => i.href !== "/dashboard");
@@ -38,39 +54,61 @@ export default async function DashboardPage() {
       {organization.isDemo ? <DemoNotice /> : null}
 
       <section aria-labelledby="kpi-heading" className="space-y-3">
-        <div className="flex flex-wrap items-end justify-between gap-2">
-          <h2 id="kpi-heading" className="text-sm font-semibold">
-            KPI E-Commerce · {ok ? `MTD s.d. ${formatDate(ok.asOf, "UTC")}` : "Bulan berjalan"}
-          </h2>
-          <DataSourceLabel
-            source={ok ? "Laporan marketplace" : "Laporan marketplace (belum diimpor)"}
-            updatedAt={ok?.lastImportAt ?? null}
-            timeZone={organization.timezone}
-          />
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div className="space-y-1">
+            <h2 id="kpi-heading" className="text-sm font-semibold">
+              KPI E-Commerce ·{" "}
+              {r ? `${RANGE_PRESET_LABELS[r.range.preset]}: ${period(r.range.from, r.range.to)}` : "Bulan berjalan"}
+            </h2>
+            <DataSourceLabel
+              source={r ? "Laporan marketplace" : "Laporan marketplace (belum diimpor)"}
+              updatedAt={r?.lastImportAt ?? null}
+              timeZone={organization.timezone}
+            />
+          </div>
+          {r ? (
+            <DateRangeFilter
+              key={`${r.range.preset}|${r.range.from}|${r.range.to}`}
+              action="/dashboard"
+              preset={r.range.preset}
+              from={r.range.from}
+              to={r.range.to}
+              min={r.dataFrom}
+              max={r.asOf}
+            />
+          ) : null}
         </div>
+        {r?.range.error ? <p className="text-xs text-destructive">{r.range.error}</p> : null}
+        {r?.range.clippedTo ? (
+          <p className="text-xs text-muted-foreground">
+            Rentang dipotong s.d. {formatDate(r.range.clippedTo, "UTC")} (data terakhir) agar perbandingan setara.
+          </p>
+        ) : null}
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <KpiCard
             label="GMV"
-            value={ok ? formatIDR(ok.mom.all.current.gmv, { compact: true }) : null}
-            hint={ok ? `${formatChange(ok.mom.all.gmvChange)} ${vsLastMonth}` : "Belum ada data penjualan"}
+            value={r ? formatIDR(r.current.gmv, { compact: true }) : null}
+            hint={r ? `${formatChange(r.gmvChange)} ${vs}` : "Belum ada data penjualan"}
             icon={Wallet}
           />
           <KpiCard
             label="Orders"
-            value={ok ? formatNumber(ok.mom.all.current.orders) : null}
-            hint={ok ? `${formatChange(ok.mom.all.ordersChange)} ${vsLastMonth}` : "Belum ada data penjualan"}
+            value={r ? formatNumber(r.current.orders) : null}
+            hint={r ? `${formatChange(r.ordersChange)} ${vs}` : "Belum ada data penjualan"}
             icon={ShoppingCart}
           />
           <KpiCard
             label="AOV"
-            value={ok ? formatIDR(ok.mom.all.current.aov === null ? null : Math.round(ok.mom.all.current.aov)) : null}
+            value={r ? formatIDR(r.current.aov === null ? null : Math.round(r.current.aov)) : null}
             hint={
-              ok ? `Conversion rate ${formatPercent(ok.mom.all.current.conversionRate, 2)}` : "Belum ada data penjualan"
+              r
+                ? `${formatChange(r.aovChange)} · Conversion rate ${formatPercent(r.current.conversionRate, 2)}`
+                : "Belum ada data penjualan"
             }
             icon={TrendingUp}
           />
           <KpiCard
-            label="Pencapaian Target"
+            label={ok ? `Target ${monthLabel(ok.month)}` : "Pencapaian Target"}
             value={target ? formatPercent(target.progress) : null}
             hint={
               target?.status
@@ -82,9 +120,54 @@ export default async function DashboardPage() {
             icon={Target}
           />
         </div>
-        {ok?.incomplete.length ? (
+        {r ? (
+          <Card className="py-0">
+            <CardContent className="px-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Channel</TableHead>
+                    <TableHead className="text-right">GMV</TableHead>
+                    <TableHead className="text-right">Δ GMV</TableHead>
+                    <TableHead className="text-right">Orders</TableHead>
+                    <TableHead className="text-right">AOV</TableHead>
+                    <TableHead className="text-right">Conversion</TableHead>
+                    <TableHead className="text-right">Hari data</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {r.channels.map((c) => (
+                    <TableRow key={c.code}>
+                      <TableCell>{c.name}</TableCell>
+                      <TableCell className="text-right tabular-nums">
+                        {c.current.days ? formatIDR(c.current.gmv, { compact: true }) : MISSING}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <ChangeText value={c.gmvChange} />
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums">
+                        {c.current.days ? formatNumber(c.current.orders) : MISSING}
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums">
+                        {formatIDR(c.current.aov === null ? null : Math.round(c.current.aov))}
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums">
+                        {formatPercent(c.current.conversionRate, 2)}
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums">
+                        {c.current.days} / {r.range.days}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        ) : null}
+        {r?.incomplete.length ? (
           <p className="text-xs text-warning-foreground">
-            Data belum lengkap untuk {ok.incomplete.length} channel; lihat halaman E-Commerce.
+            Data belum lengkap pada rentang ini:{" "}
+            {r.incomplete.map((c) => `${c.name} kurang ${c.missingDays} hari`).join(", ")}.
           </p>
         ) : null}
       </section>
