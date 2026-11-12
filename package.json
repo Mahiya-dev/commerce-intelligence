@@ -20,6 +20,7 @@
     "db:status": "npm run build:cli && node dist/cli/migrate.cjs --status",
     "db:bundle": "npm run build:cli && node dist/cli/migrate.cjs --bundle dist/migrations-phpmyadmin.sql",
     "db:seed-demo": "npm run build:cli && node dist/cli/seed-demo.cjs --with-users",
+    "db:seed-demo-sales": "npm run build:cli && node dist/cli/seed-demo.cjs --with-users --with-sales",
     "admin": "node dist/cli/admin.cjs",
     "package:cpanel": "bash scripts/package-cpanel.sh"
   },
