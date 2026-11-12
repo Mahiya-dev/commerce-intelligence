@@ -59,3 +59,21 @@ export function formatDateTime(value: string | Date | null | undefined, timeZone
   if (Number.isNaN(d.getTime())) return MISSING;
   return new Intl.DateTimeFormat(LOCALE, { dateStyle: "medium", timeStyle: "short", timeZone }).format(d);
 }
+
+const MONTH_NAMES = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
+
+/** "2026-11" → "November 2026". Pure: usable on server and client. */
+export const monthName = (ym: string) => `${MONTH_NAMES[Number(ym.slice(5, 7)) - 1]} ${ym.slice(0, 4)}`;

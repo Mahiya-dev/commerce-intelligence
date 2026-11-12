@@ -15,14 +15,14 @@ import {
 import { requireRole } from "@/lib/auth/guards";
 import { requireNavItem } from "@/config/navigation";
 import { getProductDetail } from "@/lib/data/portfolio";
-import { formatIDR, formatNumber, MISSING } from "@/lib/format";
+import { formatIDR, formatNumber, MISSING, monthName } from "@/lib/format";
 import { TOUCHPOINT_LABELS, TOUCHPOINTS } from "@/lib/imports/templates";
 import { QUADRANT_DESCRIPTIONS, type Recommendation } from "@/lib/portfolio/portfolio";
 import { PageHeader } from "@/components/shared/page-header";
 import { DemoNotice } from "@/components/shared/demo-badge";
 import { EmptyState } from "@/components/shared/empty-state";
 import { KpiCard } from "@/components/shared/kpi-card";
-import { MonthSelect, monthName } from "@/components/shared/month-select";
+import { MonthSelect } from "@/components/shared/month-select";
 import { QuadrantBadge } from "@/components/shared/quadrant-badge";
 import { ColumnChart } from "@/components/charts/column-chart";
 import { StackedColumns } from "@/components/charts/stacked-columns";

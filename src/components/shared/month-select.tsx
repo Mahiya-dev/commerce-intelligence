@@ -4,23 +4,7 @@ import { useRef } from "react";
 import Form from "next/form";
 import { CalendarDays } from "lucide-react";
 import { Label } from "@/components/ui/label";
-
-const MONTHS = [
-  "Januari",
-  "Februari",
-  "Maret",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Agustus",
-  "September",
-  "Oktober",
-  "November",
-  "Desember",
-];
-
-export const monthName = (ym: string) => `${MONTHS[Number(ym.slice(5, 7)) - 1]} ${ym.slice(0, 4)}`;
+import { monthName } from "@/lib/format";
 
 /** Month picker that writes ?month=YYYY-MM to the URL and applies on change. */
 export function MonthSelect({
