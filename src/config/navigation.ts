@@ -111,7 +111,8 @@ export const NAVIGATION: NavSection[] = [
         icon: FileUp,
         minRole: "analyst",
         phase: 2,
-        description: "Unggah Excel/CSV, validasi kolom, pratinjau perubahan dan riwayat impor.",
+        description:
+          "Impor dari Excel/CSV, Google Spreadsheet atau API marketplace; validasi kolom, pratinjau perubahan dan riwayat impor.",
       },
       {
         title: "Master Produk",
