@@ -5,6 +5,8 @@ import { requireRole } from "@/lib/auth/guards";
 import { getMasterDataSummary } from "@/lib/data/master-data";
 import { CURRENT_PHASE, NAVIGATION } from "@/config/navigation";
 import { getEcommerceOverview } from "@/lib/data/ecommerce";
+import { getDashboardInsight } from "@/lib/ai/insights";
+import { AiInsightSection } from "./ai-insight-section";
 import { formatDate, formatIDR, formatNumber, formatPercent } from "@/lib/format";
 import { formatChange, TARGET_STATUS_LABEL } from "@/components/shared/target-status-badge";
 import { PageHeader } from "@/components/shared/page-header";
@@ -16,11 +18,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export const metadata: Metadata = { title: "Dashboard" };
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams }: PageProps<"/dashboard">) {
   const session = await requireRole("viewer");
   const { organization } = session;
   const [summary, sales] = await Promise.all([getMasterDataSummary(session), getEcommerceOverview(session)]);
   const ok = sales.status === "ok" ? sales : null;
+  const insightView = await getDashboardInsight(session, sales);
+  const insightParam = (await searchParams).insight;
   const vsLastMonth = ok
     ? `vs ${formatDate(ok.mom.previous.from, "UTC")} – ${formatDate(ok.mom.previous.to, "UTC")}`
     : "";
@@ -88,6 +92,12 @@ export default async function DashboardPage() {
           </p>
         ) : null}
       </section>
+
+      <AiInsightSection
+        view={insightView}
+        outcome={typeof insightParam === "string" ? insightParam : undefined}
+        timeZone={organization.timezone}
+      />
 
       <section aria-labelledby="master-heading" className="space-y-3">
         <div className="flex flex-wrap items-end justify-between gap-2">

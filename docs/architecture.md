@@ -75,7 +75,7 @@ ke zona organisasi hanya saat ditampilkan.
 | Kreatif          | `creative_assets`, `meta_ads`, `meta_ad_daily_facts`, `creative_classifications`   | ⏳ F4  | Ad ID asli dipertahankan; file di direktori privat di luar `public_html`.                                                                                                                                                                                                        |
 | Event            | `events`, `event_revenues`, `event_costs`, `variant_cogs_history`                  | ⏳ F5  | COGS historis berversi.                                                                                                                                                                                                                                                          |
 | Afiliasi         | `affiliates`, `hsl_sales_facts`, `hsl_allocations`, `inventory_movements`          | ⏳ F5  | Alokasi proposed → approved (manusia) → applied; validasi stok dalam transaksi `SELECT … FOR UPDATE`.                                                                                                                                                                            |
-| AI               | `ai_insights`, `ai_requests`                                                       | ⏳ F6  | Output terstruktur; `ai_requests` untuk rate limit & biaya (MySQL, karena Passenger bisa multi-proses).                                                                                                                                                                          |
+| AI               | `ai_insights`, `ai_requests` (0007)                                                | ✅     | Insight dashboard (§7). Fingerprint data, input & output tersimpan, log permintaan untuk rate limit & biaya (MySQL, karena Passenger bisa multi-proses).                                                                                                                         |
 
 ### Aturan portabilitas migrasi (MySQL 8 + MariaDB)
 
@@ -114,15 +114,25 @@ ke zona organisasi hanya saat ditampilkan.
 5. **Lupa password**: admin menjalankan `reset-password` (Fase 1). Reset mandiri via email (SMTP cPanel) dapat
    ditambahkan di fase berikutnya bila diperlukan.
 
-## 7. AI Analyst (Fase 6) — Gemini
+## 7. AI — Insight dashboard (Groq)
 
-- Panggilan hanya dari server (Route Handler/Server Action); `GEMINI_API_KEY` tidak pernah ke browser.
-- Input = metrik terstruktur hasil layanan deterministik + bukti; **tanpa akses database langsung**.
-- Output = JSON terstruktur (finding, evidence, period, root cause, action, priority, confidence/limitations),
-  divalidasi zod sebelum disimpan/ditampilkan.
-- Antarmuka `AiProvider` agar Gemini dapat diganti tanpa mengubah modul analitik.
-- Rate limit per pengguna/organisasi disimpan di MySQL.
-- ID model ditetapkan & diverifikasi terhadap dokumentasi resmi Google saat Fase 6 dimulai.
+Kode: `src/lib/ai/`. Provider saat ini **Groq** (API kompatibel OpenAI, Structured Outputs `json_schema` strict);
+model diatur lewat `GROQ_MODEL` (default `openai/gpt-oss-120b`). Gemini atau penyedia lain dapat ditambahkan lewat
+antarmuka `AiProvider` tanpa mengubah logika insight.
+
+- Panggilan hanya dari server (Server Action); `GROQ_API_KEY` tidak pernah ke browser.
+- **Input** = metrik agregat hasil `getEcommerceOverview` (GMV, pesanan, AOV, CR, MoM, target, porsi SKU) —
+  tanpa baris mentah, email, atau akses database. Input disimpan di `ai_insights.input` agar setiap insight dapat
+  ditelusuri.
+- **Aturan grounding**: model tidak boleh menulis angka. Setiap insight wajib merujuk 1–3 bukti berupa pasangan
+  `metric` + `scope` dari daftar tertutup; **nilainya dirender aplikasi** dari input. Insight yang teksnya memuat
+  digit, scope tak dikenal, atau tanpa bukti valid dibuang; bila tidak tersisa satu pun, jawaban ditolak dan tidak
+  disimpan.
+- **Sekali per versi data**: `data_fingerprint` = SHA-256 input. Tombol "Buat insight" (analyst+) memakai ulang
+  insight bila data belum berubah (tanpa panggilan AI); bila data berubah, insight lama ditandai usang.
+- **Batas pemakaian** (tabel `ai_requests`, semua hasil dihitung): 20 panggilan/organisasi/hari, 6/pengguna/jam
+  (`AI_LIMITS`). Token, latensi, dan kode error dicatat untuk pemantauan biaya.
+- Audit `ai.insight_generated` untuk setiap insight yang disimpan.
 
 ## 8. Keputusan arsitektur
 
@@ -139,3 +149,5 @@ ke zona organisasi hanya saat ditampilkan.
 | 9   | Commit impor semua-atau-tidak                                               | Baris harian yang ditolak membuat GMV MTD terlihat lebih kecil tanpa disadari.            | File dengan error harus diperbaiki dan diimpor ulang; peringatan wajib dikonfirmasi.    |
 | 10  | Tanggal acuan KPI = tanggal data toko terakhir (≤ hari ini)                 | Dashboard tidak kosong saat laporan hari ini belum diunggah.                              | Label "data s.d." selalu tampil; channel yang kurang hari diberi peringatan.            |
 | 11  | Ambang status target: On Track ≥ 90%, Watch ≥ 70%, selain itu At Risk       | Interpretasi dari Kunci Jawaban; rentang 70–90% **belum dikonfirmasi pemilik bisnis**.    | Satu konstanta: `STATUS_THRESHOLDS` di `src/lib/ecommerce/kpi.ts`.                      |
+| 12  | Groq (bukan Gemini) untuk insight; model via env                            | Pilihan pemilik produk; API kompatibel OpenAI dengan structured outputs.                  | Daftar model Groq sering berubah: ganti `GROQ_MODEL` tanpa rilis kode.                  |
+| 13  | AI tidak menulis angka; bukti dirender aplikasi                             | Angka halusinasi di dashboard eksekutif lebih berbahaya daripada insight yang hilang.     | Insight yang melanggar dibuang; teks AI kualitatif, angka selalu dari database.         |

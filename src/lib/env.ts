@@ -25,10 +25,12 @@ const envSchema = z.object({
   DB_CONNECTION_LIMIT: optionalString,
   /** Public origin, e.g. https://intel.maduuray.com. Drives the Secure cookie flag. */
   APP_URL: optionalString,
-  /** Gemini API key for the AI Analyst (Phase 6). */
-  GEMINI_API_KEY: optionalString,
-  /** Gemini model id for the AI Analyst. Selected and validated in Phase 6. */
-  GEMINI_MODEL: optionalString,
+  /** Groq API key for AI insights (console.groq.com). Server-side only. */
+  GROQ_API_KEY: optionalString,
+  /** Groq model id; must support structured outputs (json_schema). */
+  GROQ_MODEL: optionalString,
+  /** Optional OpenAI-compatible base URL (default https://api.groq.com/openai/v1). */
+  GROQ_BASE_URL: optionalString,
   LOG_LEVEL: optionalString,
 });
 
@@ -120,7 +122,20 @@ export function isSecureOrigin(): boolean {
   return process.env.NODE_ENV === "production";
 }
 
-export function getAiConfig(): { apiKey: string; model: string | undefined } | null {
+/** Default Groq model: supports strict structured outputs (json_schema). */
+export const DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b";
+
+export type AiConfig = { provider: "groq"; apiKey: string; model: string; baseUrl: string | undefined };
+
+/** AI provider settings, or null when no key is configured (AI features show "not configured"). */
+export function getAiConfig(): AiConfig | null {
   const env = envSchema.parse(process.env);
-  return env.GEMINI_API_KEY ? { apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL } : null;
+  return env.GROQ_API_KEY
+    ? {
+        provider: "groq",
+        apiKey: env.GROQ_API_KEY,
+        model: env.GROQ_MODEL ?? DEFAULT_GROQ_MODEL,
+        baseUrl: env.GROQ_BASE_URL,
+      }
+    : null;
 }

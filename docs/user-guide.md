@@ -200,12 +200,28 @@ Diambil dari laporan **Kinerja Produk Harian** dan dipetakan ke SKU lewat Master
 - Bila total GMV produk berbeda dengan GMV toko, biasanya laporan produk belum diimpor untuk semua hari atau channel.
   Selisihnya ditampilkan di bawah tabel.
 
-## 8. Data DEMO
+## 8. Insight AI di Dashboard
+
+Section **Insight AI** (di bawah kartu KPI) merangkum 2–4 temuan terpenting dari angka dashboard, lengkap dengan
+prioritas dan langkah yang disarankan.
+
+- **Membuat insight:** Analyst ke atas klik **Buat insight**. Prosesnya beberapa detik. Hasilnya disimpan dan
+  dilihat semua anggota organisasi, termasuk Viewer.
+- **Kapan diperbarui:** insight dibuat sekali per versi data. Setelah ada data baru disimpan, muncul tanda **"Data
+  sudah berubah"** dan tombol **Perbarui insight**. Mengklik saat data belum berubah tidak memanggil AI lagi.
+- **Cara membaca:** setiap insight punya **kotak bukti**. Angka di kotak itu diambil langsung dari data aplikasi,
+  bukan ditulis AI. Teks AI sengaja tanpa angka, dan penyebab yang disebut adalah dugaan yang perlu dicek.
+- **Batas pemakaian:** 6 kali per pengguna per jam dan 20 kali per organisasi per hari.
+- **"AI belum dikonfigurasi":** admin server perlu mengisi `GROQ_API_KEY` di `.env`.
+- **Data yang dikirim ke AI:** hanya angka ringkasan (GMV, pesanan, target, porsi SKU) dan nama produk/channel.
+  Tidak ada data pelanggan, email, atau baris transaksi.
+
+## 9. Data DEMO
 
 Organisasi berlabel **DEMO** berisi data sintetis untuk latihan dan pengujian. Banner ungu dan label DEMO selalu
 tampil. Jangan gunakan angkanya untuk keputusan bisnis.
 
-## 9. Pertanyaan umum
+## 10. Pertanyaan umum
 
 **Saya sudah mengunggah file, kenapa dashboard masih kosong?**
 Batch masih berstatus Tervalidasi. Buka batch dan klik **Simpan ke data e-commerce**.
@@ -222,6 +238,10 @@ Atur berbagi ke "Siapa saja yang memiliki link: Pelihat", lalu coba lagi.
 **Angka bulan lalu terlihat lebih kecil dari laporan Seller Center.**
 Periksa **Hari data** di Ringkasan bulanan. Bila kurang dari jumlah hari kalender, ada laporan harian yang belum
 diimpor.
+
+**Insight AI terasa tidak tepat.**
+Periksa kotak bukti: angkanya selalu benar karena diambil dari data, tetapi kesimpulan AI bisa keliru. Perlakukan
+insight sebagai bahan diskusi, bukan keputusan.
 
 **Saya salah mengimpor angka.**
 Perbaiki file, impor ulang periode yang sama, lalu simpan. Data lama ditimpa. Semua penyimpanan tercatat di Audit

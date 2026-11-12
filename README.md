@@ -3,7 +3,7 @@
 Aplikasi internal Madu Uray untuk menyatukan kinerja penjualan Shopee, TikTok Shop, dan Tokopedia dalam satu
 dashboard: GMV, pesanan, AOV, conversion rate, progres target, forecast, dan kontribusi per SKU. Modul berikutnya
 mencakup portofolio produk, kreatif Meta, profitabilitas event, afiliasi Shopee HSL, dan AI Business Analyst
-(Gemini).
+(Groq).
 
 Prinsip yang dipegang di seluruh aplikasi: **data kosong tidak pernah ditampilkan sebagai nol**, setiap angka
 menyebut sumber dan tanggal datanya, dan data DEMO selalu berlabel.
@@ -16,7 +16,7 @@ menyebut sumber dan tanggal datanya, dan data DEMO selalu berlabel.
 | 2    | Impor data (Excel/CSV, Google Sheets), validasi, simpan ke tabel fakta, KPI dashboard & E-Commerce | ✅ Inti selesai |
 | 2+   | Forecast musiman, halaman pemetaan listing → SKU, koneksi API marketplace                          | ⏳              |
 | 3–5  | Portofolio produk, kreatif Meta, profitabilitas event, afiliasi Shopee HSL                         | ⏳              |
-| 6    | AI Analyst (Gemini)                                                                                | ⏳              |
+| 6    | Insight AI di dashboard (Groq) ✅ · AI Analyst tanya-jawab ⏳                                      | Sebagian        |
 
 Belum di-deploy ke server produksi. Langkahnya ada di [Deployment](docs/deployment.md).
 
@@ -93,6 +93,7 @@ Detail lengkap: [docs/architecture.md](docs/architecture.md) §3.
 
 ## Keterbatasan yang diketahui
 
+- **Insight AI** baru diuji dengan Groq tiruan; panggilan ke Groq sungguhan terbukti setelah `GROQ_API_KEY` diisi.
 - **Ambang status target** (On Track ≥ 90%, Watch ≥ 70%) belum dikonfirmasi pemilik bisnis. Lihat
   [arsitektur §8 #11](docs/architecture.md).
 - **Izin target**: target bulanan saat ini bisa disimpan oleh peran Analyst lewat impor, padahal izin

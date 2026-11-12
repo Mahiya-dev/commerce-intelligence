@@ -101,7 +101,7 @@ export const NAVIGATION: NavSection[] = [
         icon: Bot,
         minRole: "viewer",
         phase: 6,
-        description: "Penjelasan pergerakan KPI, anomali, dan rekomendasi berbasis bukti dari Gemini.",
+        description: "Penjelasan pergerakan KPI, anomali, dan rekomendasi berbasis bukti dari AI.",
       },
     ],
   },
