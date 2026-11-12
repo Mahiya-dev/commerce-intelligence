@@ -237,7 +237,7 @@
       "browserDebugInfoInTerminal": "warn",
       "lockDistDir": true,
       "disableResumeDataCacheCompression": false,
-      "proxyClientMaxBodySize": 10485760,
+      "proxyClientMaxBodySize": 11534336,
       "hideLogsAfterAbort": false,
       "mcpServer": true,
       "exposeRuntimeErrorsToHMR": false,
@@ -247,6 +247,9 @@
       "turbopackInferModuleSideEffects": true,
       "turbopackPluginRuntimeStrategy": "childProcesses",
       "turbopackSharedRuntime": true,
+      "serverActions": {
+        "bodySizeLimit": "11mb"
+      },
       "turbopackMemoryEvictionMode": "auto",
       "optimizePackageImports": [
         "lucide-react",

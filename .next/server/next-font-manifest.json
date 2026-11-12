@@ -24,6 +24,10 @@
       "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
       "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
     ],
+    "[project]/src/app/(app)/imports/[batchId]/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
     "[project]/src/app/(app)/imports/page": [
       "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
       "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"

@@ -52,7 +52,25 @@
     "afterFiles": [],
     "fallback": []
   },
-  "dynamicRoutes": [],
+  "dynamicRoutes": [
+    {
+      "page": "/imports/[batchId]",
+      "regex": "^/imports/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPbatchId": "nxtPbatchId"
+      },
+      "namedRegex": "^/imports/(?<nxtPbatchId>[^/]+?)(?:/)?$",
+      "prefetchSegmentDataRoutes": [
+        {
+          "destination": "/imports/[batchId].segments/!KGFwcCk/imports/$d$batchId$segment",
+          "source": "^/imports/(?<nxtPbatchId>[^/]+?)\\.segments/!KGFwcCk/imports/\\$d\\$batchId(?<segment>/__PAGE__\\.segment\\.rsc|\\.segment\\.rsc)(?:/)?$",
+          "routeKeys": {
+            "nxtPbatchId": "nxtPbatchId"
+          }
+        }
+      ]
+    }
+  ],
   "staticRoutes": [
     {
       "page": "/",

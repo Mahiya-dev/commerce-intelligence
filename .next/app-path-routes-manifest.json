@@ -5,6 +5,7 @@
   "/(app)/dashboard/page": "/dashboard",
   "/(app)/ecommerce/page": "/ecommerce",
   "/(app)/events/page": "/events",
+  "/(app)/imports/[batchId]/page": "/imports/[batchId]",
   "/(app)/imports/page": "/imports",
   "/(app)/master-data/listings/page": "/master-data/listings",
   "/(app)/master-data/products/page": "/master-data/products",

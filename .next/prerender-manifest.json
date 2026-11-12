@@ -741,11 +741,59 @@
       ]
     }
   },
-  "dynamicRoutes": {},
+  "dynamicRoutes": {
+    "/imports/[batchId]": {
+      "experimentalPPR": true,
+      "throwOnEmptyStaticShell": true,
+      "renderingMode": "PARTIALLY_STATIC",
+      "routeType": "shell",
+      "response": "initial",
+      "compute": "resuming",
+      "htmlSize": 3358,
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(?:[\\w-]+-Google|Google-[\\w-]+|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight).*"
+        }
+      ],
+      "routeRegex": "^/imports/([^/]+?)(?:/)?$",
+      "dataRoute": "/imports/[batchId].rsc",
+      "fallback": "/imports/[batchId]",
+      "fallbackRevalidate": false,
+      "fallbackRootParams": [],
+      "fallbackSourceRoute": "/imports/[batchId]",
+      "fallbackRouteParams": [
+        {
+          "paramName": "batchId",
+          "paramType": "dynamic"
+        }
+      ],
+      "dataRouteRegex": "^/imports/([^/]+?)\\.rsc$",
+      "prefetchDataRoute": null,
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    }
+  },
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "39c2cfb4b1271dcb11167746103535ca",
-    "previewModeSigningKey": "3f0e58d55966630a7a1413cac738cc10bce755cfaa8528a2726dc05c080ff9aa",
-    "previewModeEncryptionKey": "f996a0455be1d80bedf2964b45ca6edefd595975cf6aea44f236d51d33611b58"
+    "previewModeId": "bdf1beeb202f7f6baa45e9ba196f5af9",
+    "previewModeSigningKey": "d3409de01a226dbb38da5f120089b35096219e2ec2056e72f1af822f6999244f",
+    "previewModeEncryptionKey": "79698ce377741a2458db8d332a92f8adb640c5b7781dcb692ca2ea4da243cd3e"
   }
 }
