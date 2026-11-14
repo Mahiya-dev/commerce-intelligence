@@ -1,3 +1,3 @@
-module.exports=[70406,(a,b,c)=>{b.exports=a.x("next/dist/compiled/@opentelemetry/api",()=>require("next/dist/compiled/@opentelemetry/api"))},81111,(a,b,c)=>{b.exports=a.x("node:stream",()=>require("node:stream"))},27028,(a,b,c)=>{b.exports=a.x("node:zlib",()=>require("node:zlib"))},5534,a=>{"use strict";var b=a.i(17685),c=a.i(17958);a.S([b,"00155ce2e1b52a70621370458e4edc407dfb55f0fc,_",0,c,"0077bacfbfca8c184ef7a7f77626f9a09672a19517,f"],5534)}];
+module.exports=[70406,(a,b,c)=>{b.exports=a.x("next/dist/compiled/@opentelemetry/api",()=>require("next/dist/compiled/@opentelemetry/api"))},81111,(a,b,c)=>{b.exports=a.x("node:stream",()=>require("node:stream"))},27028,(a,b,c)=>{b.exports=a.x("node:zlib",()=>require("node:zlib"))},5534,a=>{"use strict";var b=a.i(17685),c=a.i(17958);a.S([b,"009cf6bc02f30f3748bddde81da9521b1b2709a2c9,_",0,c,"00d647de6f6c8cb01718d42227588c61e078d9e1b7,f"],5534)}];
 
 //# sourceMappingURL=%5Broot-of-the-server%5D__01q9ksaqt9hc3._.js.map

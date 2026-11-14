@@ -34852,7 +34852,9 @@ var PERMISSIONS = {
   "targets:manage": "admin",
   "allocations:approve": "admin",
   "inventory:manage": "admin",
-  "members:manage": "admin",
+  /** Add users, change roles, suspend/remove, reset temporary passwords. */
+  "members:manage": "owner",
+  "members:view": "admin",
   "audit:view": "admin",
   "organization:manage": "owner"
 };
@@ -35596,9 +35598,12 @@ var REPORT_TYPE_LABELS = Object.fromEntries(
   TEMPLATE_LIST.map((t) => [t.dbReportType, t.title])
 );
 
-// src/lib/imports/sources.ts
+// src/lib/imports/limits.ts
 var MAX_FILE_BYTES = 10 * 1024 * 1024;
+var MAX_TOTAL_BYTES2 = 25 * 1024 * 1024;
 var MAX_ROWS = 5e4;
+
+// src/lib/imports/sources.ts
 var MIME_TYPES = {
   csv: "text/csv",
   xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

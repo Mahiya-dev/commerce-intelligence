@@ -1,14 +1,54 @@
 {
   "node": {
-    "00155ce2e1b52a70621370458e4edc407dfb55f0fc": {
+    "009cf6bc02f30f3748bddde81da9521b1b2709a2c9": {
       "workers": {
         "app/(app)/settings/members/page": {
-          "moduleId": 43841,
+          "moduleId": 20119,
           "async": false
         }
       },
       "exportedName": "signOut",
       "filename": "src/app/(auth)/actions.ts"
+    },
+    "602639a169f708297b93157a43911c0acf9b4db45a": {
+      "workers": {
+        "app/(app)/settings/members/page": {
+          "moduleId": 20119,
+          "async": false
+        }
+      },
+      "exportedName": "addMemberAction",
+      "filename": "src/app/(app)/settings/members/actions.ts"
+    },
+    "60805e9887a73711317dcd529a26ec2e4c0b9e2fad": {
+      "workers": {
+        "app/(app)/settings/members/page": {
+          "moduleId": 20119,
+          "async": false
+        }
+      },
+      "exportedName": "removeMemberAction",
+      "filename": "src/app/(app)/settings/members/actions.ts"
+    },
+    "60a14bc3fd56b5490e304fda76b72d60247f91ad6e": {
+      "workers": {
+        "app/(app)/settings/members/page": {
+          "moduleId": 20119,
+          "async": false
+        }
+      },
+      "exportedName": "resetMemberPasswordAction",
+      "filename": "src/app/(app)/settings/members/actions.ts"
+    },
+    "60a41806e12ba1be8c52e350fd2f967ca9002bfdfe": {
+      "workers": {
+        "app/(app)/settings/members/page": {
+          "moduleId": 20119,
+          "async": false
+        }
+      },
+      "exportedName": "updateMemberAction",
+      "filename": "src/app/(app)/settings/members/actions.ts"
     }
   },
   "edge": {}

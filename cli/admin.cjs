@@ -35122,6 +35122,78 @@ async function setUserStatus(emailInput, status, actor = SYSTEM) {
   });
 }
 
+// src/lib/master-data/demo-seed.ts
+var DEMO_ORG_SLUG = "madu-uray-demo";
+var DEMO_USERS = [
+  { email: "owner.demo@uray.local", name: "Demo Owner", role: "owner" },
+  { email: "admin.demo@uray.local", name: "Demo Admin", role: "admin" },
+  { email: "analyst.demo@uray.local", name: "Demo Analyst", role: "analyst" },
+  { email: "viewer.demo@uray.local", name: "Demo Viewer", role: "viewer" }
+];
+
+// src/lib/master-data/demo-remove.ts
+var DemoRemovalRefused = class extends Error {
+};
+var SAFE_IDENT = /^[a-z][a-z0-9_]{0,63}$/;
+async function orgScopedTables(conn) {
+  const rows = await queryRows(
+    `SELECT c.TABLE_NAME AS t
+       FROM information_schema.COLUMNS c
+       JOIN information_schema.TABLES t ON t.TABLE_SCHEMA = c.TABLE_SCHEMA AND t.TABLE_NAME = c.TABLE_NAME
+      WHERE c.TABLE_SCHEMA = DATABASE() AND c.COLUMN_NAME = 'organization_id'
+        AND t.TABLE_TYPE = 'BASE TABLE' AND c.TABLE_NAME <> 'organizations'
+      ORDER BY c.TABLE_NAME`,
+    [],
+    conn
+  );
+  return rows.map((r) => r.t).filter((t) => SAFE_IDENT.test(t));
+}
+async function removeDemoData({ confirmSlug }) {
+  if (confirmSlug !== DEMO_ORG_SLUG) {
+    throw new DemoRemovalRefused(`Konfirmasi tidak cocok: gunakan --confirm ${DEMO_ORG_SLUG}.`);
+  }
+  return withTransaction(async (conn) => {
+    const org = await queryOne(
+      "SELECT id, is_demo FROM organizations WHERE slug = ? FOR UPDATE",
+      [DEMO_ORG_SLUG],
+      conn
+    );
+    if (!org) return { status: "not_found" };
+    if (Number(org.is_demo) !== 1) {
+      throw new DemoRemovalRefused(`Organisasi '${DEMO_ORG_SLUG}' tidak bertanda DEMO; dibatalkan.`);
+    }
+    const rows = {};
+    await conn.query("SET FOREIGN_KEY_CHECKS = 0");
+    try {
+      for (const table of await orgScopedTables(conn)) {
+        const res = await execute(`DELETE FROM \`${table}\` WHERE organization_id = ?`, [org.id], conn);
+        if (res.affectedRows) rows[table] = res.affectedRows;
+      }
+      await execute("DELETE FROM organizations WHERE id = ?", [org.id], conn);
+    } finally {
+      await conn.query("SET FOREIGN_KEY_CHECKS = 1");
+    }
+    const emails = DEMO_USERS.map((u) => u.email);
+    const orphans = await queryRows(
+      `SELECT u.id, u.email FROM users u
+        WHERE u.email IN (${emails.map(() => "?").join(", ")})
+          AND NOT EXISTS (SELECT 1 FROM organization_members m WHERE m.user_id = u.id)`,
+      emails,
+      conn
+    );
+    for (const u of orphans) await execute("DELETE FROM users WHERE id = ?", [u.id], conn);
+    await writeAudit(conn, {
+      organizationId: null,
+      actorUserId: null,
+      action: "demo.removed",
+      entityType: "organization",
+      entityId: org.id,
+      newData: { slug: DEMO_ORG_SLUG, rows, users: orphans.map((u) => u.email) }
+    });
+    return { status: "removed", organizationId: org.id, rows, users: orphans.map((u) => u.email) };
+  });
+}
+
 // src/cli/_shared.ts
 var import_node_fs = require("node:fs");
 var import_node_path = require("node:path");
@@ -35154,7 +35226,8 @@ async function main() {
       timezone: { type: "string" },
       email: { type: "string" },
       org: { type: "string" },
-      role: { type: "string" }
+      role: { type: "string" },
+      confirm: { type: "string" }
     }
   });
   const command = positionals[0];
@@ -35237,6 +35310,18 @@ async function main() {
       console.log(`\u2713 Dihapus: ${r.sessions} sesi kedaluwarsa, ${r.loginAttempts} catatan login lama`);
       break;
     }
+    case "remove-demo": {
+      const r = await removeDemoData({ confirmSlug: required2(values.confirm, "confirm") });
+      if (r.status === "not_found") {
+        console.log("Tidak ada organisasi DEMO \u2014 tidak ada yang dihapus.");
+        break;
+      }
+      const total = Object.values(r.rows).reduce((s, n) => s + n, 0);
+      console.log(`\u2713 Organisasi DEMO dihapus: ${total} baris dari ${Object.keys(r.rows).length} tabel`);
+      for (const [table, n] of Object.entries(r.rows)) console.log(`   - ${table}: ${n}`);
+      console.log(`\u2713 Akun demo dihapus: ${r.users.length ? r.users.join(", ") : "-"}`);
+      break;
+    }
     default:
       fail("Perintah tidak dikenal. Lihat komentar di src/cli/admin.ts untuk daftar perintah.");
   }
@@ -35244,5 +35329,7 @@ async function main() {
 }
 main().catch(async (e) => {
   await getPool().end().catch(() => void 0);
-  fail(e instanceof AdminError ? e.message : e instanceof Error ? e.message : String(e));
+  fail(
+    e instanceof AdminError || e instanceof DemoRemovalRefused ? e.message : e instanceof Error ? e.message : String(e)
+  );
 });
