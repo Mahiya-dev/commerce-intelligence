@@ -1,6 +1,6 @@
 {
   "node": {
-    "006f7516c938c02a6952d8c66c124e97fb6cbebe07": {
+    "00e3c0afebdf7bf3e339ac3f155eb914cf1ae00c02": {
       "workers": {
         "app/(app)/dashboard/page": {
           "moduleId": 5534,
@@ -10,7 +10,7 @@
       "exportedName": "signOut",
       "filename": "src/app/(auth)/actions.ts"
     },
-    "006c1029b773b80518d26b979d6e1796c35c9ea37b": {
+    "00de040c41f8873f2ba0edd154f0ee408e3a482c36": {
       "workers": {
         "app/(app)/dashboard/page": {
           "moduleId": 5534,

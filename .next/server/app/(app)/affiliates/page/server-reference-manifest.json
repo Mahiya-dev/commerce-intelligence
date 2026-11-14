@@ -1,6 +1,6 @@
 {
   "node": {
-    "006f7516c938c02a6952d8c66c124e97fb6cbebe07": {
+    "00e3c0afebdf7bf3e339ac3f155eb914cf1ae00c02": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -10,7 +10,7 @@
       "exportedName": "signOut",
       "filename": "src/app/(auth)/actions.ts"
     },
-    "003ac5753fcccfcab73e4faac7baefddbc44b236a2": {
+    "00a570feb2157909d6721eb6ba918117d3ce09f80e": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -20,7 +20,7 @@
       "exportedName": "proposeAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "40788bf0dfee647f5f5b4c19e5d1bbd8933a68efa1": {
+    "40073465363c061041246aaf9824b174a75b7f0f6e": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -30,27 +30,7 @@
       "exportedName": "approveAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "407ebeeec5c8435600e364aec8601c5e60cc1a5081": {
-      "workers": {
-        "app/(app)/affiliates/page": {
-          "moduleId": 47925,
-          "async": false
-        }
-      },
-      "exportedName": "toggleAffiliateAction",
-      "filename": "src/app/(app)/affiliates/actions.ts"
-    },
-    "40bf1f84b01403b95b55559922855c87dbdb67bde0": {
-      "workers": {
-        "app/(app)/affiliates/page": {
-          "moduleId": 47925,
-          "async": false
-        }
-      },
-      "exportedName": "rejectAction",
-      "filename": "src/app/(app)/affiliates/actions.ts"
-    },
-    "40d21a5f33cc17bab749713d0e0dd08c93acf464cc": {
+    "40789c1dd54d06bc70d61496b2c3cffb872866ba18": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -60,7 +40,27 @@
       "exportedName": "applyAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "601d4a8fea5e3ac970a7b229fb3124ebbaad85e10c": {
+    "40857e8f92241d235df29d125993bed30202781ec8": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "exportedName": "toggleAffiliateAction",
+      "filename": "src/app/(app)/affiliates/actions.ts"
+    },
+    "40e798ab11d88ed941973c2b516ef0630a90d4b2b6": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "exportedName": "rejectAction",
+      "filename": "src/app/(app)/affiliates/actions.ts"
+    },
+    "6041689cf4d57918af7cbea8ccfa583a05367f78b5": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -70,7 +70,7 @@
       "exportedName": "movementAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "602f50f3b29673222ef919e13a59d9188b870eabd6": {
+    "60605cdb362773b786c86acbd5c502ca60b33600c9": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
