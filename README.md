@@ -20,8 +20,9 @@ menyebut sumber dan tanggal datanya, dan data DEMO selalu berlabel.
 | 6    | Insight AI di dashboard (Groq) ✅ · AI Analyst tanya-jawab ⏳                                                                                 | Sebagian        |
 | —    | Pengaturan organisasi & KPI, API Key AI per organisasi (terenkripsi), kelola pengguna oleh Owner                                              | ✅              |
 
-Target produksi: **cPanel** ([Deployment](docs/deployment.md)). Preview **DEMO** di Vercel dengan MySQL cloud:
-[Deployment Vercel](docs/deployment-vercel.md) — jangan isi data bisnis asli ke preview.
+Selama pengembangan, aplikasi berjalan di **Vercel** + MySQL cloud; setiap merge ke `main` otomatis menerapkan
+migrasi lalu deploy ([Deployment Vercel](docs/deployment-vercel.md)). Setelah selesai, produksi pindah ke **cPanel**
+([Deployment](docs/deployment.md)).
 
 ## Dokumentasi
 
