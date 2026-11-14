@@ -85,9 +85,17 @@ beforeAll(async () => {
   await createUser({ email: "outsider@ai.test", password: "MaduHutan2026" });
   await setMembership({ organizationSlug: "other-ai", email: "outsider@ai.test", role: "owner" });
   outsider = await sessionFor(await userId("outsider@ai.test"));
-  for (const f of ["target_bulanan_DEMO.csv", "kinerja_toko_harian_DEMO.csv"]) {
-    await importAndCommit(analyst, f, readFileSync(join(SAMPLES, "csv", f)));
-  }
+  const admin = await sessionFor(await userId("admin.demo@uray.local"));
+  await importAndCommit(
+    admin,
+    "target_bulanan_DEMO.csv",
+    readFileSync(join(SAMPLES, "csv", "target_bulanan_DEMO.csv")),
+  );
+  await importAndCommit(
+    analyst,
+    "kinerja_toko_harian_DEMO.csv",
+    readFileSync(join(SAMPLES, "csv", "kinerja_toko_harian_DEMO.csv")),
+  );
 });
 afterEach(() => setAiProvider(undefined));
 afterAll(() => teardown());

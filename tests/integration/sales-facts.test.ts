@@ -7,7 +7,7 @@ import { queryOne } from "@/lib/db/pool";
 import type { ActiveSession } from "@/lib/auth/sessions";
 import { importTables, sha256 } from "@/lib/imports/pipeline";
 import { csvTables, MIME_TYPES, readUploadedFile, type SourceTable } from "@/lib/imports/sources";
-import { commitImportBatch, previewCommit } from "@/lib/imports/commit";
+import { canCommitReportType, commitImportBatch, previewCommit } from "@/lib/imports/commit";
 import { getEcommerceOverview } from "@/lib/data/ecommerce";
 import { createOrganization, createUser, setMembership } from "@/lib/admin/users";
 import { expectDbError, sessionFor, setupTestDatabase } from "./helpers";
@@ -19,6 +19,7 @@ const expected = JSON.parse(readFileSync(join(SAMPLES, "expected.json"), "utf8")
 
 let teardown: () => Promise<void>;
 let analyst: ActiveSession;
+let admin: ActiveSession;
 let viewer: ActiveSession;
 let outsider: ActiveSession;
 
@@ -47,6 +48,7 @@ beforeAll(async () => {
   ({ teardown } = await setupTestDatabase("facts"));
   await seedDemo({ withUsers: true });
   analyst = await sessionFor(await userId("analyst.demo@uray.local"));
+  admin = await sessionFor(await userId("admin.demo@uray.local"));
   viewer = await sessionFor(await userId("viewer.demo@uray.local"));
   await createOrganization({ name: "Other Org (TEST)", slug: "other-facts", isDemo: true });
   await createUser({ email: "outsider@facts.test", password: "MaduHutan2026" });
@@ -99,6 +101,17 @@ describe("commit guards", () => {
     expect(await previewCommit(outsider, id)).toBeNull();
     await expect(commitImportBatch(viewer, id)).rejects.toBeInstanceOf(AuthorizationError);
   });
+
+  it("lets analysts stage targets but only admins/owners save them", async () => {
+    const id = (await queryOne<{ id: string }>(
+      "SELECT id FROM import_batches WHERE report_type = 'sales_target' AND status = 'validated'",
+    ))!.id;
+    expect(canCommitReportType(analyst, "sales_target")).toBe(false);
+    expect(canCommitReportType(analyst, "marketplace_sales_daily")).toBe(true);
+    expect(canCommitReportType(admin, "sales_target")).toBe(true);
+    expect(await commitImportBatch(analyst, id, {})).toEqual({ status: "rejected", reason: "targets_forbidden" });
+    expect(await count("SELECT COUNT(*) AS n FROM sales_targets")).toBe(0);
+  });
 });
 
 describe("DEMO data end to end", () => {
@@ -117,7 +130,8 @@ describe("DEMO data end to end", () => {
     expect(await previewCommit(analyst, productId)).toMatchObject({ rows: 708, newListings: 0 });
 
     for (const id of [listingId, targetsId, shopId, productId]) {
-      expect((await commitImportBatch(analyst, id)).status, id).toBe("committed");
+      const by = id === targetsId ? admin : analyst;
+      expect((await commitImportBatch(by, id)).status, id).toBe("committed");
     }
     expect(await count("SELECT COUNT(*) AS n FROM sales_daily_facts WHERE fact_date >= '2026-09-01'")).toBe(212);
     expect(await count("SELECT COUNT(*) AS n FROM listing_daily_facts")).toBe(708);

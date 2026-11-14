@@ -7,12 +7,12 @@ dashboard. Tidak perlu pengetahuan teknis.
 
 Setiap pengguna punya satu peran per organisasi. Peran yang lebih tinggi mencakup semua akses peran di bawahnya.
 
-| Peran       | Bisa melakukan                                                                                |
-| ----------- | --------------------------------------------------------------------------------------------- |
-| **Viewer**  | Melihat dashboard, halaman E-Commerce, master produk dan listing. Tidak melihat COGS.         |
-| **Analyst** | Semua akses Viewer, ditambah: melihat COGS, **mengimpor data dan menyimpannya** ke dashboard. |
-| **Admin**   | Semua akses Analyst, ditambah: mengelola anggota dan melihat Audit Log.                       |
-| **Owner**   | Semua akses Admin, ditambah: pengaturan organisasi.                                           |
+| Peran       | Bisa melakukan                                                                                                                             |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Viewer**  | Melihat dashboard, halaman E-Commerce, master produk dan listing. Tidak melihat COGS.                                                      |
+| **Analyst** | Semua akses Viewer, ditambah: melihat COGS, **mengimpor data dan menyimpannya** ke dashboard (kecuali target bulanan), membuat Insight AI. |
+| **Admin**   | Semua akses Analyst, ditambah: **menyimpan target bulanan**, mengelola anggota, melihat Audit Log.                                         |
+| **Owner**   | Semua akses Admin, ditambah: pengaturan organisasi.                                                                                        |
 
 Akun baru dibuat oleh admin dengan password sementara. Saat login pertama, Anda wajib menggantinya. Setelah 5 kali
 salah password, login untuk email tersebut dikunci sementara (15 menit).
@@ -124,6 +124,10 @@ Di halaman batch yang tervalidasi tanpa error, panel **Simpan ke data e-commerce
 
 Klik **Simpan ke data e-commerce**. Semua baris disimpan sekaligus, atau tidak sama sekali bila terjadi gangguan.
 
+**Target bulanan hanya disimpan oleh Admin atau Owner.** Target menentukan status On Track / Watch / At Risk, jadi
+perubahan target adalah keputusan manajemen. Analyst tetap boleh mengunggah dan memvalidasi file target; batch-nya
+menunggu di menu Impor Data sampai Admin atau Owner membukanya dan menyimpannya.
+
 ### Urutan yang disarankan untuk impor pertama
 
 1. `master_listing`: supaya listing sudah terpetakan ke SKU.
@@ -178,7 +182,8 @@ Tanda **"—"** berarti datanya belum ada atau tidak bisa dihitung (misalnya AOV
 | **Watch**    | 70% – < 90% | Tertinggal; perlu dipantau dan dicari penyebabnya      |
 | **At Risk**  | < 70%       | Kemungkinan besar target tidak tercapai tanpa tindakan |
 
-Ambang ini masih menunggu konfirmasi pemilik bisnis dan bisa berubah.
+Ambang ini sudah dikonfirmasi pemilik bisnis (November 2026). Progres dihitung terhadap jalur target linear, jadi di
+awal bulan angkanya bisa naik-turun tajam; baca bersama grafik GMV kumulatif.
 
 Contoh membaca: Shopee target Rp 345 jt untuk November, data s.d. 10 Nov, GMV Rp 110,5 jt.
 
