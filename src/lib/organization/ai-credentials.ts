@@ -4,7 +4,7 @@ import { writeAudit } from "@/lib/audit";
 import { can, hasRole } from "@/lib/auth/roles";
 import type { ActiveSession } from "@/lib/auth/sessions";
 import { AuthorizationError } from "@/lib/data/master-data";
-import { getAiConfig, getEncryptionKey } from "@/lib/env";
+import { DEFAULT_GROQ_MODEL, getEncryptionKey, getGeminiEnvConfig, getGroqEnvConfig } from "@/lib/env";
 import { decryptSecret, encryptSecret, secretHint } from "@/lib/crypto/secret-box";
 import { GROQ_VERIFY_MESSAGES, verifyGroqKey } from "@/lib/ai/groq";
 import { GEMINI_VERIFY_MESSAGES, verifyGeminiKey } from "@/lib/ai/gemini";
@@ -17,8 +17,8 @@ import { GEMINI_VERIFY_MESSAGES, verifyGeminiKey } from "@/lib/ai/gemini";
  * available server-side via getAiApiKey() for the AI Analyst. Audit entries
  * never contain a key.
  *
- * Gemini falls back to GEMINI_API_KEY / GEMINI_MODEL from the server
- * environment when the organization has not stored its own key.
+ * Both providers fall back to the server environment (GEMINI_API_KEY /
+ * GROQ_API_KEY) when the organization has not stored its own key.
  */
 
 export const AI_PROVIDERS = ["gemini", "groq"] as const;
@@ -38,7 +38,7 @@ export function isAiProvider(v: unknown): v is AiProvider {
 export type AiCredentialStatus =
   | {
       configured: false;
-      /** Gemini only: a server-wide key exists in the environment (value never exposed). */
+      /** A server-wide key exists in the environment (value never exposed). */
       envFallback: boolean;
     }
   | {
@@ -77,7 +77,7 @@ export async function getAiCredentialStatus(
 ): Promise<AiCredentialStatus> {
   if (!hasRole(session.role, "admin")) throw new AuthorizationError("admin");
   const row = await queryOne<Row>(SELECT, [session.organization.id, provider], db);
-  if (!row) return { configured: false, envFallback: provider === "gemini" && getAiConfig() !== null };
+  if (!row) return { configured: false, envFallback: envConfig(provider) !== null };
   return {
     configured: true,
     hint: row.key_hint,
@@ -104,12 +104,36 @@ export async function getAiApiKey(
       source: "organization",
     };
   }
-  if (provider === "gemini") {
-    const env = getAiConfig();
-    if (env) return { apiKey: env.apiKey, model: env.model ?? null, source: "environment" };
-  }
-  return null;
+  const env = envConfig(provider);
+  return env ? { apiKey: env.apiKey, model: env.model ?? null, source: "environment" } : null;
 }
+
+function envConfig(provider: AiProvider): { apiKey: string; model: string | undefined } | null {
+  return provider === "gemini" ? getGeminiEnvConfig() : getGroqEnvConfig();
+}
+
+/**
+ * Whether a key is available for the provider (organization or environment),
+ * without decrypting anything — safe to call for any role (e.g. to show
+ * "AI belum dikonfigurasi" to viewers).
+ */
+export async function isAiKeyAvailable(
+  session: ActiveSession,
+  provider: AiProvider,
+  db: Queryable = getPool(),
+): Promise<boolean> {
+  if (getEncryptionKey()) {
+    const row = await queryOne(
+      "SELECT 1 AS ok FROM organization_ai_credentials WHERE organization_id = ? AND provider = ?",
+      [session.organization.id, provider],
+      db,
+    );
+    if (row) return true;
+  }
+  return envConfig(provider) !== null;
+}
+
+export { DEFAULT_GROQ_MODEL };
 
 export const aiCredentialSchema = z.object({
   /** Empty = keep the stored key (e.g. only the model changes). */

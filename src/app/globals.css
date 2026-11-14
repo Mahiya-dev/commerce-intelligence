@@ -47,7 +47,14 @@
   --chart-3: #1baf7a;
   --chart-4: #eda100;
   --chart-5: #e87ba4;
-  --chart-grid: oklch(0.92 0.004 85);
+  /* Chart tokens (validated categorical palette, fixed per channel). */
+  --chart-shopee: #2a78d6;
+  --chart-tiktok-shop: #eb6834;
+  --chart-tokopedia: #1baf7a;
+  --chart-other: #898781;
+  --chart-pace: #898781;
+  --chart-grid: #e1e0d9;
+  --chart-axis: #c3c2b7;
 }
 
 .dark {
@@ -86,7 +93,13 @@
   --chart-3: #199e70;
   --chart-4: #c98500;
   --chart-5: #d55181;
-  --chart-grid: oklch(0.3 0.006 60);
+  --chart-shopee: #3987e5;
+  --chart-tiktok-shop: #d95926;
+  --chart-tokopedia: #199e70;
+  --chart-other: #898781;
+  --chart-pace: #898781;
+  --chart-grid: #2c2c2a;
+  --chart-axis: #383835;
 }
 
 @theme inline {

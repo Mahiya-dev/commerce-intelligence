@@ -6,7 +6,10 @@ import { logger } from "@/lib/logger";
 import { todayInTimeZone } from "@/lib/imports/validate";
 import {
   addMonths,
+  cumulativeVsTarget,
+  dailyGmvSeries,
   incompleteChannels,
+  momEquivalent,
   monthlySummary,
   monthStart,
   targetScorecard,
@@ -49,6 +52,17 @@ export type EcommerceOverview =
       months: ReturnType<typeof monthlySummary>;
       targets: ReturnType<typeof targetScorecard>;
       incomplete: ReturnType<typeof incompleteChannels>;
+      mom: ReturnType<typeof momEquivalent>;
+      skus: SkuContribution[];
+      /** Listing GMV vs shop GMV for the month (product reports may lag the shop report). */
+      skuCoverage: { listingGmv: number; shopGmv: number };
+      /** Series for the dashboard charts. */
+      charts: {
+        /** Daily GMV per channel from the start of the previous month to the as-of date. */
+        daily: ReturnType<typeof dailyGmvSeries>;
+        /** Cumulative GMV vs straight-line target pace for the as-of month; null without targets. */
+        cumulative: ReturnType<typeof cumulativeVsTarget>;
+      };
       lastImportAt: string | null;
       kpi: KpiSettings;
     };
@@ -82,7 +96,7 @@ export async function getEcommerceOverview(
     const asOf = iso(latest.d);
     const from = addMonths(asOf, -(months - 1));
 
-    const [kpi, channelRows, factRows, targetRows, lastImport] = await Promise.all([
+    const [kpi, channelRows, factRows, targetRows, skuRows, coverage, lastImport] = await Promise.all([
       getKpiSettings(session),
       queryRows<ChannelInfo>("SELECT code, name FROM channels WHERE kind = 'marketplace' ORDER BY sort_order"),
       queryRows<{
@@ -104,6 +118,21 @@ export async function getEcommerceOverview(
           WHERE t.organization_id = ? AND t.target_month = ?`,
         [org, monthStart(asOf)],
       ),
+      queryRows<{ sku: string | null; name: string | null; gmv: string | number; units: string | number }>(
+        `SELECT v.sku, v.name, SUM(f.gmv) AS gmv, SUM(f.units_sold * l.units_per_listing) AS units
+           FROM listing_daily_facts f
+           JOIN channel_listings l ON l.organization_id = f.organization_id AND l.id = f.listing_id
+           LEFT JOIN product_variants v ON v.organization_id = l.organization_id AND v.id = l.variant_id
+          WHERE f.organization_id = ? AND f.fact_date BETWEEN ? AND ?
+          GROUP BY v.sku, v.name
+          ORDER BY gmv DESC`,
+        [org, monthStart(asOf), asOf],
+      ),
+      queryOne<{ gmv: string | number | null }>(
+        `SELECT SUM(gmv) AS gmv FROM sales_daily_facts
+          WHERE organization_id = ? AND fact_date BETWEEN ? AND ?`,
+        [org, monthStart(asOf), asOf],
+      ),
       queryOne<{ at: Date | null }>(
         `SELECT MAX(committed_at) AS at FROM import_batches
           WHERE organization_id = ? AND status = 'committed'`,
@@ -120,6 +149,8 @@ export async function getEcommerceOverview(
       units: r.units_sold,
       visitors: r.visitors,
     }));
+    const targets = targetRows.map((t) => ({ channel: t.code, targetGmv: n(t.target_gmv) }));
+    const skus = skuRows.map((r) => ({ sku: r.sku, name: r.name, gmv: n(r.gmv), units: n(r.units) }));
 
     return {
       status: "ok",
@@ -127,14 +158,15 @@ export async function getEcommerceOverview(
       month: asOf.slice(0, 7),
       channels: channelRows,
       months: monthlySummary(facts, channels, asOf, months),
-      targets: targetScorecard(
-        facts,
-        targetRows.map((t) => ({ channel: t.code, targetGmv: n(t.target_gmv) })),
-        channels,
-        asOf,
-        kpi.thresholds,
-      ),
+      mom: momEquivalent(facts, channels, asOf),
+      targets: targetScorecard(facts, targets, channels, asOf, kpi.thresholds),
       incomplete: incompleteChannels(facts, channels, asOf),
+      skus,
+      skuCoverage: { listingGmv: skus.reduce((s, r) => s + r.gmv, 0), shopGmv: n(coverage?.gmv ?? null) },
+      charts: {
+        daily: dailyGmvSeries(facts, channels, addMonths(asOf, -1), asOf),
+        cumulative: cumulativeVsTarget(facts, targets, asOf),
+      },
       lastImportAt: lastImport?.at ? lastImport.at.toISOString() : null,
       kpi,
     };

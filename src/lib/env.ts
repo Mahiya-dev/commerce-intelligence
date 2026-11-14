@@ -32,9 +32,15 @@ const envSchema = z.object({
   DB_SSL_CA: optionalString,
   /** Public origin, e.g. https://intel.maduuray.com. Drives the Secure cookie flag. */
   APP_URL: optionalString,
-  /** Gemini API key for the AI Analyst (Phase 6). */
+  /** Groq API key for AI insights (console.groq.com). Server-side only. */
+  GROQ_API_KEY: optionalString,
+  /** Groq model id; must support structured outputs (json_schema). */
+  GROQ_MODEL: optionalString,
+  /** Optional OpenAI-compatible base URL (default https://api.groq.com/openai/v1). */
+  GROQ_BASE_URL: optionalString,
+  /** Server-wide Gemini key (fallback when an organization stores none in the dashboard). */
   GEMINI_API_KEY: optionalString,
-  /** Gemini model id for the AI Analyst. Selected and validated in Phase 6. */
+  /** Gemini model id for GEMINI_API_KEY. */
   GEMINI_MODEL: optionalString,
   LOG_LEVEL: optionalString,
   /**
@@ -150,7 +156,30 @@ export function isSecureOrigin(): boolean {
   return process.env.NODE_ENV === "production";
 }
 
-export function getAiConfig(): { apiKey: string; model: string | undefined } | null {
+/** Default Groq model: supports strict structured outputs (json_schema). */
+export const DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b";
+
+export type GroqEnvConfig = { provider: "groq"; apiKey: string; model: string; baseUrl: string | undefined };
+
+/**
+ * Server-wide Groq settings from the environment, or null without GROQ_API_KEY.
+ * A key stored by the Owner in Pengaturan → Organisasi takes precedence
+ * (src/lib/organization/ai-credentials.ts).
+ */
+export function getGroqEnvConfig(): GroqEnvConfig | null {
+  const env = envSchema.parse(process.env);
+  return env.GROQ_API_KEY
+    ? {
+        provider: "groq",
+        apiKey: env.GROQ_API_KEY,
+        model: env.GROQ_MODEL ?? DEFAULT_GROQ_MODEL,
+        baseUrl: env.GROQ_BASE_URL,
+      }
+    : null;
+}
+
+/** Server-wide Gemini settings from the environment (fallback), or null without GEMINI_API_KEY. */
+export function getGeminiEnvConfig(): { apiKey: string; model: string | undefined } | null {
   const env = envSchema.parse(process.env);
   return env.GEMINI_API_KEY ? { apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL } : null;
 }

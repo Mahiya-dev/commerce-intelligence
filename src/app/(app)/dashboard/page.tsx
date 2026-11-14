@@ -21,6 +21,9 @@ import { RANGE_PRESET_LABELS } from "@/lib/ecommerce/date-range";
 import { formatDate, formatIDR, formatNumber, formatPercent, MISSING } from "@/lib/format";
 import { ChangeText, formatChange, TARGET_STATUS_LABEL } from "@/components/shared/target-status-badge";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
+import { getDashboardInsight } from "@/lib/ai/insights";
+import { AiInsightSection } from "./ai-insight-section";
+import { SalesCharts } from "./sales-charts";
 import { PageHeader } from "@/components/shared/page-header";
 import { DemoNotice } from "@/components/shared/demo-badge";
 import { DataSourceLabel } from "@/components/shared/data-source-label";
@@ -56,6 +59,8 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   const ok = sales.status === "ok" ? sales : null;
   const r = ranged.status === "ok" ? ranged : null;
   const vs = r ? `vs ${period(r.range.compare.from, r.range.compare.to)}` : "";
+  const insightView = await getDashboardInsight(session, sales);
+  const insightParam = sp.insight;
   const target = ok?.targets.all ?? null;
   const kpi = r?.kpi ?? DEFAULT_KPI_SETTINGS;
 
@@ -200,6 +205,14 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
           </p>
         ) : null}
       </section>
+
+      {ok ? <SalesCharts overview={ok} /> : null}
+
+      <AiInsightSection
+        view={insightView}
+        outcome={typeof insightParam === "string" ? insightParam : undefined}
+        timeZone={organization.timezone}
+      />
 
       <section aria-labelledby="master-heading" className="space-y-3">
         <div className="flex flex-wrap items-end justify-between gap-2">

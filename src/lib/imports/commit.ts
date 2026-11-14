@@ -55,7 +55,7 @@ export type CommitOutcome =
   | { status: "not_found" }
   | {
       status: "rejected";
-      reason: "status" | "invalid_rows" | "unknown_skus" | "warnings_not_acknowledged" | "empty";
+      reason: "status" | "invalid_rows" | "unknown_skus" | "warnings_not_acknowledged" | "empty" | "targets_forbidden";
       plan?: CommitPlan;
     };
 
@@ -63,6 +63,16 @@ const CHUNK = 500;
 
 function assertCanManage(session: ActiveSession) {
   if (!can(session.role, "imports:manage")) throw new AuthorizationError("analyst");
+}
+
+/**
+ * Monthly targets drive every status badge, so saving them is an admin/owner
+ * decision (`targets:manage`). Analysts may still upload and validate a target
+ * file; only the commit is restricted.
+ */
+export function canCommitReportType(session: ActiveSession, reportType: string): boolean {
+  if (!can(session.role, "imports:manage")) return false;
+  return reportType !== "sales_target" || can(session.role, "targets:manage");
 }
 
 const parseJson = (v: unknown): Row => (typeof v === "string" ? (JSON.parse(v) as Row) : (v as Row));
@@ -640,6 +650,7 @@ export async function commitImportBatch(
       conn,
     );
     if (!batch) return { status: "not_found" };
+    if (!canCommitReportType(session, batch.report_type)) return { status: "rejected", reason: "targets_forbidden" };
     if (batch.status !== "validated") return { status: "rejected", reason: "status" };
     if ((batch.invalid_rows ?? 0) > 0) return { status: "rejected", reason: "invalid_rows" };
 
