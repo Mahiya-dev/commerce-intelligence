@@ -87,7 +87,7 @@ describe("portfolio read model", () => {
       `INSERT INTO import_batches (id, organization_id, channel_id, report_type, source_file_name, mime_type,
                                    file_size_bytes, file_sha256, status)
        VALUES ('0b000000-0000-4000-8000-0000000000aa', ?, ?, 'marketplace_product_performance', 'raw.xlsx',
-               'text/csv', 1, REPEAT('a', 64), 'committed')`,
+               'text/csv', 1, REPEAT('a', 64), 'validated')`,
       [org, channel],
     );
     await execute(
