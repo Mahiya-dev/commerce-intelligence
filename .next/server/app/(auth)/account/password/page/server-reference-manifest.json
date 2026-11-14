@@ -1,6 +1,6 @@
 {
   "node": {
-    "60b8566b6c459ccc66511328e80b3d0d7a1b100907": {
+    "60bc7fca66ad9ec9aa34a658959e29c52effc12f6f": {
       "workers": {
         "app/(auth)/account/password/page": {
           "moduleId": 38039,

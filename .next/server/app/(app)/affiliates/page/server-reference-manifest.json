@@ -1,6 +1,6 @@
 {
   "node": {
-    "00a96089f726ed5779f3a53a24c7ad6798cdd212bc": {
+    "00abd9df0fce82f5890ce1de70984f5c1a39167cee": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -10,7 +10,7 @@
       "exportedName": "signOut",
       "filename": "src/app/(auth)/actions.ts"
     },
-    "00efa7963a870be5f24696c6df63ad3a8da76545b3": {
+    "00c33d68bd83591e220f52d9ec19b58692fd86c960": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -20,17 +20,7 @@
       "exportedName": "proposeAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "4015fdf92667ab1ea5807656ffe1935002247a31f8": {
-      "workers": {
-        "app/(app)/affiliates/page": {
-          "moduleId": 47925,
-          "async": false
-        }
-      },
-      "exportedName": "toggleAffiliateAction",
-      "filename": "src/app/(app)/affiliates/actions.ts"
-    },
-    "40163cc5572d47083b04eaa682e62c0288e3cd9489": {
+    "4033f7adf1809a11b7894b025dea5dc510ce74fb65": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -40,17 +30,7 @@
       "exportedName": "applyAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "4054ccf47459142dbe2a24c2f381697b6c70bd0e6c": {
-      "workers": {
-        "app/(app)/affiliates/page": {
-          "moduleId": 47925,
-          "async": false
-        }
-      },
-      "exportedName": "rejectAction",
-      "filename": "src/app/(app)/affiliates/actions.ts"
-    },
-    "40921f33473b917c686654d7ab0c615a753c687b22": {
+    "409d14aa3af74a4f7f0ab1802ada062d3388c8161d": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -60,7 +40,27 @@
       "exportedName": "approveAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "6077364c10e1ed63700b6cfd5b3ea5b93974ab78aa": {
+    "40c77549f6b88f945a8202bce42e4350a43f918a1c": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "exportedName": "toggleAffiliateAction",
+      "filename": "src/app/(app)/affiliates/actions.ts"
+    },
+    "40cd0fe355ac19608dc1501aef3109028918118dcc": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "exportedName": "rejectAction",
+      "filename": "src/app/(app)/affiliates/actions.ts"
+    },
+    "606bea5ad268d150bf7c66ae0b891b1e49f8619b62": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -70,7 +70,7 @@
       "exportedName": "allocationSettingsAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "60f005843f39acdbd9d479215592b1d96085500761": {
+    "60e26b44ebbce59b2b6b68a93b85cb8c458c438b02": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
