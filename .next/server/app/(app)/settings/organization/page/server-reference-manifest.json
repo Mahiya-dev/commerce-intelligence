@@ -1,6 +1,6 @@
 {
   "node": {
-    "00abd9df0fce82f5890ce1de70984f5c1a39167cee": {
+    "0046402c7eef01c34523e70171905c555057164ab2": {
       "workers": {
         "app/(app)/settings/organization/page": {
           "moduleId": 26912,
@@ -10,7 +10,7 @@
       "exportedName": "signOut",
       "filename": "src/app/(auth)/actions.ts"
     },
-    "60036a9b087774ca75f19934a6d2178fa278f6a8d2": {
+    "6022f6c5d8334ccabdff7c462386bd45bfdcfc695b": {
       "workers": {
         "app/(app)/settings/organization/page": {
           "moduleId": 26912,
@@ -20,7 +20,7 @@
       "exportedName": "saveOrganizationSettings",
       "filename": "src/app/(app)/settings/organization/actions.ts"
     },
-    "40d1b58898fab04690dd960c216fa75b856109fc34": {
+    "40e400284b65334f581940115da7bda049e271d457": {
       "workers": {
         "app/(app)/settings/organization/page": {
           "moduleId": 26912,
@@ -30,7 +30,7 @@
       "exportedName": "removeAiKey",
       "filename": "src/app/(app)/settings/organization/actions.ts"
     },
-    "60b01eedd1eb76fd3fd996dbed9e8dca89f40ef1cc": {
+    "6065419346e2db7908b0a774107c1aa0999d96b24f": {
       "workers": {
         "app/(app)/settings/organization/page": {
           "moduleId": 26912,

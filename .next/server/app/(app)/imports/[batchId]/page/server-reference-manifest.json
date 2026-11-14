@@ -1,6 +1,6 @@
 {
   "node": {
-    "00abd9df0fce82f5890ce1de70984f5c1a39167cee": {
+    "0046402c7eef01c34523e70171905c555057164ab2": {
       "workers": {
         "app/(app)/imports/[batchId]/page": {
           "moduleId": 82540,
@@ -10,17 +10,7 @@
       "exportedName": "signOut",
       "filename": "src/app/(auth)/actions.ts"
     },
-    "4072d195b76238a14279393530dfca6be1cddce446": {
-      "workers": {
-        "app/(app)/imports/[batchId]/page": {
-          "moduleId": 82540,
-          "async": false
-        }
-      },
-      "exportedName": "cancelImport",
-      "filename": "src/app/(app)/imports/actions.ts"
-    },
-    "40e2a762c6c92c968a3c40c7cc5ba5b1ce33e778f0": {
+    "40535de9b80086bbfb2a4b72848992cf48e1f7796a": {
       "workers": {
         "app/(app)/imports/[batchId]/page": {
           "moduleId": 82540,
@@ -30,7 +20,27 @@
       "exportedName": "commitImport",
       "filename": "src/app/(app)/imports/actions.ts"
     },
-    "606de9ae9f5b4f06c4e713130d643e3087bdef4498": {
+    "40ff9849e1e0e9bfab92032ad9f9089cf6598f9343": {
+      "workers": {
+        "app/(app)/imports/[batchId]/page": {
+          "moduleId": 82540,
+          "async": false
+        }
+      },
+      "exportedName": "cancelImport",
+      "filename": "src/app/(app)/imports/actions.ts"
+    },
+    "6024376823bb4701ebab5a19a01bf9d742e87ac810": {
+      "workers": {
+        "app/(app)/imports/[batchId]/page": {
+          "moduleId": 82540,
+          "async": false
+        }
+      },
+      "exportedName": "bulkImportAction",
+      "filename": "src/app/(app)/imports/actions.ts"
+    },
+    "608d1ec5719dbb839dc8f0e58d2e71194a6e9f5b59": {
       "workers": {
         "app/(app)/imports/[batchId]/page": {
           "moduleId": 82540,

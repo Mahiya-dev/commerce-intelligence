@@ -1,6 +1,6 @@
 {
   "node": {
-    "00abd9df0fce82f5890ce1de70984f5c1a39167cee": {
+    "0046402c7eef01c34523e70171905c555057164ab2": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -10,7 +10,7 @@
       "exportedName": "signOut",
       "filename": "src/app/(auth)/actions.ts"
     },
-    "00c33d68bd83591e220f52d9ec19b58692fd86c960": {
+    "00739439f2604313fdd54f2b11c5253002944ea3e9": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -20,7 +20,7 @@
       "exportedName": "proposeAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "4033f7adf1809a11b7894b025dea5dc510ce74fb65": {
+    "403a2c9bf9bfed5dffa4cf5a35956f4e7175524875": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -30,17 +30,7 @@
       "exportedName": "applyAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "409d14aa3af74a4f7f0ab1802ada062d3388c8161d": {
-      "workers": {
-        "app/(app)/affiliates/page": {
-          "moduleId": 47925,
-          "async": false
-        }
-      },
-      "exportedName": "approveAction",
-      "filename": "src/app/(app)/affiliates/actions.ts"
-    },
-    "40c77549f6b88f945a8202bce42e4350a43f918a1c": {
+    "4062839961635be0bd7a3d79288ae7817e94914c01": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -50,7 +40,7 @@
       "exportedName": "toggleAffiliateAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "40cd0fe355ac19608dc1501aef3109028918118dcc": {
+    "40b2d0dc2c9dbc0232c3838256da3d0e89906a8e7f": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -60,7 +50,17 @@
       "exportedName": "rejectAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "606bea5ad268d150bf7c66ae0b891b1e49f8619b62": {
+    "40ebcadeb5794afe9e8b1a9482b600bf680ec9a7b5": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "exportedName": "approveAction",
+      "filename": "src/app/(app)/affiliates/actions.ts"
+    },
+    "6060b94e3d933c50280760223c7c99c7440228c918": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
@@ -70,7 +70,7 @@
       "exportedName": "allocationSettingsAction",
       "filename": "src/app/(app)/affiliates/actions.ts"
     },
-    "60e26b44ebbce59b2b6b68a93b85cb8c458c438b02": {
+    "606aac6372f6d927aec0f302e9e095da5bb9b619a3": {
       "workers": {
         "app/(app)/affiliates/page": {
           "moduleId": 47925,
