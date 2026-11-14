@@ -119,6 +119,30 @@ Cara aplikasi membaca file:
 - File ini hanya mengisi **kontribusi per produk/SKU**. KPI toko (GMV, pesanan, pengunjung toko) tetap dari laporan
   `kinerja_toko_harian`.
 
+### 4.2 Ekspor langsung dari Shopee Ads (Iklan Shopee)
+
+File **Data Keseluruhan Iklan** dari Iklan Shopee juga bisa diunggah apa adanya.
+
+1. Seller Center → **Iklan Shopee → Laporan**, pilih **satu hari** (tanggal awal = tanggal akhir), lalu ekspor
+   **Semua Laporan Iklan** (`DataKeseluruhanIklanShopee-DD_MM_YYYY-DD_MM_YYYY.csv`).
+2. Unggah di **Impor Data** dengan **Deteksi otomatis** (atau jenis **Iklan Marketplace Harian**). Tanggal diambil dari
+   baris **Periode** di kepala file; ekspor beberapa hari sekaligus ditolak.
+3. Setiap baris iklan/kampanye disimpan per hari. Kampanye **GMV Max** tingkat toko tidak punya kode produk; itu
+   normal. Mengunggah ulang tanggal yang sama **menimpa** angka lama (Shopee masih memperbarui angka beberapa hari).
+
+Hasilnya tampil di halaman **E-Commerce → Iklan marketplace** mengikuti rentang tanggal:
+
+| Kolom            | Arti                                                                                      |
+| ---------------- | ----------------------------------------------------------------------------------------- |
+| Biaya iklan      | Kolom **Biaya** Shopee Ads                                                                |
+| Omzet iklan      | Kolom **Omzet Penjualan**: penjualan yang diatribusikan Shopee ke iklan                   |
+| ROAS / ACOS      | Omzet iklan ÷ biaya / biaya ÷ omzet iklan (versi Shopee: "Efektivitas Iklan" dan "ACOS")  |
+| Biaya ÷ GMV toko | Biaya iklan ÷ GMV toko dari laporan toko harian: porsi biaya iklan terhadap seluruh omzet |
+
+**Penting:** omzet iklan menurut Shopee termasuk pesanan yang belum dikirim dan bisa tumpang tindih dengan penjualan
+organik, jadi **jangan dijumlahkan dengan GMV toko**. Untuk menilai efisiensi biaya iklan terhadap bisnis secara
+keseluruhan, pakai **Biaya ÷ GMV toko**.
+
 Setelah impor, setiap batch tampil di **Riwayat impor** dengan status:
 
 | Status          | Arti                                                                   |

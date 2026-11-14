@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type { PoolConnection } from "mysql2/promise";
 import { execute, getPool, queryOne, queryRows, withTransaction, type Queryable } from "@/lib/db/pool";
 import { writeAudit } from "@/lib/audit";
@@ -131,6 +131,14 @@ async function existingListings(db: Queryable, org: string) {
 const rowListingKey = (channels: Map<string, string>, r: Row) =>
   listingKey(channelOf(channels, r), str(r.id_produk_channel).toLowerCase(), str(r.id_sku_channel).toLowerCase());
 
+/** Shopee exports no campaign ID: key = SHA-256 of ad type | name | product code (case-insensitive). */
+export function adCampaignKey(r: { jenis_iklan?: CellValue; nama_iklan?: CellValue; kode_produk?: CellValue }) {
+  const part = (v: CellValue | undefined) => str(v ?? null).toLowerCase();
+  return createHash("sha256")
+    .update(`${part(r.jenis_iklan)}|${part(r.nama_iklan)}|${part(r.kode_produk)}`)
+    .digest("hex");
+}
+
 async function existingDateKeys(
   db: Queryable,
   sql: string,
@@ -253,6 +261,20 @@ async function plan(db: Queryable, org: string, reportType: string, inputRows: R
     return { ...base, overwrites, inserts: rows.length - overwrites, newListings: missing.size };
   }
 
+  if (reportType === "marketplace_ads_daily") {
+    const dates = rows.map((r) => str(r.tanggal)).sort();
+    const found = await queryRows<{ channel_id: string; k1: string; d: Date | string }>(
+      `SELECT channel_id, campaign_key AS k1, fact_date AS d FROM marketplace_ad_daily_facts
+        WHERE organization_id = ? AND fact_date BETWEEN ? AND ?`,
+      [org, dates[0], dates[dates.length - 1]],
+      db,
+    );
+    const existing = new Set(found.map((r) => `${r.channel_id}|${r.k1}|${iso(r.d)}`));
+    const overwrites = rows.filter((r) =>
+      existing.has(`${channelOf(channels, r)}|${adCampaignKey(r)}|${str(r.tanggal)}`),
+    ).length;
+    return { ...base, overwrites, inserts: rows.length - overwrites };
+  }
   if (reportType === "meta_ads_performance") {
     const dates = rows.map((r) => str(r.tanggal)).sort();
     const found = await queryRows<{ k1: string; d: Date | string }>(
@@ -496,6 +518,44 @@ async function writeFacts(
     return;
   }
 
+  if (reportType === "marketplace_ads_daily") {
+    await insertChunks(
+      conn,
+      rows.map((r) => [
+        org,
+        channelOf(channels, r),
+        str(r.tanggal),
+        adCampaignKey(r),
+        str(r.nama_iklan),
+        str(r.jenis_iklan),
+        str(r.mode_bidding) || null,
+        str(r.kode_produk) || null,
+        num(r.dilihat),
+        num(r.klik),
+        num(r.konversi),
+        num(r.konversi_langsung),
+        num(r.produk_terjual),
+        num(r.terjual_langsung),
+        num(r.omzet_iklan),
+        num(r.omzet_langsung),
+        num(r.biaya),
+        batchId,
+        isDemo,
+      ]),
+      `INSERT INTO marketplace_ad_daily_facts
+         (organization_id, channel_id, fact_date, campaign_key, campaign_name, ad_type, bidding_mode, product_code,
+          impressions, clicks, conversions, direct_conversions, units_sold, direct_units_sold, gmv, direct_gmv, cost,
+          source_batch_id, is_demo)`,
+      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      `ON DUPLICATE KEY UPDATE campaign_name = VALUES(campaign_name), ad_type = VALUES(ad_type),
+         bidding_mode = VALUES(bidding_mode), product_code = VALUES(product_code), impressions = VALUES(impressions),
+         clicks = VALUES(clicks), conversions = VALUES(conversions), direct_conversions = VALUES(direct_conversions),
+         units_sold = VALUES(units_sold), direct_units_sold = VALUES(direct_units_sold), gmv = VALUES(gmv),
+         direct_gmv = VALUES(direct_gmv), cost = VALUES(cost), source_batch_id = VALUES(source_batch_id),
+         is_demo = VALUES(is_demo)`,
+    );
+    return;
+  }
   if (reportType === "meta_ads_performance") {
     // Latest name per ad (an ad can be renamed during the period).
     const latest = new Map<string, Row>();

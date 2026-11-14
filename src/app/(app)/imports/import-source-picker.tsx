@@ -32,6 +32,8 @@ const REPORT_PURPOSE: Record<TemplateKey, string> = {
     "GMV, pesanan dan biaya per listing per touchpoint (organik, iklan, afiliasi, live, video) per hari.",
   meta_ads_harian: "Spend, impresi, klik, pembelian dan nilai pembelian per iklan Meta (Ad ID asli) per hari.",
   penjualan_hsl: "Unit terjual, GMV dan komisi per afiliasi Shopee HSL per listing per hari.",
+  iklan_marketplace_harian:
+    "Biaya, omzet, klik dan konversi per kampanye iklan marketplace (mis. Shopee Ads) per hari.",
 };
 
 const METHODS: {

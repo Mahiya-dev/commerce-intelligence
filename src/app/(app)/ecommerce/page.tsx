@@ -4,6 +4,9 @@ import { AlertTriangle, FileUp, ShoppingCart } from "lucide-react";
 import { requireRole } from "@/lib/auth/guards";
 import { requireNavItem } from "@/config/navigation";
 import { getEcommerceOverview, getSalesForRange } from "@/lib/data/ecommerce";
+import { getMarketplaceAds } from "@/lib/data/marketplace-ads";
+import { dateRange } from "@/lib/ecommerce/kpi";
+import { MarketplaceAdsCard } from "./marketplace-ads-card";
 import { RANGE_PRESET_LABELS } from "@/lib/ecommerce/date-range";
 import { formatDate, formatIDR, formatNumber, formatPercent, MISSING } from "@/lib/format";
 import { hasRole } from "@/lib/auth/roles";
@@ -88,6 +91,8 @@ export default async function EcommercePage({ searchParams }: PageProps<"/ecomme
   const name = new Map(data.channels.map((c) => [c.code, c.name]));
   const { targets, months, incomplete } = data;
   const { range, kpi } = ranged;
+  const ads = await getMarketplaceAds(session, { from: range.from, to: range.to });
+  const rangeDays = dateRange(range.from, range.to).length;
   const targetNote = [
     kpi.targetAov !== null ? `target AOV ${formatIDR(kpi.targetAov)}` : null,
     kpi.targetConversionRate !== null ? `target conversion ${pct(kpi.targetConversionRate, 2)}` : null,
@@ -272,6 +277,13 @@ export default async function EcommercePage({ searchParams }: PageProps<"/ecomme
           ) : null}
         </CardContent>
       </Card>
+
+      <MarketplaceAdsCard
+        rows={ads}
+        shopGmv={Object.fromEntries(ranged.channels.map((c) => [c.code, c.current.gmv]))}
+        rangeDays={rangeDays}
+        periodLabel={period(range.from, range.to)}
+      />
 
       <Card>
         <CardHeader>

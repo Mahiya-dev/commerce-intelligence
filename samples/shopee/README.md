@@ -4,6 +4,10 @@
 sheet, 36 kolom, angka berformat teks id-ID) dengan produk DEMO dan angka karangan. Dipakai oleh tes
 `tests/unit/shopee-export.test.ts` dan `tests/integration/shopee-export.test.ts`.
 
+`DataKeseluruhanIklanShopee-20_10_2026-20_10_2026.csv` meniru ekspor **Data Keseluruhan Iklan** Shopee Ads (blok
+info toko + baris "Periode", lalu satu baris per iklan) dengan kampanye DEMO. Dipakai oleh
+`tests/unit/shopee-ads-export.test.ts` dan `tests/integration/shopee-ads.test.ts`.
+
 Dibuat ulang dengan:
 
 ```bash

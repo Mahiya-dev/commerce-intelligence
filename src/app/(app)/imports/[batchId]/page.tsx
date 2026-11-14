@@ -62,6 +62,7 @@ const PLAN_NOUN: Record<string, string> = {
   touchpoint_performance: "baris kinerja touchpoint harian",
   meta_ads_performance: "baris performa iklan Meta harian",
   shopee_hsl_affiliate: "baris penjualan afiliasi HSL",
+  marketplace_ads_daily: "baris iklan marketplace harian",
 };
 
 function CommitPanel({ batchId, plan, warningRows }: { batchId: string; plan: CommitPlan; warningRows: number }) {
