@@ -11,11 +11,24 @@ Setiap pengguna punya satu peran per organisasi. Peran yang lebih tinggi mencaku
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Viewer**  | Melihat dashboard, halaman E-Commerce, master produk dan listing. Tidak melihat COGS.                                                      |
 | **Analyst** | Semua akses Viewer, ditambah: melihat COGS, **mengimpor data dan menyimpannya** ke dashboard (kecuali target bulanan), membuat Insight AI. |
-| **Admin**   | Semua akses Analyst, ditambah: **menyimpan target bulanan**, mengelola anggota, melihat Audit Log.                                         |
-| **Owner**   | Semua akses Admin, ditambah: pengaturan organisasi.                                                                                        |
+| **Admin**   | Semua akses Analyst, ditambah: **menyimpan target bulanan**, melihat daftar pengguna dan Audit Log.                                        |
+| **Owner**   | Semua akses Admin, ditambah: pengaturan organisasi dan **menambah/mengelola pengguna**.                                                    |
 
-Akun baru dibuat oleh admin dengan password sementara. Saat login pertama, Anda wajib menggantinya. Setelah 5 kali
+Akun baru dibuat oleh Owner dengan password sementara. Saat login pertama, Anda wajib menggantinya. Setelah 5 kali
 salah password, login untuk email tersebut dikunci sementara (15 menit).
+
+### Menambah pengguna (Owner)
+
+Buka **Pengaturan → Pengguna & Akses**, isi email, nama (opsional) dan peran, lalu klik **Tambah pengguna**.
+
+- **Email baru:** akun dibuat dan password sementara **ditampilkan sekali**. Salin dan kirimkan lewat jalur aman
+  (bukan grup chat). Pengguna wajib menggantinya saat login pertama.
+- **Email yang sudah punya akun** (mis. dari organisasi lain): langsung mendapat akses dengan password miliknya.
+
+Di tabel anggota, Owner dapat mengubah peran, **menangguhkan** (akses langsung berhenti, bisa diaktifkan lagi),
+membuat **password sementara baru** (semua sesi pengguna itu dikeluarkan), atau **mencabut akses**. Owner tidak dapat
+mengubah aksesnya sendiri, dan organisasi selalu harus punya minimal satu Owner aktif. Semua perubahan tercatat di
+Audit Log.
 
 ## 2. Alur singkat: dari laporan marketplace ke dashboard
 
@@ -59,7 +72,9 @@ Lembar **Kamus Kolom** di template menjelaskan setiap kolom. Hapus baris contoh 
 
 ### 3.3 Batas file
 
-- Ukuran maksimal **10 MB**, maksimal **50.000 baris** per sheet.
+- Boleh memilih **beberapa file sekaligus** (maks. **10 file**, **10 MB per file**, total **25 MB**). Setiap file
+  divalidasi dan menjadi batch tersendiri; file yang ditolak tidak menghalangi file lain.
+- Maksimal **50.000 baris** per sheet.
 - Format: `.xlsx` atau `.csv` (UTF-8, pemisah `,` atau `;`). Format `.xls` lama tidak didukung; simpan ulang
   sebagai `.xlsx`.
 

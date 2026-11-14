@@ -8,8 +8,15 @@ import { isDatabaseConfigured } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import type { ImportFormState } from "@/lib/imports/form-state";
 import { fetchSheetCsv, GoogleSheetsError, parseSheetUrl } from "@/lib/imports/google-sheets";
-import { importTables, sha256, type PipelineResult } from "@/lib/imports/pipeline";
-import { csvTables, ImportInputError, MAX_FILE_BYTES, MIME_TYPES, readUploadedFile } from "@/lib/imports/sources";
+import { importTables, importUploadedFiles, sha256, type PipelineResult } from "@/lib/imports/pipeline";
+import {
+  csvTables,
+  ImportInputError,
+  MAX_FILE_BYTES,
+  MAX_FILES,
+  MAX_TOTAL_BYTES,
+  MIME_TYPES,
+} from "@/lib/imports/sources";
 import { cancelImportBatch } from "@/lib/imports/staging";
 import { isTemplateKey } from "@/lib/imports/templates";
 import { commitImportBatch } from "@/lib/imports/commit";
@@ -24,11 +31,16 @@ const SERVICE_ERROR: ImportFormState = {
   message: "Impor gagal karena gangguan layanan. Coba lagi beberapa saat lagi.",
 };
 
-function summarize(result: PipelineResult): ImportFormState {
+function summarize(result: PipelineResult, fileCount = 1): ImportFormState {
   const staged = result.staged.filter((s) => s.outcome === "staged");
   const dupes = result.staged.length - staged.length;
   if (result.staged.length === 0) {
-    const message = result.rejected.length === 1 ? result.rejected[0].message : "Semua sheet ditolak.";
+    const message =
+      result.rejected.length === 1
+        ? result.rejected[0].message
+        : fileCount > 1
+          ? "Semua file ditolak — lihat rincian di bawah."
+          : "Semua sheet ditolak.";
     return { status: "error", message, result };
   }
   if (staged.length === 0 && result.rejected.length === 0) {
@@ -48,35 +60,37 @@ export async function submitImport(_prev: ImportFormState, formData: FormData): 
 
   try {
     if (method === "file") {
-      const file = formData.get("file");
-      if (!(file instanceof File) || file.size === 0) {
-        return { status: "error", fieldErrors: { file: ["Pilih file .xlsx atau .csv."] } };
+      const files = formData.getAll("file").filter((f): f is File => f instanceof File && f.size > 0);
+      if (files.length === 0) return { status: "error", fieldErrors: { file: ["Pilih file .xlsx atau .csv."] } };
+      if (files.length > MAX_FILES) {
+        return { status: "error", fieldErrors: { file: [`Maksimal ${MAX_FILES} file sekali unggah.`] } };
       }
-      if (file.size > MAX_FILE_BYTES) {
-        return { status: "error", fieldErrors: { file: [`Ukuran file maksimal ${MAX_FILE_BYTES / 1024 / 1024} MB.`] } };
+      const tooBig = files.filter((f) => f.size > MAX_FILE_BYTES).map((f) => f.name);
+      if (tooBig.length) {
+        return {
+          status: "error",
+          fieldErrors: { file: [`Ukuran per file maksimal ${MAX_FILE_BYTES / 1024 / 1024} MB: ${tooBig.join(", ")}.`] },
+        };
+      }
+      if (files.reduce((s, f) => s + f.size, 0) > MAX_TOTAL_BYTES) {
+        return {
+          status: "error",
+          fieldErrors: { file: [`Total ukuran maksimal ${MAX_TOTAL_BYTES / 1024 / 1024} MB; unggah sebagian dulu.`] },
+        };
       }
       const reportType = String(formData.get("reportType") ?? "auto");
       if (reportType !== "auto" && !isTemplateKey(reportType)) {
         return { status: "error", fieldErrors: { reportType: ["Pilih jenis data."] } };
       }
       const expectedTemplate = reportType === "auto" ? undefined : reportType;
-      const buf = Buffer.from(await file.arrayBuffer());
-      const { kind, tables } = readUploadedFile(file.name, buf, expectedTemplate);
-      const result = await importTables(session, {
-        source: {
-          kind: "file_upload",
-          ref: null,
-          fileName: file.name,
-          mimeType: MIME_TYPES[kind],
-          sizeBytes: buf.length,
-        },
-        contentSha256: sha256(buf),
-        tables,
-        expectedTemplate,
-        ipAddress,
-      });
+
+      const combined = await importUploadedFiles(
+        session,
+        await Promise.all(files.map(async (f) => ({ name: f.name, buffer: Buffer.from(await f.arrayBuffer()) }))),
+        { expectedTemplate, ipAddress },
+      );
       revalidatePath("/imports");
-      return summarize(result);
+      return summarize(combined, files.length);
     }
 
     if (method === "google_sheets") {

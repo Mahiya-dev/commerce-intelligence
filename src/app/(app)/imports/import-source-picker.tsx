@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AlertCircle, CheckCircle2, FileSpreadsheet, Info, Loader2, PlugZap, Sheet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { INITIAL_IMPORT_STATE } from "@/lib/imports/form-state";
+import { MAX_FILE_BYTES, MAX_FILES, MAX_TOTAL_BYTES } from "@/lib/imports/limits";
 import { TEMPLATE_LIST, TEMPLATES, type TemplateKey } from "@/lib/imports/templates";
 import { submitImport } from "./actions";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -16,6 +17,11 @@ import { Label } from "@/components/ui/label";
 export type ImportMethod = "file" | "google_sheets" | "api";
 export type ApiPlatform = "tiktok_shop" | "tokopedia" | "shopee";
 type ReportTypeChoice = "auto" | TemplateKey;
+
+const mb = (bytes: number) =>
+  `${new Intl.NumberFormat("id-ID", { maximumFractionDigits: bytes >= 1024 * 1024 ? 1 : 0 }).format(
+    bytes >= 1024 * 1024 ? bytes / 1024 / 1024 : Math.max(1, Math.round(bytes / 1024)),
+  )} ${bytes >= 1024 * 1024 ? "MB" : "KB"}`;
 
 const REPORT_PURPOSE: Record<TemplateKey, string> = {
   kinerja_toko_harian: "GMV, pesanan, unit dan pengunjung per channel per hari.",
@@ -82,6 +88,8 @@ export function ImportSourcePicker({ apiConfigured = false }: { apiConfigured?: 
   const [method, setMethod] = useState<ImportMethod>("file");
   const [platform, setPlatform] = useState<ApiPlatform>("tiktok_shop");
   const [reportType, setReportType] = useState<ReportTypeChoice>("auto");
+  const [selected, setSelected] = useState<{ name: string; size: number }[]>([]);
+  const totalSize = selected.reduce((s, f) => s + f.size, 0);
   const [state, action, pending] = useActionState(submitImport, INITIAL_IMPORT_STATE);
   const apiBlocked = method === "api" && !apiConfigured;
   const fileErrors = state.fieldErrors?.file;
@@ -169,20 +177,44 @@ export function ImportSourcePicker({ apiConfigured = false }: { apiConfigured?: 
                 </p>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="import-file">File laporan</Label>
+                <Label htmlFor="import-file">File laporan (boleh lebih dari satu)</Label>
                 <Input
                   id="import-file"
                   name="file"
                   type="file"
+                  multiple
                   required
+                  onChange={(e) =>
+                    setSelected(Array.from(e.currentTarget.files ?? []).map((f) => ({ name: f.name, size: f.size })))
+                  }
                   disabled={pending}
                   accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
                   aria-invalid={fileErrors?.length ? true : undefined}
                   aria-describedby={fileErrors?.length ? "import-file-error" : undefined}
                 />
                 <FieldError id="import-file-error" errors={fileErrors} />
+                {selected.length ? (
+                  <ul className="grid gap-1 rounded-md border p-2 text-xs" aria-label="File yang dipilih">
+                    {selected.map((f) => (
+                      <li key={f.name} className="flex justify-between gap-3">
+                        <span className="truncate">{f.name}</span>
+                        <span className={f.size > MAX_FILE_BYTES ? "text-destructive" : "text-muted-foreground"}>
+                          {mb(f.size)}
+                        </span>
+                      </li>
+                    ))}
+                    <li className="flex justify-between gap-3 border-t pt-1 font-medium">
+                      <span>
+                        {selected.length} file{selected.length > MAX_FILES ? ` (maks. ${MAX_FILES})` : ""}
+                      </span>
+                      <span className={totalSize > MAX_TOTAL_BYTES ? "text-destructive" : ""}>{mb(totalSize)}</span>
+                    </li>
+                  </ul>
+                ) : null}
                 <p className="text-xs text-muted-foreground">
-                  .xlsx atau .csv, maks. 10 MB, mengikuti Template Standar Impor.
+                  .xlsx atau .csv mengikuti Template Standar Impor. Maks. {MAX_FILES} file, {mb(MAX_FILE_BYTES)} per
+                  file, total {mb(MAX_TOTAL_BYTES)}. Setiap file divalidasi terpisah; file yang ditolak tidak
+                  menghalangi file lain. Untuk jenis campuran, pilih &ldquo;Deteksi otomatis&rdquo;.
                 </p>
               </div>
             </div>

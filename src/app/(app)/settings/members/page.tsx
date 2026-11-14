@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { requireRole } from "@/lib/auth/guards";
 import { requireNavItem } from "@/config/navigation";
 import { listMembers } from "@/lib/data/master-data";
-import { ROLE_LABELS, ROLES } from "@/lib/auth/roles";
+import { can, ROLE_LABELS, ROLES } from "@/lib/auth/roles";
+import { AddMemberForm, MemberRowActions } from "./member-forms";
 import { formatDateTime, MISSING } from "@/lib/format";
 import { PageHeader } from "@/components/shared/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -16,14 +17,33 @@ export default async function MembersPage() {
   const session = await requireRole(item.minRole);
   const { organization } = session;
   const members = await listMembers(session);
+  const canManage = can(session.role, "members:manage");
 
   return (
     <div className="space-y-6">
       <PageHeader
         title={item.title}
-        description={`${item.description} Penambahan pengguna & perubahan peran via UI tersedia pada fase berikutnya; sementara gunakan CLI admin (docs/environment.md).`}
+        description={
+          canManage
+            ? `${item.description} Tambahkan pengguna yang boleh mengakses dashboard, atur peran, tangguhkan atau cabut aksesnya.`
+            : `${item.description} Hanya Owner yang dapat menambah pengguna atau mengubah peran.`
+        }
         isDemo={organization.isDemo}
       />
+      {canManage ? (
+        <Card className="max-w-4xl">
+          <CardHeader>
+            <CardTitle className="text-sm">Tambah pengguna</CardTitle>
+            <CardDescription>
+              Email baru dibuatkan akun dengan kata sandi sementara (ditampilkan sekali, wajib diganti saat login
+              pertama). Email yang sudah punya akun langsung mendapat akses dengan kata sandinya sendiri.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AddMemberForm />
+          </CardContent>
+        </Card>
+      ) : null}
       <Card className="py-0">
         <CardContent className="px-0">
           <Table>
@@ -34,6 +54,7 @@ export default async function MembersPage() {
                 <TableHead>Peran</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Login terakhir</TableHead>
+                {canManage ? <TableHead>Kelola akses</TableHead> : null}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -56,6 +77,21 @@ export default async function MembersPage() {
                   <TableCell className="tabular-nums">
                     {m.lastLoginAt ? formatDateTime(m.lastLoginAt, organization.timezone) : "Belum pernah"}
                   </TableCell>
+                  {canManage ? (
+                    <TableCell>
+                      {m.userId === session.user.id ? (
+                        <span className="text-xs text-muted-foreground">Akun Anda</span>
+                      ) : (
+                        <MemberRowActions
+                          key={`${m.role}-${m.status}`}
+                          userId={m.userId}
+                          email={m.email}
+                          role={m.role}
+                          status={m.status}
+                        />
+                      )}
+                    </TableCell>
+                  ) : null}
                 </TableRow>
               ))}
             </TableBody>

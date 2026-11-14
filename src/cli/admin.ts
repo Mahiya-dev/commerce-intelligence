@@ -10,6 +10,7 @@
  *   node dist/cli/admin.cjs disable-user|enable-user --email a@b.com
  *   node dist/cli/admin.cjs list-users
  *   node dist/cli/admin.cjs purge-sessions
+ *   node dist/cli/admin.cjs remove-demo --confirm madu-uray-demo   (hapus SELURUH data & akun DEMO)
  */
 import { parseArgs } from "node:util";
 import { getPool, queryRows } from "@/lib/db/pool";
@@ -23,6 +24,7 @@ import {
   setUserStatus,
 } from "@/lib/admin/users";
 import { purgeExpiredAuthData } from "@/lib/auth/sessions";
+import { DemoRemovalRefused, removeDemoData } from "@/lib/master-data/demo-remove";
 import { isAppRole } from "@/lib/auth/roles";
 import { fail, loadEnv } from "./_shared";
 
@@ -42,6 +44,7 @@ async function main() {
       email: { type: "string" },
       org: { type: "string" },
       role: { type: "string" },
+      confirm: { type: "string" },
     },
   });
   const command = positionals[0];
@@ -125,6 +128,18 @@ async function main() {
       console.log(`✓ Dihapus: ${r.sessions} sesi kedaluwarsa, ${r.loginAttempts} catatan login lama`);
       break;
     }
+    case "remove-demo": {
+      const r = await removeDemoData({ confirmSlug: required(values.confirm, "confirm") });
+      if (r.status === "not_found") {
+        console.log("Tidak ada organisasi DEMO — tidak ada yang dihapus.");
+        break;
+      }
+      const total = Object.values(r.rows).reduce((s, n) => s + n, 0);
+      console.log(`✓ Organisasi DEMO dihapus: ${total} baris dari ${Object.keys(r.rows).length} tabel`);
+      for (const [table, n] of Object.entries(r.rows)) console.log(`   - ${table}: ${n}`);
+      console.log(`✓ Akun demo dihapus: ${r.users.length ? r.users.join(", ") : "-"}`);
+      break;
+    }
     default:
       fail("Perintah tidak dikenal. Lihat komentar di src/cli/admin.ts untuk daftar perintah.");
   }
@@ -135,5 +150,7 @@ main().catch(async (e) => {
   await getPool()
     .end()
     .catch(() => undefined);
-  fail(e instanceof AdminError ? e.message : e instanceof Error ? e.message : String(e));
+  fail(
+    e instanceof AdminError || e instanceof DemoRemovalRefused ? e.message : e instanceof Error ? e.message : String(e),
+  );
 });
