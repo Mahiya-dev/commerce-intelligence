@@ -65,6 +65,7 @@ function demoOverview(): Extract<EcommerceOverview, { status: "ok" }> {
     incomplete: incompleteChannels(facts, CH, AS_OF),
     skus,
     skuCoverage: { listingGmv: skus.reduce((s, x) => s + x.gmv, 0), shopGmv: 229183400 },
+    charts: { daily: [], cumulative: null },
     lastImportAt: null,
   };
 }

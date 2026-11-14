@@ -149,6 +149,15 @@ describe("DEMO data end to end", () => {
       Object.fromEntries(Object.entries(expected.sec5).map(([k, v]) => [k, (v as { B: number }).B])),
     );
     expect(o.skuCoverage).toEqual({ listingGmv: nov.all.gmv, shopGmv: nov.all.gmv });
+
+    // Chart series agree with the KPI cards they illustrate.
+    expect(o.charts.daily[0].points[0].date).toBe("2026-10-01");
+    expect(o.charts.daily.at(-1)!.points.at(-1)!.date).toBe("2026-11-10");
+    const novDaily = o.charts.daily.flatMap((s) => s.points.filter((p) => p.date >= "2026-11-01"));
+    expect(novDaily.reduce((sum, p) => sum + (p.value ?? 0), 0)).toBe(nov.all.gmv);
+    const cumulative = o.charts.cumulative!;
+    expect(cumulative.find((p) => p.date === o.asOf)?.actual).toBe(o.targets.all!.actual);
+    expect(cumulative.at(-1)!.pace).toBeCloseTo(o.targets.all!.target, 6);
   });
 
   it("re-importing the same period overwrites instead of double counting", async () => {

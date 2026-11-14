@@ -7,6 +7,7 @@ import { CURRENT_PHASE, NAVIGATION } from "@/config/navigation";
 import { getEcommerceOverview } from "@/lib/data/ecommerce";
 import { getDashboardInsight } from "@/lib/ai/insights";
 import { AiInsightSection } from "./ai-insight-section";
+import { SalesCharts } from "./sales-charts";
 import { formatDate, formatIDR, formatNumber, formatPercent } from "@/lib/format";
 import { formatChange, TARGET_STATUS_LABEL } from "@/components/shared/target-status-badge";
 import { PageHeader } from "@/components/shared/page-header";
@@ -92,6 +93,8 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
           </p>
         ) : null}
       </section>
+
+      {ok ? <SalesCharts overview={ok} /> : null}
 
       <AiInsightSection
         view={insightView}

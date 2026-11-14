@@ -200,6 +200,23 @@ Diambil dari laporan **Kinerja Produk Harian** dan dipetakan ke SKU lewat Master
 - Bila total GMV produk berbeda dengan GMV toko, biasanya laporan produk belum diimpor untuk semua hari atau channel.
   Selisihnya ditampilkan di bawah tabel.
 
+### 7.5 Grafik penjualan di Dashboard
+
+Section **Grafik penjualan** muncul di Dashboard setelah ada data penjualan yang disimpan. Semua grafik memakai
+angka yang sama dengan kartu KPI dan halaman E-Commerce.
+
+| Grafik                        | Cara membaca                                                                                                                                                                |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GMV kumulatif vs jalur target | Garis berwarna = GMV yang terkumpul sejak tanggal 1. Garis abu-abu = jalur lurus menuju target sebulan. Di bawah jalur berarti tertinggal. Hanya channel yang punya target. |
+| Progres target per channel    | Batang = GMV MTD. Garis tegak = posisi yang seharusnya dicapai hari ini. Lintasan penuh = target sebulan. Status memakai ambang di §7.3.                                    |
+| GMV harian per channel        | Tren harian sejak awal bulan lalu. Hari tanpa laporan tampil sebagai **celah**, bukan nol.                                                                                  |
+| Komposisi GMV per bulan       | Satu batang per bulan; panjangnya = total GMV, persentase = porsi tiap channel. Bulan berjalan ditandai "s.d." tanggal data terakhir.                                       |
+| Kontribusi SKU                | GMV listing per SKU bulan ini (maks. 8 SKU teratas) plus baris abu-abu untuk listing belum dipetakan.                                                                       |
+
+- Arahkan kursor (atau ketuk di ponsel) ke grafik untuk melihat angka persisnya.
+- **Lihat tabel** di bawah setiap grafik menampilkan semua angkanya dalam bentuk tabel.
+- Warna channel tetap: Shopee biru, TikTok Shop oranye, Tokopedia hijau.
+
 ## 8. Insight AI di Dashboard
 
 Section **Insight AI** (di bawah kartu KPI) merangkum 2–4 temuan terpenting dari angka dashboard, lengkap dengan

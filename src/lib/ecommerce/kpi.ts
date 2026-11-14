@@ -244,3 +244,61 @@ export function incompleteChannels(facts: DailyFact[], channels: string[], asOf:
     .filter((c) => c.days < expectedDays)
     .map((c) => ({ ...c, missingDays: expectedDays - c.days }));
 }
+
+// ---- chart series (pure; shaped for the dashboard charts) ---------------------
+
+/** Every calendar date from `from` to `to`, inclusive. */
+export function dateRange(from: string, to: string): string[] {
+  const out: string[] = [];
+  const d = new Date(`${from}T00:00:00Z`);
+  const end = new Date(`${to}T00:00:00Z`);
+  while (d <= end) {
+    out.push(d.toISOString().slice(0, 10));
+    d.setUTCDate(d.getUTCDate() + 1);
+  }
+  return out;
+}
+
+export type DailyPoint = { date: string; value: number | null };
+
+/**
+ * Daily GMV per channel from `from` to `to`. A day without a report is null
+ * (a gap in the line), never zero, so missing data is not read as no sales.
+ */
+export function dailyGmvSeries(facts: DailyFact[], channels: string[], from: string, to: string) {
+  const days = dateRange(from, to);
+  const key = (ch: string, d: string) => `${ch}|${d}`;
+  const byKey = new Map<string, number>();
+  for (const f of facts) byKey.set(key(f.channel, f.date), (byKey.get(key(f.channel, f.date)) ?? 0) + f.gmv);
+  return channels.map((channel) => ({
+    channel,
+    points: days.map<DailyPoint>((date) => ({ date, value: byKey.get(key(channel, date)) ?? null })),
+  }));
+}
+
+/**
+ * Cumulative GMV of the as-of month (channels with a target only, matching
+ * targetScorecard) against the straight-line target pace for every day of
+ * the month. Actual stops at the as-of date.
+ */
+export function cumulativeVsTarget(
+  facts: DailyFact[],
+  targets: { channel: string; targetGmv: number }[],
+  asOf: string,
+): { date: string; actual: number | null; pace: number }[] | null {
+  const withTarget = new Set(targets.map((t) => t.channel));
+  if (withTarget.size === 0) return null;
+  const target = targets.reduce((s, t) => s + t.targetGmv, 0);
+  const dim = daysInMonth(asOf);
+  const perDay = new Map<string, number>();
+  for (const f of facts) {
+    if (withTarget.has(f.channel) && inRange(f.date, monthStart(asOf), asOf)) {
+      perDay.set(f.date, (perDay.get(f.date) ?? 0) + f.gmv);
+    }
+  }
+  let running = 0;
+  return dateRange(monthStart(asOf), monthEnd(asOf)).map((date, i) => {
+    if (date <= asOf) running += perDay.get(date) ?? 0;
+    return { date, actual: date <= asOf ? running : null, pace: (target * (i + 1)) / dim };
+  });
+}

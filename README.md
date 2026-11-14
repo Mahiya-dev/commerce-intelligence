@@ -10,13 +10,13 @@ menyebut sumber dan tanggal datanya, dan data DEMO selalu berlabel.
 
 ## Status
 
-| Fase | Isi                                                                                                | Status          |
-| ---- | -------------------------------------------------------------------------------------------------- | --------------- |
-| 1    | Fondasi: login & peran, multi-organisasi, master produk & listing, audit log, deploy cPanel        | ✅ Selesai      |
-| 2    | Impor data (Excel/CSV, Google Sheets), validasi, simpan ke tabel fakta, KPI dashboard & E-Commerce | ✅ Inti selesai |
-| 2+   | Forecast musiman, halaman pemetaan listing → SKU, koneksi API marketplace                          | ⏳              |
-| 3–5  | Portofolio produk, kreatif Meta, profitabilitas event, afiliasi Shopee HSL                         | ⏳              |
-| 6    | Insight AI di dashboard (Groq) ✅ · AI Analyst tanya-jawab ⏳                                      | Sebagian        |
+| Fase | Isi                                                                                                        | Status          |
+| ---- | ---------------------------------------------------------------------------------------------------------- | --------------- |
+| 1    | Fondasi: login & peran, multi-organisasi, master produk & listing, audit log, deploy cPanel                | ✅ Selesai      |
+| 2    | Impor data (Excel/CSV, Google Sheets), validasi, simpan ke tabel fakta, KPI & grafik dashboard, E-Commerce | ✅ Inti selesai |
+| 2+   | Forecast musiman, halaman pemetaan listing → SKU, koneksi API marketplace                                  | ⏳              |
+| 3–5  | Portofolio produk, kreatif Meta, profitabilitas event, afiliasi Shopee HSL                                 | ⏳              |
+| 6    | Insight AI di dashboard (Groq) ✅ · AI Analyst tanya-jawab ⏳                                              | Sebagian        |
 
 Belum di-deploy ke server produksi. Langkahnya ada di [Deployment](docs/deployment.md).
 

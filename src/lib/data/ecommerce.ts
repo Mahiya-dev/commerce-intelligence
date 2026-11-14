@@ -6,6 +6,8 @@ import { logger } from "@/lib/logger";
 import { todayInTimeZone } from "@/lib/imports/validate";
 import {
   addMonths,
+  cumulativeVsTarget,
+  dailyGmvSeries,
   incompleteChannels,
   momEquivalent,
   monthlySummary,
@@ -50,6 +52,13 @@ export type EcommerceOverview =
       skus: SkuContribution[];
       /** Listing GMV vs shop GMV for the month (product reports may lag the shop report). */
       skuCoverage: { listingGmv: number; shopGmv: number };
+      /** Series for the dashboard charts. */
+      charts: {
+        /** Daily GMV per channel from the start of the previous month to the as-of date. */
+        daily: ReturnType<typeof dailyGmvSeries>;
+        /** Cumulative GMV vs straight-line target pace for the as-of month; null without targets. */
+        cumulative: ReturnType<typeof cumulativeVsTarget>;
+      };
       lastImportAt: string | null;
     };
 
@@ -134,6 +143,7 @@ export async function getEcommerceOverview(
       units: r.units_sold,
       visitors: r.visitors,
     }));
+    const targets = targetRows.map((t) => ({ channel: t.code, targetGmv: n(t.target_gmv) }));
     const skus = skuRows.map((r) => ({ sku: r.sku, name: r.name, gmv: n(r.gmv), units: n(r.units) }));
 
     return {
@@ -143,15 +153,14 @@ export async function getEcommerceOverview(
       channels: channelRows,
       months: monthlySummary(facts, channels, asOf, months),
       mom: momEquivalent(facts, channels, asOf),
-      targets: targetScorecard(
-        facts,
-        targetRows.map((t) => ({ channel: t.code, targetGmv: n(t.target_gmv) })),
-        channels,
-        asOf,
-      ),
+      targets: targetScorecard(facts, targets, channels, asOf),
       incomplete: incompleteChannels(facts, channels, asOf),
       skus,
       skuCoverage: { listingGmv: skus.reduce((s, r) => s + r.gmv, 0), shopGmv: n(coverage?.gmv ?? null) },
+      charts: {
+        daily: dailyGmvSeries(facts, channels, addMonths(asOf, -1), asOf),
+        cumulative: cumulativeVsTarget(facts, targets, asOf),
+      },
       lastImportAt: lastImport?.at ? lastImport.at.toISOString() : null,
     };
   });
