@@ -249,7 +249,8 @@ prioritas dan langkah yang disarankan.
 - **Cara membaca:** setiap insight punya **kotak bukti**. Angka di kotak itu diambil langsung dari data aplikasi,
   bukan ditulis AI. Teks AI sengaja tanpa angka, dan penyebab yang disebut adalah dugaan yang perlu dicek.
 - **Batas pemakaian:** 6 kali per pengguna per jam dan 20 kali per organisasi per hari.
-- **"AI belum dikonfigurasi":** admin server perlu mengisi `GROQ_API_KEY` di `.env`.
+- **"AI belum dikonfigurasi":** Owner mengisi **API Key Groq** di **Pengaturan → Organisasi** (key diuji saat
+  disimpan dan disimpan terenkripsi). Cadangan tingkat server: `GROQ_API_KEY` di `.env`.
 - **Data yang dikirim ke AI:** hanya angka ringkasan (GMV, pesanan, target, porsi SKU) dan nama produk/channel.
   Tidak ada data pelanggan, email, atau baris transaksi.
 

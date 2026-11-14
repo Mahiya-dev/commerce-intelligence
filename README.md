@@ -10,15 +10,18 @@ menyebut sumber dan tanggal datanya, dan data DEMO selalu berlabel.
 
 ## Status
 
-| Fase | Isi                                                                                                        | Status          |
-| ---- | ---------------------------------------------------------------------------------------------------------- | --------------- |
-| 1    | Fondasi: login & peran, multi-organisasi, master produk & listing, audit log, deploy cPanel                | ✅ Selesai      |
-| 2    | Impor data (Excel/CSV, Google Sheets), validasi, simpan ke tabel fakta, KPI & grafik dashboard, E-Commerce | ✅ Inti selesai |
-| 2+   | Forecast musiman, halaman pemetaan listing → SKU, koneksi API marketplace                                  | ⏳              |
-| 3–5  | Portofolio produk, kreatif Meta, profitabilitas event, afiliasi Shopee HSL                                 | ⏳              |
-| 6    | Insight AI di dashboard (Groq) ✅ · AI Analyst tanya-jawab ⏳                                              | Sebagian        |
+| Fase | Isi                                                                                                                                           | Status          |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| 1    | Fondasi: login & peran, multi-organisasi, master produk & listing, audit log, deploy cPanel                                                   | ✅ Selesai      |
+| 2    | Impor data (Excel/CSV, Google Sheets), validasi, simpan ke tabel fakta, KPI & grafik dashboard, E-Commerce                                    | ✅ Inti selesai |
+| 2+   | Rentang tanggal Dashboard & E-Commerce, impor beberapa file sekaligus ✅ · forecast musiman, pemetaan listing → SKU di UI, API marketplace ⏳ | Sebagian        |
+| 3    | Portofolio produk                                                                                                                             | ✅ (data DEMO)  |
+| 4–5  | Kreatif Meta, profitabilitas event, afiliasi Shopee HSL                                                                                       | ✅ (data DEMO)  |
+| 6    | Insight AI di dashboard (Groq) ✅ · AI Analyst tanya-jawab ⏳                                                                                 | Sebagian        |
+| —    | Pengaturan organisasi & KPI, API Key AI per organisasi (terenkripsi), kelola pengguna oleh Owner                                              | ✅              |
 
-Belum di-deploy ke server produksi. Langkahnya ada di [Deployment](docs/deployment.md).
+Target produksi: **cPanel** ([Deployment](docs/deployment.md)). Preview **DEMO** di Vercel dengan MySQL cloud:
+[Deployment Vercel](docs/deployment-vercel.md) — jangan isi data bisnis asli ke preview.
 
 ## Dokumentasi
 
@@ -29,6 +32,7 @@ Mulai dari dokumen yang sesuai dengan peran Anda:
 | Memakai aplikasi: impor data, membaca KPI             | [Panduan Pengguna](docs/user-guide.md)               |
 | Menjalankan aplikasi di laptop (Windows/Mac)          | [Environment & setup lokal](docs/environment.md)     |
 | Men-deploy ke cPanel, backup, rollback                | [Deployment](docs/deployment.md)                     |
+| Membuat preview DEMO di Vercel                        | [Deployment Vercel](docs/deployment-vercel.md)       |
 | Menyambungkan GitHub ↔ cPanel (SSH, deploy key)       | [Setup GitHub & cPanel](docs/setup-github-cpanel.md) |
 | Memahami arsitektur, skema database, keputusan desain | [Arsitektur](docs/architecture.md)                   |
 | Melihat hasil verifikasi Fase 1                       | [Laporan Fase 1](docs/phase-1-report.md)             |
@@ -93,11 +97,9 @@ Detail lengkap: [docs/architecture.md](docs/architecture.md) §3.
 
 ## Keterbatasan yang diketahui
 
-- **Insight AI** baru diuji dengan Groq tiruan; panggilan ke Groq sungguhan terbukti setelah `GROQ_API_KEY` diisi.
-- **Ambang status target** (On Track ≥ 90%, Watch ≥ 70%) belum dikonfirmasi pemilik bisnis. Lihat
-  [arsitektur §8 #11](docs/architecture.md).
-- **Izin target**: target bulanan saat ini bisa disimpan oleh peran Analyst lewat impor, padahal izin
-  `targets:manage` di `src/lib/auth/roles.ts` disiapkan untuk Admin. Perlu diputuskan mana yang berlaku.
+- **Insight AI** diuji otomatis dengan Groq tiruan. Panggilan ke Groq sungguhan dicek manual: Owner menyimpan API
+  Key di **Pengaturan → Organisasi** (key diverifikasi saat disimpan), lalu klik **Buat insight** di Dashboard.
+- **Preview Vercel**: unggahan impor maksimal 4,5 MB per kirim (batas Vercel); di cPanel 10 MB/file.
 - Batch yang sudah disimpan belum bisa dibatalkan. Koreksi dilakukan dengan mengimpor ulang file yang sudah
   diperbaiki, yang menimpa data lama.
 - Belum diuji di server cPanel sungguhan: restart Passenger dan batas memori hosting baru terbukti saat deploy

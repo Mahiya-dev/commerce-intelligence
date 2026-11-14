@@ -5,14 +5,14 @@ Revisi stack (2026-11-04): **Supabase → MySQL/MariaDB di cPanel (dikelola via 
 
 ## 1. Stack
 
-| Lapisan             | Teknologi                                                                  | Catatan                                                     |
-| ------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| Aplikasi            | Next.js 16 (App Router, TypeScript, Cache Components), output `standalone` | Dijalankan Passenger (cPanel Setup Node.js App), Node 20/22 |
-| UI                  | Tailwind CSS 4 + shadcn/ui (Radix)                                         | Bahasa Indonesia                                            |
-| Database            | MySQL 8.0.16+ / MariaDB 10.6+ (InnoDB, utf8mb4) via `mysql2`               | Dikelola lewat phpMyAdmin; skema hanya lewat migrasi        |
-| Autentikasi         | Lokal: scrypt (Node built-in) + sesi server di tabel `sessions`            | Tanpa layanan eksternal                                     |
-| AI Analyst (Fase 6) | Google Gemini API, server-side                                             | Kunci di env server; abstraksi provider                     |
-| Tes                 | Vitest (unit + integrasi MySQL/MariaDB), Playwright (E2E)                  | CI matrix MySQL 8.0, MariaDB 10.6 & 10.11                   |
+| Lapisan     | Teknologi                                                                  | Catatan                                                                                 |
+| ----------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Aplikasi    | Next.js 16 (App Router, TypeScript, Cache Components), output `standalone` | Dijalankan Passenger (cPanel Setup Node.js App), Node 20/22                             |
+| UI          | Tailwind CSS 4 + shadcn/ui (Radix)                                         | Bahasa Indonesia                                                                        |
+| Database    | MySQL 8.0.16+ / MariaDB 10.6+ (InnoDB, utf8mb4) via `mysql2`               | Dikelola lewat phpMyAdmin; skema hanya lewat migrasi                                    |
+| Autentikasi | Lokal: scrypt (Node built-in) + sesi server di tabel `sessions`            | Tanpa layanan eksternal                                                                 |
+| AI (Fase 6) | Groq (insight dashboard); Gemini disiapkan, server-side                    | Key per organisasi terenkripsi (`APP_ENCRYPTION_KEY`), cadangan env; abstraksi provider |
+| Tes         | Vitest (unit + integrasi MySQL/MariaDB), Playwright (E2E)                  | CI matrix MySQL 8.0, MariaDB 10.6 & 10.11                                               |
 
 ## 2. Prinsip
 
@@ -117,10 +117,12 @@ ke zona organisasi hanya saat ditampilkan.
 ## 7. AI — Insight dashboard (Groq)
 
 Kode: `src/lib/ai/`. Provider saat ini **Groq** (API kompatibel OpenAI, Structured Outputs `json_schema` strict);
-model diatur lewat `GROQ_MODEL` (default `openai/gpt-oss-120b`). Gemini atau penyedia lain dapat ditambahkan lewat
-antarmuka `AiProvider` tanpa mengubah logika insight.
+model = pilihan yang disimpan bersama key, lalu `GROQ_MODEL`, lalu default `openai/gpt-oss-120b`. Gemini atau
+penyedia lain dapat ditambahkan lewat antarmuka `AiProvider` tanpa mengubah logika insight.
 
-- Panggilan hanya dari server (Server Action); `GROQ_API_KEY` tidak pernah ke browser.
+- **Key**: yang disimpan Owner di Pengaturan → Organisasi (terenkripsi dengan `APP_ENCRYPTION_KEY`, per
+  organisasi, `src/lib/organization/ai-credentials.ts`) diutamakan; `GROQ_API_KEY` di env server sebagai cadangan.
+- Panggilan hanya dari server (Server Action); key tidak pernah dikirim ke browser.
 - **Input** = metrik agregat hasil `getEcommerceOverview` (GMV, pesanan, AOV, CR, MoM, target, porsi SKU) —
   tanpa baris mentah, email, atau akses database. Input disimpan di `ai_insights.input` agar setiap insight dapat
   ditelusuri.
@@ -149,7 +151,7 @@ antarmuka `AiProvider` tanpa mengubah logika insight.
 | 9   | Commit impor semua-atau-tidak                                               | Baris harian yang ditolak membuat GMV MTD terlihat lebih kecil tanpa disadari.            | File dengan error harus diperbaiki dan diimpor ulang; peringatan wajib dikonfirmasi.        |
 | 10  | Tanggal acuan KPI = tanggal data toko terakhir (≤ hari ini)                 | Dashboard tidak kosong saat laporan hari ini belum diunggah.                              | Label "data s.d." selalu tampil; channel yang kurang hari diberi peringatan.                |
 | 11  | Ambang status target: On Track ≥ 90%, Watch ≥ 70%, selain itu At Risk       | Sesuai Kunci Jawaban; **dikonfirmasi pemilik bisnis** (Nov 2026).                         | Satu konstanta: `STATUS_THRESHOLDS` di `src/lib/ecommerce/kpi.ts`.                          |
-| 12  | Groq (bukan Gemini) untuk insight; model via env                            | Pilihan pemilik produk; API kompatibel OpenAI dengan structured outputs.                  | Daftar model Groq sering berubah: ganti `GROQ_MODEL` tanpa rilis kode.                      |
+| 12  | Groq (bukan Gemini) untuk insight; key & model per organisasi               | Pilihan pemilik produk; API kompatibel OpenAI dengan structured outputs.                  | Daftar model Groq sering berubah: ganti model di Pengaturan atau `GROQ_MODEL` tanpa rilis.  |
 | 13  | AI tidak menulis angka; bukti dirender aplikasi                             | Angka halusinasi di dashboard eksekutif lebih berbahaya daripada insight yang hilang.     | Insight yang melanggar dibuang; teks AI kualitatif, angka selalu dari database.             |
 | 14  | Simpan target bulanan = Admin/Owner (`targets:manage`)                      | Target menentukan semua badge status; perubahan target adalah keputusan manajemen.        | Analyst tetap boleh unggah & validasi; commit `sales_target` ditolak (`targets_forbidden`). |
 | 15  | Grafik dashboard tanpa library chart                                        | Build cPanel tetap ringan; tampilan mengikuti palet tervalidasi dan aturan dataviz.       | SVG/HTML di `src/components/charts`; seri dari `kpi.ts` (murni, diuji).                     |
