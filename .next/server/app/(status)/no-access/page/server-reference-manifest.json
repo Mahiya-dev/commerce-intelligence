@@ -1,6 +1,6 @@
 {
   "node": {
-    "009cf6bc02f30f3748bddde81da9521b1b2709a2c9": {
+    "005a9e5ee715d1a10775ae419e2b0688191e3e1c6f": {
       "workers": {
         "app/(status)/no-access/page": {
           "moduleId": 25933,
@@ -10,17 +10,7 @@
       "exportedName": "signOut",
       "filename": "src/app/(auth)/actions.ts"
     },
-    "60412f8e55258d8ed5510bcc632be2a593ce609135": {
-      "workers": {
-        "app/(status)/no-access/page": {
-          "moduleId": 25933,
-          "async": false
-        }
-      },
-      "exportedName": "signIn",
-      "filename": "src/app/(auth)/actions.ts"
-    },
-    "604e8e3b7c7a9677c2c0850d24cfe10b306e508501": {
+    "60389838aa63427e5bae21b6705894105796c29f2b": {
       "workers": {
         "app/(status)/no-access/page": {
           "moduleId": 25933,
@@ -28,6 +18,16 @@
         }
       },
       "exportedName": "changePassword",
+      "filename": "src/app/(auth)/actions.ts"
+    },
+    "60e87a58e1e65ced510a71b5587e9d8215f2127fc3": {
+      "workers": {
+        "app/(status)/no-access/page": {
+          "moduleId": 25933,
+          "async": false
+        }
+      },
+      "exportedName": "signIn",
       "filename": "src/app/(auth)/actions.ts"
     }
   },

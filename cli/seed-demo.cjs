@@ -88,12 +88,12 @@ var require_lib = __commonJS({
     CONTEXT_TRIGGER[charCode.dash] = 1;
     CONTEXT_TRIGGER[charCode.slash] = 1;
     for (const word of SET_CLAUSE_TERMINATORS) {
-      const first = word.charCodeAt(0);
-      const bucket = SET_CLAUSE_TERMINATORS_BY_FIRST[first];
+      const first2 = word.charCodeAt(0);
+      const bucket = SET_CLAUSE_TERMINATORS_BY_FIRST[first2];
       if (bucket)
         bucket.push(word);
       else
-        SET_CLAUSE_TERMINATORS_BY_FIRST[first] = [word];
+        SET_CLAUSE_TERMINATORS_BY_FIRST[first2] = [word];
     }
     var hasOwnProperty = Object.prototype.hasOwnProperty;
     var isRecord = (value) => typeof value === "object" && value !== null && !Array.isArray(value) && !(value instanceof Set) && !(value instanceof Map);
@@ -260,13 +260,13 @@ var require_lib = __commonJS({
     var escapeString = (value) => {
       const escapeChars = regex.escapeChars;
       escapeChars.lastIndex = 0;
-      const first = escapeChars.exec(value);
-      if (first === null)
+      const first2 = escapeChars.exec(value);
+      if (first2 === null)
         return `'${value}'`;
       const length = value.length;
-      let result = "'" + value.slice(0, first.index);
-      let chunkStart = first.index;
-      for (let i = first.index; i < length; i++) {
+      let result = "'" + value.slice(0, first2.index);
+      let chunkStart = first2.index;
+      for (let i = first2.index; i < length; i++) {
         let escaped;
         switch (value.charCodeAt(i)) {
           case 0:
@@ -24012,10 +24012,10 @@ var $ZodUnion = /* @__PURE__ */ $constructor("$ZodUnion", (inst, def) => {
     return void 0;
   });
   const single = def.options.length === 1;
-  const first = def.options[0]._zod.run;
+  const first2 = def.options[0]._zod.run;
   inst._zod.parse = (payload, ctx) => {
     if (single) {
-      return first(payload, ctx);
+      return first2(payload, ctx);
     }
     let async = false;
     const results = [];
@@ -24068,10 +24068,10 @@ var $ZodXor = /* @__PURE__ */ $constructor("$ZodXor", (inst, def) => {
   $ZodUnion.init(inst, def);
   def.inclusive = false;
   const single = def.options.length === 1;
-  const first = def.options[0]._zod.run;
+  const first2 = def.options[0]._zod.run;
   inst._zod.parse = (payload, ctx) => {
     if (single) {
-      return first(payload, ctx);
+      return first2(payload, ctx);
     }
     let async = false;
     const results = [];
@@ -35490,7 +35490,9 @@ var TEMPLATES = {
       { name: "unit_terjual", label: "Unit terjual", type: "integer", required: true },
       { name: "pengunjung_produk", label: "Pengunjung produk", type: "integer", required: false },
       { name: "klik_produk", label: "Klik produk", type: "integer", required: false },
-      { name: "pesanan_batal", label: "Pesanan batal", type: "integer", required: false }
+      { name: "pesanan_batal", label: "Pesanan batal", type: "integer", required: false },
+      /** Optional internal SKU (e.g. Shopee "SKU Induk"): maps a new/unmapped listing automatically. */
+      { name: "sku_internal", label: "SKU internal", type: "text", required: false, maxLength: 64 }
     ]
   },
   target_bulanan: {
@@ -35567,6 +35569,30 @@ var TEMPLATES = {
       { name: "nilai_pembelian", label: "Nilai pembelian", type: "integer", required: true }
     ]
   },
+  iklan_marketplace_harian: {
+    key: "iklan_marketplace_harian",
+    title: "Iklan Marketplace Harian",
+    dbReportType: "marketplace_ads_daily",
+    keyColumns: ["tanggal", "channel", "jenis_iklan", "nama_iklan", "kode_produk"],
+    periodColumn: "tanggal",
+    columns: [
+      { name: "tanggal", label: "Tanggal", type: "date", required: true, notFuture: true },
+      { name: "channel", label: "Channel", type: "channel", required: true },
+      { name: "nama_iklan", label: "Nama iklan", type: "text", required: true, maxLength: 255 },
+      { name: "jenis_iklan", label: "Jenis iklan", type: "text", required: true, maxLength: 64 },
+      { name: "mode_bidding", label: "Mode bidding", type: "text", required: false, maxLength: 64 },
+      { name: "kode_produk", label: "Kode produk", type: "text", required: false, maxLength: ID },
+      { name: "dilihat", label: "Dilihat", type: "integer", required: true },
+      { name: "klik", label: "Klik", type: "integer", required: true },
+      { name: "konversi", label: "Konversi", type: "integer", required: true },
+      { name: "konversi_langsung", label: "Konversi langsung", type: "integer", required: false },
+      { name: "produk_terjual", label: "Produk terjual", type: "integer", required: true },
+      { name: "terjual_langsung", label: "Terjual langsung", type: "integer", required: false },
+      { name: "omzet_iklan", label: "Omzet dari iklan", type: "integer", required: true },
+      { name: "omzet_langsung", label: "Omzet langsung", type: "integer", required: false },
+      { name: "biaya", label: "Biaya iklan", type: "integer", required: true }
+    ]
+  },
   penjualan_hsl: {
     key: "penjualan_hsl",
     title: "Penjualan Afiliasi Shopee HSL",
@@ -35597,6 +35623,195 @@ var TEMPLATE_LIST = Object.values(TEMPLATES);
 var REPORT_TYPE_LABELS = Object.fromEntries(
   TEMPLATE_LIST.map((t) => [t.dbReportType, t.title])
 );
+
+// src/lib/imports/shopee.ts
+var SHOPEE_PRODUCT_SHEET = "Produk dengan Performa Terbaik";
+var COL = {
+  productId: "Kode Produk",
+  name: "Produk",
+  variationId: "Kode Variasi",
+  parentSku: "SKU Induk",
+  gmv: "Penjualan (Pesanan Siap Dikirim) (IDR)",
+  orders: "Pesanan Siap Dikirim",
+  units: "Produk (Pesanan Siap Dikirim)",
+  visitors: "Pengunjung Produk (Kunjungan)",
+  clicks: "Produk Diklik"
+};
+var OUT_HEADERS = [
+  "tanggal",
+  "channel",
+  "id_produk_channel",
+  "id_sku_channel",
+  "nama_listing",
+  "gmv",
+  "pesanan",
+  "unit_terjual",
+  "pengunjung_produk",
+  "klik_produk",
+  "sku_internal"
+];
+var SKU_RE = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
+var EMPTY = /* @__PURE__ */ new Set(["", "-"]);
+var ShopeeExportError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ShopeeExportError";
+  }
+};
+function isShopeeProductExport(wb) {
+  const sheet = wb.sheets.find((s2) => s2.name.trim() === SHOPEE_PRODUCT_SHEET);
+  const header = sheet?.rows[0]?.map((h) => h.trim()) ?? [];
+  return header.includes(COL.productId) && header.includes(COL.gmv) && header.includes(COL.parentSku);
+}
+function shopeeExportDate(fileName) {
+  const m = /parentskudetail\.(\d{4})(\d{2})(\d{2})_(\d{4})(\d{2})(\d{2})/i.exec(fileName);
+  if (!m) {
+    throw new ShopeeExportError(
+      "Tanggal tidak terbaca dari nama file ekspor Shopee. Jangan mengganti nama file (format: parentskudetail.YYYYMMDD_YYYYMMDD.xlsx)."
+    );
+  }
+  const from = `${m[1]}-${m[2]}-${m[3]}`;
+  const to = `${m[4]}-${m[5]}-${m[6]}`;
+  if (from !== to) {
+    throw new ShopeeExportError(
+      `File ekspor Shopee mencakup ${from} s.d. ${to}. Ekspor per hari (tanggal awal = tanggal akhir) agar data harian tidak tercampur.`
+    );
+  }
+  return from;
+}
+function shopeeInteger(raw) {
+  const v = raw.trim();
+  if (EMPTY.has(v)) return "0";
+  const normalized = v.replace(/\./g, "").replace(",", ".");
+  const n = Number(normalized);
+  return Number.isFinite(n) ? String(Math.round(n)) : v;
+}
+function shopeeProductTable(wb, fileName) {
+  const date6 = shopeeExportDate(fileName);
+  const sheet = wb.sheets.find((s2) => s2.name.trim() === SHOPEE_PRODUCT_SHEET);
+  const header = sheet.rows[0].map((h) => h.trim());
+  const at = (name) => header.indexOf(name);
+  const idx = Object.fromEntries(Object.entries(COL).map(([k, name]) => [k, at(name)]));
+  const missing = Object.entries(COL).filter(([k]) => idx[k] < 0).map(([, name]) => name);
+  if (missing.length) {
+    throw new ShopeeExportError(`Kolom ekspor Shopee tidak ditemukan: ${missing.join(", ")}.`);
+  }
+  const cell = (row, i) => (row[i] ?? "").trim();
+  const body = sheet.rows.slice(1).filter((r) => cell(r, idx.productId) !== "").map((r) => {
+    const variation = cell(r, idx.variationId);
+    const sku = cell(r, idx.parentSku);
+    return [
+      date6,
+      "shopee",
+      cell(r, idx.productId),
+      EMPTY.has(variation) ? "" : variation,
+      cell(r, idx.name),
+      shopeeInteger(cell(r, idx.gmv)),
+      shopeeInteger(cell(r, idx.orders)),
+      shopeeInteger(cell(r, idx.units)),
+      shopeeInteger(cell(r, idx.visitors)),
+      shopeeInteger(cell(r, idx.clicks)),
+      // An odd parent SKU must not reject the day's data: leave it unmapped instead.
+      SKU_RE.test(sku) ? sku : ""
+    ];
+  });
+  if (body.length === 0) throw new ShopeeExportError("Ekspor Shopee tidak berisi baris produk.");
+  return [OUT_HEADERS, ...body];
+}
+
+// src/lib/imports/shopee-ads.ts
+var COL2 = {
+  name: "Nama Iklan",
+  adType: "Jenis Iklan",
+  productCode: "Kode Produk",
+  bidding: "Mode Bidding",
+  impressions: "Dilihat",
+  clicks: "Jumlah Klik",
+  conversions: "Konversi",
+  directConversions: "Konversi Langsung",
+  units: "Produk Terjual",
+  directUnits: "Terjual Langsung",
+  gmv: "Omzet Penjualan",
+  directGmv: "Penjualan Langsung (GMV Langsung)",
+  cost: "Biaya"
+};
+var OUT_HEADERS2 = [
+  "tanggal",
+  "channel",
+  "nama_iklan",
+  "jenis_iklan",
+  "mode_bidding",
+  "kode_produk",
+  "dilihat",
+  "klik",
+  "konversi",
+  "konversi_langsung",
+  "produk_terjual",
+  "terjual_langsung",
+  "omzet_iklan",
+  "omzet_langsung",
+  "biaya"
+];
+var ShopeeAdsExportError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ShopeeAdsExportError";
+  }
+};
+var first = (row) => (row?.[0] ?? "").trim();
+function isShopeeAdsExport(table) {
+  return /^Semua Laporan Iklan\b.*Shopee/i.test(first(table[0])) && table.some((r) => first(r) === "Urutan");
+}
+function shopeeAdsDate(table) {
+  const period = table.find((r) => first(r) === "Periode")?.[1]?.trim() ?? "";
+  const m = /^(\d{2})\/(\d{2})\/(\d{4})\s*-\s*(\d{2})\/(\d{2})\/(\d{4})$/.exec(period);
+  if (!m) throw new ShopeeAdsExportError("Baris 'Periode' tidak ditemukan di ekspor iklan Shopee.");
+  const from = `${m[3]}-${m[2]}-${m[1]}`;
+  const to = `${m[6]}-${m[5]}-${m[4]}`;
+  if (from !== to) {
+    throw new ShopeeAdsExportError(
+      `Ekspor iklan Shopee mencakup ${from} s.d. ${to}. Ekspor per hari (tanggal awal = tanggal akhir) agar biaya iklan harian tidak tercampur.`
+    );
+  }
+  return from;
+}
+function adsNumber(raw) {
+  const v = raw.trim().replace(/%$/, "");
+  if (v === "" || v === "-") return "";
+  const n = Number(v.replace(/,/g, ""));
+  return Number.isFinite(n) ? String(Math.round(n)) : raw.trim();
+}
+function shopeeAdsTable(table) {
+  const date6 = shopeeAdsDate(table);
+  const h = table.findIndex((r) => first(r) === "Urutan");
+  const header = table[h].map((c) => c.trim());
+  const idx = Object.fromEntries(Object.entries(COL2).map(([k, name]) => [k, header.indexOf(name)]));
+  const missing = Object.entries(COL2).filter(([k]) => idx[k] < 0).map(([, name]) => name);
+  if (missing.length)
+    throw new ShopeeAdsExportError(`Kolom ekspor iklan Shopee tidak ditemukan: ${missing.join(", ")}.`);
+  const cell = (r, i) => (r[i] ?? "").trim();
+  const text = (r, i) => cell(r, i) === "-" ? "" : cell(r, i);
+  const required2 = (r, i) => adsNumber(cell(r, i)) || "0";
+  const body = table.slice(h + 1).filter((r) => cell(r, idx.name) !== "").map((r) => [
+    date6,
+    "shopee",
+    cell(r, idx.name),
+    text(r, idx.adType),
+    text(r, idx.bidding),
+    text(r, idx.productCode),
+    required2(r, idx.impressions),
+    required2(r, idx.clicks),
+    required2(r, idx.conversions),
+    adsNumber(cell(r, idx.directConversions)),
+    required2(r, idx.units),
+    adsNumber(cell(r, idx.directUnits)),
+    required2(r, idx.gmv),
+    adsNumber(cell(r, idx.directGmv)),
+    required2(r, idx.cost)
+  ]);
+  if (body.length === 0) throw new ShopeeAdsExportError("Ekspor iklan Shopee tidak berisi baris iklan.");
+  return [OUT_HEADERS2, ...body];
+}
 
 // src/lib/imports/limits.ts
 var MAX_FILE_BYTES = 10 * 1024 * 1024;
@@ -35638,16 +35853,31 @@ function decodeText(buf) {
     return new TextDecoder("windows-1252").decode(buf);
   }
 }
-function csvTables(name, buf) {
+function csvTables(name, buf, expected) {
+  let table;
   try {
-    return [{ name, table: parseCsv(decodeText(buf)) }];
+    table = parseCsv(decodeText(buf));
   } catch (error48) {
     if (error48 instanceof CsvParseError) throw new ImportInputError(error48.message);
     throw error48;
   }
+  if (isShopeeAdsExport(table)) {
+    if (expected && expected !== "iklan_marketplace_harian") {
+      throw new ImportInputError(
+        `File ini ekspor Iklan Shopee; pilih jenis "${TEMPLATES.iklan_marketplace_harian.title}".`
+      );
+    }
+    try {
+      return [{ name: "Shopee Ads \xB7 Data Keseluruhan Iklan", table: shopeeAdsTable(table) }];
+    } catch (error48) {
+      if (error48 instanceof ShopeeAdsExportError) throw new ImportInputError(error48.message);
+      throw error48;
+    }
+  }
+  return [{ name, table }];
 }
 var hasData = (rows2) => rows2.slice(1).some((r) => r.some((c) => c.trim() !== ""));
-function xlsxTables(buf, expected) {
+function xlsxTables(buf, expected, fileName = "") {
   let wb;
   try {
     wb = readXlsx(buf, { maxRows: MAX_ROWS + 1e3 });
@@ -35656,6 +35886,19 @@ function xlsxTables(buf, expected) {
     throw error48;
   }
   const excelDates = { date1904: wb.date1904 };
+  if (isShopeeProductExport(wb)) {
+    if (expected && expected !== "kinerja_produk_harian") {
+      throw new ImportInputError(
+        `File ini ekspor Performa Produk Shopee; pilih jenis "${TEMPLATES.kinerja_produk_harian.title}".`
+      );
+    }
+    try {
+      return [{ name: "Shopee \xB7 Performa Produk", table: shopeeProductTable(wb, fileName) }];
+    } catch (error48) {
+      if (error48 instanceof ShopeeExportError) throw new ImportInputError(error48.message);
+      throw error48;
+    }
+  }
   const keys = expected ? [expected] : TEMPLATE_LIST.map((t) => t.key);
   const named = wb.sheets.filter((s2) => keys.includes(s2.name.trim().toLowerCase()) && hasData(s2.rows));
   const picked = named.length > 0 ? named : wb.sheets.filter((s2) => hasData(s2.rows)).slice(0, 1);
@@ -35672,7 +35915,7 @@ function readUploadedFile(fileName, buf, expected) {
     throw new ImportInputError(`Ukuran file melebihi ${MAX_FILE_BYTES / 1024 / 1024} MB.`);
   }
   const kind = detectFileKind(fileName, buf);
-  return { kind, tables: kind === "xlsx" ? xlsxTables(buf, expected) : csvTables(fileName, buf) };
+  return { kind, tables: kind === "xlsx" ? xlsxTables(buf, expected, fileName) : csvTables(fileName, buf, expected) };
 }
 
 // src/lib/imports/staging.ts
@@ -35842,7 +36085,7 @@ var MONTHS = [
 ];
 var CHANNEL_LIST = MARKETPLACE_CHANNELS.join(" | ");
 var INTEGER_RE = /^-?\d+$/;
-var SKU_RE = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
+var SKU_RE2 = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
 function normalizeHeader(h) {
   return h.replace(/^﻿/, "").trim().toLowerCase();
 }
@@ -35977,7 +36220,7 @@ function parseCell(raw, col, opts) {
           issue: issue2(col.name, "invalid_format", `${col.label} '${value}' tidak valid (${col.pattern.hint}).`)
         };
       }
-      if (col.name === "sku_internal" && !SKU_RE.test(value)) {
+      if (col.name === "sku_internal" && !SKU_RE2.test(value)) {
         return {
           value: null,
           issue: issue2(col.name, "invalid_format", `SKU internal '${value}' tidak valid (huruf, angka, . _ -).`)
@@ -36115,13 +36358,13 @@ function validateTable(table, opts) {
     const keyBroken = issues.some((x) => template.keyColumns.includes(x.column));
     if (!keyBroken) {
       naturalKey = template.keyColumns.map((k) => String(normalized[k] ?? "")).join("|");
-      const first = seenKeys.get(naturalKey);
-      if (first !== void 0) {
+      const first2 = seenKeys.get(naturalKey);
+      if (first2 !== void 0) {
         issues.push(
           issue2(
             template.keyColumns.join("+"),
             "duplicate_key",
-            `Duplikat baris ${first} (${keyLabel} sama) dalam satu file.`
+            `Duplikat baris ${first2} (${keyLabel} sama) dalam satu file.`
           )
         );
       } else {
@@ -36420,6 +36663,10 @@ async function existingListings(db, org) {
   );
 }
 var rowListingKey = (channels, r) => listingKey(channelOf(channels, r), str(r.id_produk_channel).toLowerCase(), str(r.id_sku_channel).toLowerCase());
+function adCampaignKey(r) {
+  const part = (v) => str(v ?? null).toLowerCase();
+  return (0, import_node_crypto7.createHash)("sha256").update(`${part(r.jenis_iklan)}|${part(r.nama_iklan)}|${part(r.kode_produk)}`).digest("hex");
+}
 async function existingDateKeys(db, sql, org, rows2, key, dateColumn) {
   if (rows2.length === 0) return /* @__PURE__ */ new Set();
   const dates = rows2.map((r) => str(r[dateColumn])).sort();
@@ -36445,7 +36692,9 @@ async function plan(db, org, reportType, inputRows) {
     inserts: 0,
     overwrites: 0,
     newListings: 0,
-    unknownSkus: []
+    unknownSkus: [],
+    autoMapped: 0,
+    unmatchedSkus: []
   };
   if (reportType === "marketplace_sales_daily") {
     const existing = await existingDateKeys(
@@ -36476,7 +36725,15 @@ async function plan(db, org, reportType, inputRows) {
       const id = listings.get(rowListingKey(channels, r));
       return id !== void 0 && existing.has(`${id}|${str(r.tanggal)}`);
     }).length;
-    return { ...base, overwrites, inserts: rows2.length - overwrites, newListings: missing.size };
+    const auto = await autoMappings(db, org, channels, rows2);
+    return {
+      ...base,
+      overwrites,
+      inserts: rows2.length - overwrites,
+      newListings: missing.size,
+      autoMapped: auto.mapped.size,
+      unmatchedSkus: auto.unmatched
+    };
   }
   if (reportType === "touchpoint_performance") {
     const listings = await existingListings(db, org);
@@ -36513,6 +36770,20 @@ async function plan(db, org, reportType, inputRows) {
       return a && l && existing.has(`${a}|${l}|${str(r.tanggal)}`);
     }).length;
     return { ...base, overwrites, inserts: rows2.length - overwrites, newListings: missing.size };
+  }
+  if (reportType === "marketplace_ads_daily") {
+    const dates = rows2.map((r) => str(r.tanggal)).sort();
+    const found = await queryRows(
+      `SELECT channel_id, campaign_key AS k1, fact_date AS d FROM marketplace_ad_daily_facts
+        WHERE organization_id = ? AND fact_date BETWEEN ? AND ?`,
+      [org, dates[0], dates[dates.length - 1]],
+      db
+    );
+    const existing = new Set(found.map((r) => `${r.channel_id}|${r.k1}|${iso(r.d)}`));
+    const overwrites = rows2.filter(
+      (r) => existing.has(`${channelOf(channels, r)}|${adCampaignKey(r)}|${str(r.tanggal)}`)
+    ).length;
+    return { ...base, overwrites, inserts: rows2.length - overwrites };
   }
   if (reportType === "meta_ads_performance") {
     const dates = rows2.map((r) => str(r.tanggal)).sort();
@@ -36559,7 +36830,47 @@ async function insertChunks(conn, rows2, sqlHead, placeholders, tail) {
     await execute(`${sqlHead} VALUES ${chunk.map(() => placeholders).join(", ")} ${tail}`, chunk.flat(), conn);
   }
 }
-async function ensureListings(conn, org, channels, rows2, isDemo) {
+async function autoMappings(db, org, channels, rows2) {
+  const withSku = rows2.filter((r) => str(r.sku_internal) !== "");
+  if (withSku.length === 0) return { mapped: /* @__PURE__ */ new Map(), unmatched: [] };
+  const [variants, mappedRows] = await Promise.all([
+    queryRows("SELECT id, sku FROM product_variants WHERE organization_id = ?", [org], db),
+    queryRows(
+      `SELECT channel_id, external_product_id, external_sku_id FROM channel_listings
+        WHERE organization_id = ? AND variant_id IS NOT NULL`,
+      [org],
+      db
+    )
+  ]);
+  const variantBySku2 = new Map(variants.map((v) => [v.sku.toLowerCase(), v.id]));
+  const alreadyMapped = new Set(
+    mappedRows.map(
+      (r) => listingKey(r.channel_id, r.external_product_id.toLowerCase(), r.external_sku_id.toLowerCase())
+    )
+  );
+  const mapped = /* @__PURE__ */ new Map();
+  const unmatched = /* @__PURE__ */ new Set();
+  for (const r of withSku) {
+    const key = rowListingKey(channels, r);
+    if (alreadyMapped.has(key)) continue;
+    const variantId2 = variantBySku2.get(str(r.sku_internal).toLowerCase());
+    if (variantId2) mapped.set(key, variantId2);
+    else unmatched.add(str(r.sku_internal));
+  }
+  return { mapped, unmatched: [...unmatched].sort() };
+}
+async function applyAutoMappings(conn, org, listings, mapped) {
+  for (const [key, variantId2] of mapped) {
+    await execute(
+      `UPDATE channel_listings
+          SET variant_id = ?, mapping_source = 'auto', mapped_at = CURRENT_TIMESTAMP(3)
+        WHERE organization_id = ? AND id = ? AND variant_id IS NULL`,
+      [variantId2, org, listings.get(key)],
+      conn
+    );
+  }
+}
+async function ensureListings(conn, org, channels, rows2, isDemo, autoMapped = /* @__PURE__ */ new Map()) {
   const listings = await existingListings(conn, org);
   const created = [];
   for (const r of rows2) {
@@ -36567,6 +36878,7 @@ async function ensureListings(conn, org, channels, rows2, isDemo) {
     if (listings.has(key)) continue;
     const id = (0, import_node_crypto7.randomUUID)();
     listings.set(key, id);
+    const variantId2 = autoMapped.get(key) ?? null;
     created.push([
       id,
       org,
@@ -36574,6 +36886,9 @@ async function ensureListings(conn, org, channels, rows2, isDemo) {
       str(r.id_produk_channel),
       str(r.id_sku_channel),
       str(r.nama_listing),
+      variantId2,
+      variantId2 ? "auto" : null,
+      variantId2 ? /* @__PURE__ */ new Date() : null,
       isDemo
     ]);
   }
@@ -36581,8 +36896,9 @@ async function ensureListings(conn, org, channels, rows2, isDemo) {
     conn,
     created,
     `INSERT INTO channel_listings
-       (id, organization_id, channel_id, external_product_id, external_sku_id, listing_name, is_demo)`,
-    "(?, ?, ?, ?, ?, ?, ?)",
+       (id, organization_id, channel_id, external_product_id, external_sku_id, listing_name, variant_id,
+        mapping_source, mapped_at, is_demo)`,
+    "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     ""
   );
   return listings;
@@ -36658,6 +36974,44 @@ async function writeFacts(conn, session, batchId, reportType, inputRows, isDemo)
          visitors = VALUES(visitors), buyers = VALUES(buyers), cancelled_orders = VALUES(cancelled_orders),
          cancelled_gmv = VALUES(cancelled_gmv), returned_gmv = VALUES(returned_gmv),
          source_batch_id = VALUES(source_batch_id), is_demo = VALUES(is_demo)`
+    );
+    return;
+  }
+  if (reportType === "marketplace_ads_daily") {
+    await insertChunks(
+      conn,
+      rows2.map((r) => [
+        org,
+        channelOf(channels, r),
+        str(r.tanggal),
+        adCampaignKey(r),
+        str(r.nama_iklan),
+        str(r.jenis_iklan),
+        str(r.mode_bidding) || null,
+        str(r.kode_produk) || null,
+        num(r.dilihat),
+        num(r.klik),
+        num(r.konversi),
+        num(r.konversi_langsung),
+        num(r.produk_terjual),
+        num(r.terjual_langsung),
+        num(r.omzet_iklan),
+        num(r.omzet_langsung),
+        num(r.biaya),
+        batchId,
+        isDemo
+      ]),
+      `INSERT INTO marketplace_ad_daily_facts
+         (organization_id, channel_id, fact_date, campaign_key, campaign_name, ad_type, bidding_mode, product_code,
+          impressions, clicks, conversions, direct_conversions, units_sold, direct_units_sold, gmv, direct_gmv, cost,
+          source_batch_id, is_demo)`,
+      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      `ON DUPLICATE KEY UPDATE campaign_name = VALUES(campaign_name), ad_type = VALUES(ad_type),
+         bidding_mode = VALUES(bidding_mode), product_code = VALUES(product_code), impressions = VALUES(impressions),
+         clicks = VALUES(clicks), conversions = VALUES(conversions), direct_conversions = VALUES(direct_conversions),
+         units_sold = VALUES(units_sold), direct_units_sold = VALUES(direct_units_sold), gmv = VALUES(gmv),
+         direct_gmv = VALUES(direct_gmv), cost = VALUES(cost), source_batch_id = VALUES(source_batch_id),
+         is_demo = VALUES(is_demo)`
     );
     return;
   }
@@ -36753,7 +37107,9 @@ async function writeFacts(conn, session, batchId, reportType, inputRows, isDemo)
     return;
   }
   if (reportType === "marketplace_product_performance") {
-    const listings = await ensureListings(conn, org, channels, rows2, isDemo);
+    const auto = await autoMappings(conn, org, channels, rows2);
+    const listings = await ensureListings(conn, org, channels, rows2, isDemo, auto.mapped);
+    await applyAutoMappings(conn, org, listings, auto.mapped);
     await insertChunks(
       conn,
       rows2.map((r) => [
