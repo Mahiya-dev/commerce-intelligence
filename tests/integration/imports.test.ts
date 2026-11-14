@@ -7,7 +7,7 @@ import { queryOne, queryRows } from "@/lib/db/pool";
 import type { ActiveSession } from "@/lib/auth/sessions";
 import { importTables, importUploadedFiles, sha256 } from "@/lib/imports/pipeline";
 import { MIME_TYPES, readUploadedFile } from "@/lib/imports/sources";
-import { cancelImportBatch, getImportBatch, listImportBatches } from "@/lib/imports/staging";
+import { cancelImportBatch, getImportBatch, listImportBatches, listImportBatchesPage } from "@/lib/imports/staging";
 import { createOrganization, createUser, setMembership } from "@/lib/admin/users";
 import { sessionFor, setupTestDatabase } from "./helpers";
 
@@ -111,6 +111,8 @@ describe("import staging", () => {
     expect(await getImportBatch(outsider, mine[0].id)).toBeNull();
     expect(await cancelImportBatch(outsider, mine[0].id)).toBe("not_found");
     await expect(listImportBatches(viewer)).rejects.toBeInstanceOf(AuthorizationError);
+    await expect(listImportBatchesPage(viewer)).rejects.toBeInstanceOf(AuthorizationError);
+    expect(await listImportBatchesPage(outsider)).toEqual({ items: [], total: 0, page: 1, pageCount: 1 });
     await expect(upload(viewer, "csv/master_listing_DEMO.csv")).rejects.toBeInstanceOf(AuthorizationError);
   });
 });
@@ -139,5 +141,19 @@ describe("multiple files in one upload", () => {
     expect([...res.staged, ...res.rejected].some((x) => x.tableName.startsWith("Template_Standar_Impor.xlsx › "))).toBe(
       true,
     );
+  });
+
+  it("paginates the history newest first without gaps or repeats, clamping the page", async () => {
+    const all = await listImportBatchesPage(analyst, 1, 100);
+    expect(all.total).toBe(all.items.length);
+    expect(all.total).toBeGreaterThan(2);
+    const first = await listImportBatchesPage(analyst, 1, 2);
+    const second = await listImportBatchesPage(analyst, 2, 2);
+    expect(first.pageCount).toBe(Math.ceil(all.total / 2));
+    expect([...first.items, ...second.items].map((b) => b.id)).toEqual(all.items.slice(0, 4).map((b) => b.id));
+    const beyond = await listImportBatchesPage(analyst, 999, 2);
+    expect(beyond.page).toBe(beyond.pageCount);
+    expect(beyond.items.length).toBeGreaterThan(0);
+    expect((await listImportBatchesPage(analyst, -3, 2)).page).toBe(1);
   });
 });
