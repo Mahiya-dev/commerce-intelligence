@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type { PoolConnection } from "mysql2/promise";
 import { execute, getPool, queryOne, queryRows, withTransaction, type Queryable } from "@/lib/db/pool";
 import { writeAudit } from "@/lib/audit";
@@ -48,6 +48,10 @@ export type CommitPlan = {
   newListings: number;
   /** master_listing: sku_internal values not found in Master Produk. */
   unknownSkus: string[];
+  /** Product performance: new or unmapped listings linked to a variant via sku_internal ("auto"). */
+  autoMapped: number;
+  /** Product performance: sku_internal values not in Master Produk (listing stays unmapped; not blocking). */
+  unmatchedSkus: string[];
 };
 
 export type CommitOutcome =
@@ -127,6 +131,14 @@ async function existingListings(db: Queryable, org: string) {
 const rowListingKey = (channels: Map<string, string>, r: Row) =>
   listingKey(channelOf(channels, r), str(r.id_produk_channel).toLowerCase(), str(r.id_sku_channel).toLowerCase());
 
+/** Shopee exports no campaign ID: key = SHA-256 of ad type | name | product code (case-insensitive). */
+export function adCampaignKey(r: { jenis_iklan?: CellValue; nama_iklan?: CellValue; kode_produk?: CellValue }) {
+  const part = (v: CellValue | undefined) => str(v ?? null).toLowerCase();
+  return createHash("sha256")
+    .update(`${part(r.jenis_iklan)}|${part(r.nama_iklan)}|${part(r.kode_produk)}`)
+    .digest("hex");
+}
+
 async function existingDateKeys(
   db: Queryable,
   sql: string,
@@ -166,6 +178,8 @@ async function plan(db: Queryable, org: string, reportType: string, inputRows: R
     overwrites: 0,
     newListings: 0,
     unknownSkus: [],
+    autoMapped: 0,
+    unmatchedSkus: [],
   };
 
   if (reportType === "marketplace_sales_daily") {
@@ -198,7 +212,15 @@ async function plan(db: Queryable, org: string, reportType: string, inputRows: R
       const id = listings.get(rowListingKey(channels, r));
       return id !== undefined && existing.has(`${id}|${str(r.tanggal)}`);
     }).length;
-    return { ...base, overwrites, inserts: rows.length - overwrites, newListings: missing.size };
+    const auto = await autoMappings(db, org, channels, rows);
+    return {
+      ...base,
+      overwrites,
+      inserts: rows.length - overwrites,
+      newListings: missing.size,
+      autoMapped: auto.mapped.size,
+      unmatchedSkus: auto.unmatched,
+    };
   }
 
   if (reportType === "touchpoint_performance") {
@@ -239,6 +261,20 @@ async function plan(db: Queryable, org: string, reportType: string, inputRows: R
     return { ...base, overwrites, inserts: rows.length - overwrites, newListings: missing.size };
   }
 
+  if (reportType === "marketplace_ads_daily") {
+    const dates = rows.map((r) => str(r.tanggal)).sort();
+    const found = await queryRows<{ channel_id: string; k1: string; d: Date | string }>(
+      `SELECT channel_id, campaign_key AS k1, fact_date AS d FROM marketplace_ad_daily_facts
+        WHERE organization_id = ? AND fact_date BETWEEN ? AND ?`,
+      [org, dates[0], dates[dates.length - 1]],
+      db,
+    );
+    const existing = new Set(found.map((r) => `${r.channel_id}|${r.k1}|${iso(r.d)}`));
+    const overwrites = rows.filter((r) =>
+      existing.has(`${channelOf(channels, r)}|${adCampaignKey(r)}|${str(r.tanggal)}`),
+    ).length;
+    return { ...base, overwrites, inserts: rows.length - overwrites };
+  }
   if (reportType === "meta_ads_performance") {
     const dates = rows.map((r) => str(r.tanggal)).sort();
     const found = await queryRows<{ k1: string; d: Date | string }>(
@@ -298,12 +334,72 @@ async function insertChunks(
 }
 
 /** Listing ids for the rows; listings not seen before are created UNMAPPED. */
+/**
+ * Listings in a product report that can be linked to Master Produk through the
+ * row's sku_internal (e.g. Shopee "SKU Induk"): new listings, and existing ones
+ * that are still unmapped. A listing already mapped is never changed here;
+ * Master Listing (manual) stays the authority.
+ */
+async function autoMappings(
+  db: Queryable,
+  org: string,
+  channels: Map<string, string>,
+  rows: Row[],
+): Promise<{ mapped: Map<string, string>; unmatched: string[] }> {
+  const withSku = rows.filter((r) => str(r.sku_internal) !== "");
+  if (withSku.length === 0) return { mapped: new Map(), unmatched: [] };
+  const [variants, mappedRows] = await Promise.all([
+    queryRows<{ id: string; sku: string }>("SELECT id, sku FROM product_variants WHERE organization_id = ?", [org], db),
+    queryRows<{ channel_id: string; external_product_id: string; external_sku_id: string }>(
+      `SELECT channel_id, external_product_id, external_sku_id FROM channel_listings
+        WHERE organization_id = ? AND variant_id IS NOT NULL`,
+      [org],
+      db,
+    ),
+  ]);
+  const variantBySku = new Map(variants.map((v) => [v.sku.toLowerCase(), v.id]));
+  const alreadyMapped = new Set(
+    mappedRows.map((r) =>
+      listingKey(r.channel_id, r.external_product_id.toLowerCase(), r.external_sku_id.toLowerCase()),
+    ),
+  );
+  const mapped = new Map<string, string>();
+  const unmatched = new Set<string>();
+  for (const r of withSku) {
+    const key = rowListingKey(channels, r);
+    if (alreadyMapped.has(key)) continue;
+    const variantId = variantBySku.get(str(r.sku_internal).toLowerCase());
+    if (variantId) mapped.set(key, variantId);
+    else unmatched.add(str(r.sku_internal));
+  }
+  return { mapped, unmatched: [...unmatched].sort() };
+}
+
+/** Links existing unmapped listings found by autoMappings (new ones are created already mapped). */
+async function applyAutoMappings(
+  conn: PoolConnection,
+  org: string,
+  listings: Map<string, string>,
+  mapped: Map<string, string>,
+) {
+  for (const [key, variantId] of mapped) {
+    await execute(
+      `UPDATE channel_listings
+          SET variant_id = ?, mapping_source = 'auto', mapped_at = CURRENT_TIMESTAMP(3)
+        WHERE organization_id = ? AND id = ? AND variant_id IS NULL`,
+      [variantId, org, listings.get(key)],
+      conn,
+    );
+  }
+}
+
 async function ensureListings(
   conn: PoolConnection,
   org: string,
   channels: Map<string, string>,
   rows: Row[],
   isDemo: number,
+  autoMapped: Map<string, string> = new Map(),
 ): Promise<Map<string, string>> {
   const listings = await existingListings(conn, org);
   const created: unknown[][] = [];
@@ -312,6 +408,7 @@ async function ensureListings(
     if (listings.has(key)) continue;
     const id = randomUUID();
     listings.set(key, id);
+    const variantId = autoMapped.get(key) ?? null;
     created.push([
       id,
       org,
@@ -319,6 +416,9 @@ async function ensureListings(
       str(r.id_produk_channel),
       str(r.id_sku_channel),
       str(r.nama_listing),
+      variantId,
+      variantId ? "auto" : null,
+      variantId ? new Date() : null,
       isDemo,
     ]);
   }
@@ -326,8 +426,9 @@ async function ensureListings(
     conn,
     created,
     `INSERT INTO channel_listings
-       (id, organization_id, channel_id, external_product_id, external_sku_id, listing_name, is_demo)`,
-    "(?, ?, ?, ?, ?, ?, ?)",
+       (id, organization_id, channel_id, external_product_id, external_sku_id, listing_name, variant_id,
+        mapping_source, mapped_at, is_demo)`,
+    "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     "",
   );
   return listings;
@@ -417,6 +518,44 @@ async function writeFacts(
     return;
   }
 
+  if (reportType === "marketplace_ads_daily") {
+    await insertChunks(
+      conn,
+      rows.map((r) => [
+        org,
+        channelOf(channels, r),
+        str(r.tanggal),
+        adCampaignKey(r),
+        str(r.nama_iklan),
+        str(r.jenis_iklan),
+        str(r.mode_bidding) || null,
+        str(r.kode_produk) || null,
+        num(r.dilihat),
+        num(r.klik),
+        num(r.konversi),
+        num(r.konversi_langsung),
+        num(r.produk_terjual),
+        num(r.terjual_langsung),
+        num(r.omzet_iklan),
+        num(r.omzet_langsung),
+        num(r.biaya),
+        batchId,
+        isDemo,
+      ]),
+      `INSERT INTO marketplace_ad_daily_facts
+         (organization_id, channel_id, fact_date, campaign_key, campaign_name, ad_type, bidding_mode, product_code,
+          impressions, clicks, conversions, direct_conversions, units_sold, direct_units_sold, gmv, direct_gmv, cost,
+          source_batch_id, is_demo)`,
+      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      `ON DUPLICATE KEY UPDATE campaign_name = VALUES(campaign_name), ad_type = VALUES(ad_type),
+         bidding_mode = VALUES(bidding_mode), product_code = VALUES(product_code), impressions = VALUES(impressions),
+         clicks = VALUES(clicks), conversions = VALUES(conversions), direct_conversions = VALUES(direct_conversions),
+         units_sold = VALUES(units_sold), direct_units_sold = VALUES(direct_units_sold), gmv = VALUES(gmv),
+         direct_gmv = VALUES(direct_gmv), cost = VALUES(cost), source_batch_id = VALUES(source_batch_id),
+         is_demo = VALUES(is_demo)`,
+    );
+    return;
+  }
   if (reportType === "meta_ads_performance") {
     // Latest name per ad (an ad can be renamed during the period).
     const latest = new Map<string, Row>();
@@ -513,7 +652,9 @@ async function writeFacts(
   }
 
   if (reportType === "marketplace_product_performance") {
-    const listings = await ensureListings(conn, org, channels, rows, isDemo);
+    const auto = await autoMappings(conn, org, channels, rows);
+    const listings = await ensureListings(conn, org, channels, rows, isDemo, auto.mapped);
+    await applyAutoMappings(conn, org, listings, auto.mapped);
     await insertChunks(
       conn,
       rows.map((r) => [

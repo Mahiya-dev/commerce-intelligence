@@ -1,6 +1,8 @@
 import { parseCsv, CsvParseError } from "@/lib/imports/csv";
 import { readXlsx, XlsxReadError } from "@/lib/imports/xlsx";
 import { TEMPLATE_LIST, TEMPLATES, type TemplateKey } from "@/lib/imports/templates";
+import { isShopeeProductExport, ShopeeExportError, shopeeProductTable } from "@/lib/imports/shopee";
+import { isShopeeAdsExport, ShopeeAdsExportError, shopeeAdsTable } from "@/lib/imports/shopee-ads";
 
 export { MAX_FILE_BYTES, MAX_FILES, MAX_ROWS, MAX_TOTAL_BYTES } from "@/lib/imports/limits";
 import { MAX_FILE_BYTES, MAX_ROWS } from "@/lib/imports/limits";
@@ -55,13 +57,28 @@ export function decodeText(buf: Buffer): string {
   }
 }
 
-export function csvTables(name: string, buf: Buffer): SourceTable[] {
+export function csvTables(name: string, buf: Buffer, expected?: TemplateKey): SourceTable[] {
+  let table: string[][];
   try {
-    return [{ name, table: parseCsv(decodeText(buf)) }];
+    table = parseCsv(decodeText(buf));
   } catch (error) {
     if (error instanceof CsvParseError) throw new ImportInputError(error.message);
     throw error;
   }
+  if (isShopeeAdsExport(table)) {
+    if (expected && expected !== "iklan_marketplace_harian") {
+      throw new ImportInputError(
+        `File ini ekspor Iklan Shopee; pilih jenis "${TEMPLATES.iklan_marketplace_harian.title}".`,
+      );
+    }
+    try {
+      return [{ name: "Shopee Ads · Data Keseluruhan Iklan", table: shopeeAdsTable(table) }];
+    } catch (error) {
+      if (error instanceof ShopeeAdsExportError) throw new ImportInputError(error.message);
+      throw error;
+    }
+  }
+  return [{ name, table }];
 }
 
 const hasData = (rows: string[][]) => rows.slice(1).some((r) => r.some((c) => c.trim() !== ""));
@@ -71,7 +88,7 @@ const hasData = (rows: string[][]) => rows.slice(1).some((r) => r.some((c) => c.
  * report type (or the first sheet with data). With `expected`: only that
  * report type's sheet (or the first sheet with data if none is named so).
  */
-export function xlsxTables(buf: Buffer, expected?: TemplateKey): SourceTable[] {
+export function xlsxTables(buf: Buffer, expected?: TemplateKey, fileName = ""): SourceTable[] {
   let wb;
   try {
     // Header + MAX_ROWS data rows, with headroom for title/blank rows above the header.
@@ -81,6 +98,19 @@ export function xlsxTables(buf: Buffer, expected?: TemplateKey): SourceTable[] {
     throw error;
   }
   const excelDates = { date1904: wb.date1904 };
+  if (isShopeeProductExport(wb)) {
+    if (expected && expected !== "kinerja_produk_harian") {
+      throw new ImportInputError(
+        `File ini ekspor Performa Produk Shopee; pilih jenis "${TEMPLATES.kinerja_produk_harian.title}".`,
+      );
+    }
+    try {
+      return [{ name: "Shopee · Performa Produk", table: shopeeProductTable(wb, fileName) }];
+    } catch (error) {
+      if (error instanceof ShopeeExportError) throw new ImportInputError(error.message);
+      throw error;
+    }
+  }
   const keys = expected ? [expected as string] : TEMPLATE_LIST.map((t) => t.key as string);
   const named = wb.sheets.filter((s) => keys.includes(s.name.trim().toLowerCase()) && hasData(s.rows));
   const picked = named.length > 0 ? named : wb.sheets.filter((s) => hasData(s.rows)).slice(0, 1);
@@ -104,5 +134,5 @@ export function readUploadedFile(
     throw new ImportInputError(`Ukuran file melebihi ${MAX_FILE_BYTES / 1024 / 1024} MB.`);
   }
   const kind = detectFileKind(fileName, buf);
-  return { kind, tables: kind === "xlsx" ? xlsxTables(buf, expected) : csvTables(fileName, buf) };
+  return { kind, tables: kind === "xlsx" ? xlsxTables(buf, expected, fileName) : csvTables(fileName, buf, expected) };
 }

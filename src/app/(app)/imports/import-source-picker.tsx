@@ -32,6 +32,8 @@ const REPORT_PURPOSE: Record<TemplateKey, string> = {
     "GMV, pesanan dan biaya per listing per touchpoint (organik, iklan, afiliasi, live, video) per hari.",
   meta_ads_harian: "Spend, impresi, klik, pembelian dan nilai pembelian per iklan Meta (Ad ID asli) per hari.",
   penjualan_hsl: "Unit terjual, GMV dan komisi per afiliasi Shopee HSL per listing per hari.",
+  iklan_marketplace_harian:
+    "Biaya, omzet, klik dan konversi per kampanye iklan marketplace (mis. Shopee Ads) per hari.",
 };
 
 const METHODS: {
@@ -161,7 +163,9 @@ export function ImportSourcePicker({ apiConfigured = false }: { apiConfigured?: 
                   {reportType === "auto" ? (
                     <>
                       Jenis dikenali dari baris header. Workbook .xlsx boleh berisi beberapa sheet bernama sesuai jenis
-                      data (mis. <code>kinerja_toko_harian</code>); setiap sheet menjadi satu batch.
+                      data (mis. <code>kinerja_toko_harian</code>); setiap sheet menjadi satu batch. Ekspor{" "}
+                      <strong>Performa Produk Shopee</strong> (<code>parentskudetail.…xlsx</code>, per hari) juga
+                      dikenali langsung; jangan ganti nama filenya.
                     </>
                   ) : (
                     <>

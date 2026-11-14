@@ -46,12 +46,12 @@ Data **baru muncul di dashboard setelah langkah 5**. Mengunggah file saja belum 
 
 Gunakan `Template_Standar_Impor.xlsx` (folder `samples/phase-2/` atau minta ke admin). Ada 4 jenis laporan:
 
-| Template                | Isi                                            | Dipakai untuk                              |
-| ----------------------- | ---------------------------------------------- | ------------------------------------------ |
-| `kinerja_toko_harian`   | 1 baris = 1 channel pada 1 tanggal             | GMV, pesanan, AOV, conversion rate, target |
-| `kinerja_produk_harian` | 1 baris = 1 listing pada 1 tanggal             | Kontribusi per SKU internal                |
-| `target_bulanan`        | 1 baris = target 1 channel pada 1 bulan        | Progres target, status, forecast           |
-| `master_listing`        | 1 baris = 1 listing marketplace → SKU internal | Memetakan listing ke produk Madu Uray      |
+| Template                | Isi                                            | Dipakai untuk                                                                          |
+| ----------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `kinerja_toko_harian`   | 1 baris = 1 channel pada 1 tanggal             | GMV, pesanan, AOV, conversion rate, target                                             |
+| `kinerja_produk_harian` | 1 baris = 1 listing pada 1 tanggal             | Kontribusi per SKU internal (kolom opsional `sku_internal` memetakan listing otomatis) |
+| `target_bulanan`        | 1 baris = target 1 channel pada 1 bulan        | Progres target, status, forecast                                                       |
+| `master_listing`        | 1 baris = 1 listing marketplace → SKU internal | Memetakan listing ke produk Madu Uray                                                  |
 
 Lembar **Kamus Kolom** di template menjelaskan setiap kolom. Hapus baris contoh berwarna abu-abu sebelum mengunggah.
 
@@ -87,6 +87,61 @@ Menu **Impor Data** (peran Analyst ke atas). Pilih salah satu sumber:
 | **Unggah Excel/CSV**   | Pilih file, klik impor.                                                                                                                      |
 | **Google Spreadsheet** | Tempel URL spreadsheet. Atur berbagi ke **"Siapa saja yang memiliki link: Pelihat"**. Yang diambil hanya tab yang terbuka di URL (`#gid=…`). |
 | **API marketplace**    | Belum aktif. Membutuhkan kredensial aplikasi partner dari Shopee / TikTok Shop.                                                              |
+
+### 4.1 Ekspor langsung dari Shopee Seller Center
+
+File **Performa Produk** Shopee bisa diunggah apa adanya, tanpa disalin ke template.
+
+1. Seller Center → **Bisnis Saya → Produk → Performa Produk**, pilih **satu hari** (tanggal awal = tanggal akhir),
+   lalu **Ekspor**. Nama filenya `parentskudetail.YYYYMMDD_YYYYMMDD.xlsx`.
+2. **Jangan mengganti nama file**: tanggal data hanya ada di nama file. File rentang beberapa hari ditolak agar data
+   harian tidak tercampur.
+3. Di **Impor Data**, pilih jenis **Deteksi otomatis** (atau **Kinerja Produk Harian**) lalu unggah. Beberapa hari
+   sekaligus boleh (maks. 10 file per unggahan); setiap file menjadi satu batch.
+
+Cara aplikasi membaca file:
+
+| Kolom aplikasi      | Kolom Shopee                           |
+| ------------------- | -------------------------------------- |
+| `gmv`               | Penjualan (Pesanan Siap Dikirim) (IDR) |
+| `pesanan`           | Pesanan Siap Dikirim                   |
+| `unit_terjual`      | Produk (Pesanan Siap Dikirim)          |
+| `pengunjung_produk` | Pengunjung Produk (Kunjungan)          |
+| `klik_produk`       | Produk Diklik                          |
+| `sku_internal`      | SKU Induk (memetakan listing otomatis) |
+
+- Yang dibaca hanya sheet **Produk dengan Performa Terbaik** (berisi semua produk yang terjual hari itu).
+- GMV memakai **Pesanan Siap Dikirim**, bukan Pesanan Dibuat (keputusan pemilik bisnis, Nov 2026). Angka Shopee
+  untuk satu tanggal bisa berubah beberapa hari kemudian; unggah ulang file tanggal itu untuk memperbaruinya.
+- **Pemetaan otomatis**: bila **SKU Induk** sama dengan SKU di Master Produk, listing baru (atau listing yang belum
+  dipetakan) langsung terhubung ke SKU tersebut. Listing yang sudah dipetakan tidak diubah. SKU yang tidak ada di
+  Master Produk ditampilkan saat menyimpan; datanya tetap tersimpan sebagai **belum dipetakan**.
+- File ini hanya mengisi **kontribusi per produk/SKU**. KPI toko (GMV, pesanan, pengunjung toko) tetap dari laporan
+  `kinerja_toko_harian`.
+
+### 4.2 Ekspor langsung dari Shopee Ads (Iklan Shopee)
+
+File **Data Keseluruhan Iklan** dari Iklan Shopee juga bisa diunggah apa adanya.
+
+1. Seller Center → **Iklan Shopee → Laporan**, pilih **satu hari** (tanggal awal = tanggal akhir), lalu ekspor
+   **Semua Laporan Iklan** (`DataKeseluruhanIklanShopee-DD_MM_YYYY-DD_MM_YYYY.csv`).
+2. Unggah di **Impor Data** dengan **Deteksi otomatis** (atau jenis **Iklan Marketplace Harian**). Tanggal diambil dari
+   baris **Periode** di kepala file; ekspor beberapa hari sekaligus ditolak.
+3. Setiap baris iklan/kampanye disimpan per hari. Kampanye **GMV Max** tingkat toko tidak punya kode produk; itu
+   normal. Mengunggah ulang tanggal yang sama **menimpa** angka lama (Shopee masih memperbarui angka beberapa hari).
+
+Hasilnya tampil di halaman **E-Commerce → Iklan marketplace** mengikuti rentang tanggal:
+
+| Kolom            | Arti                                                                                      |
+| ---------------- | ----------------------------------------------------------------------------------------- |
+| Biaya iklan      | Kolom **Biaya** Shopee Ads                                                                |
+| Omzet iklan      | Kolom **Omzet Penjualan**: penjualan yang diatribusikan Shopee ke iklan                   |
+| ROAS / ACOS      | Omzet iklan ÷ biaya / biaya ÷ omzet iklan (versi Shopee: "Efektivitas Iklan" dan "ACOS")  |
+| Biaya ÷ GMV toko | Biaya iklan ÷ GMV toko dari laporan toko harian: porsi biaya iklan terhadap seluruh omzet |
+
+**Penting:** omzet iklan menurut Shopee termasuk pesanan yang belum dikirim dan bisa tumpang tindih dengan penjualan
+organik, jadi **jangan dijumlahkan dengan GMV toko**. Untuk menilai efisiensi biaya iklan terhadap bisnis secara
+keseluruhan, pakai **Biaya ÷ GMV toko**.
 
 Setelah impor, setiap batch tampil di **Riwayat impor** dengan status:
 
@@ -249,7 +304,8 @@ prioritas dan langkah yang disarankan.
 - **Cara membaca:** setiap insight punya **kotak bukti**. Angka di kotak itu diambil langsung dari data aplikasi,
   bukan ditulis AI. Teks AI sengaja tanpa angka, dan penyebab yang disebut adalah dugaan yang perlu dicek.
 - **Batas pemakaian:** 6 kali per pengguna per jam dan 20 kali per organisasi per hari.
-- **"AI belum dikonfigurasi":** admin server perlu mengisi `GROQ_API_KEY` di `.env`.
+- **"AI belum dikonfigurasi":** Owner mengisi **API Key Groq** di **Pengaturan → Organisasi** (key diuji saat
+  disimpan dan disimpan terenkripsi). Cadangan tingkat server: `GROQ_API_KEY` di `.env`.
 - **Data yang dikirim ke AI:** hanya angka ringkasan (GMV, pesanan, target, porsi SKU) dan nama produk/channel.
   Tidak ada data pelanggan, email, atau baris transaksi.
 

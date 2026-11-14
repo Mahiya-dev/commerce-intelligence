@@ -62,6 +62,7 @@ const PLAN_NOUN: Record<string, string> = {
   touchpoint_performance: "baris kinerja touchpoint harian",
   meta_ads_performance: "baris performa iklan Meta harian",
   shopee_hsl_affiliate: "baris penjualan afiliasi HSL",
+  marketplace_ads_daily: "baris iklan marketplace harian",
 };
 
 function CommitPanel({ batchId, plan, warningRows }: { batchId: string; plan: CommitPlan; warningRows: number }) {
@@ -87,11 +88,29 @@ function CommitPanel({ batchId, plan, warningRows }: { batchId: string; plan: Co
           {plan.newListings > 0 ? (
             <li>
               <span className="font-medium tabular-nums">{plan.newListings.toLocaleString("id-ID")}</span> listing baru
-              dibuat sebagai <span className="font-medium">belum dipetakan</span> (tetap dihitung di total channel;
-              petakan lewat impor Master Listing)
+              dibuat{plan.autoMapped > 0 ? "" : " sebagai "}
+              {plan.autoMapped > 0 ? null : <span className="font-medium">belum dipetakan</span>}
+              {plan.autoMapped > 0 ? "" : " (tetap dihitung di total channel; petakan lewat impor Master Listing)"}
+            </li>
+          ) : null}
+          {plan.autoMapped > 0 ? (
+            <li>
+              <span className="font-medium tabular-nums">{plan.autoMapped.toLocaleString("id-ID")}</span> listing
+              otomatis <span className="font-medium">dipetakan ke SKU internal</span> lewat kolom SKU (mis. SKU Induk
+              Shopee). Listing yang sudah dipetakan tidak diubah.
             </li>
           ) : null}
         </ul>
+        {plan.unmatchedSkus.length > 0 ? (
+          <Alert>
+            <Info aria-hidden />
+            <AlertDescription>
+              SKU berikut tidak ada di Master Produk, jadi listing-nya tetap belum dipetakan (data tetap tersimpan dan
+              dihitung di total channel): {plan.unmatchedSkus.join(", ")}. Tambahkan SKU tersebut di Master Produk lalu
+              impor ulang file ini, atau petakan lewat Master Listing.
+            </AlertDescription>
+          </Alert>
+        ) : null}
         {blocked ? (
           <Alert variant="destructive">
             <AlertTriangle aria-hidden />

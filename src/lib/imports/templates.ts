@@ -46,7 +46,8 @@ export type TemplateKey =
   | "master_listing"
   | "kinerja_touchpoint"
   | "meta_ads_harian"
-  | "penjualan_hsl";
+  | "penjualan_hsl"
+  | "iklan_marketplace_harian";
 
 /** import_batches.report_type values. */
 export type DbReportType =
@@ -56,7 +57,8 @@ export type DbReportType =
   | "channel_listing_master"
   | "touchpoint_performance"
   | "meta_ads_performance"
-  | "shopee_hsl_affiliate";
+  | "shopee_hsl_affiliate"
+  | "marketplace_ads_daily";
 
 export type TemplateSpec = {
   key: TemplateKey;
@@ -109,6 +111,8 @@ export const TEMPLATES: Record<TemplateKey, TemplateSpec> = {
       { name: "pengunjung_produk", label: "Pengunjung produk", type: "integer", required: false },
       { name: "klik_produk", label: "Klik produk", type: "integer", required: false },
       { name: "pesanan_batal", label: "Pesanan batal", type: "integer", required: false },
+      /** Optional internal SKU (e.g. Shopee "SKU Induk"): maps a new/unmapped listing automatically. */
+      { name: "sku_internal", label: "SKU internal", type: "text", required: false, maxLength: 64 },
     ],
   },
   target_bulanan: {
@@ -183,6 +187,30 @@ export const TEMPLATES: Record<TemplateKey, TemplateSpec> = {
       { name: "klik", label: "Klik tautan", type: "integer", required: true },
       { name: "pembelian", label: "Pembelian", type: "integer", required: true },
       { name: "nilai_pembelian", label: "Nilai pembelian", type: "integer", required: true },
+    ],
+  },
+  iklan_marketplace_harian: {
+    key: "iklan_marketplace_harian",
+    title: "Iklan Marketplace Harian",
+    dbReportType: "marketplace_ads_daily",
+    keyColumns: ["tanggal", "channel", "jenis_iklan", "nama_iklan", "kode_produk"],
+    periodColumn: "tanggal",
+    columns: [
+      { name: "tanggal", label: "Tanggal", type: "date", required: true, notFuture: true },
+      { name: "channel", label: "Channel", type: "channel", required: true },
+      { name: "nama_iklan", label: "Nama iklan", type: "text", required: true, maxLength: 255 },
+      { name: "jenis_iklan", label: "Jenis iklan", type: "text", required: true, maxLength: 64 },
+      { name: "mode_bidding", label: "Mode bidding", type: "text", required: false, maxLength: 64 },
+      { name: "kode_produk", label: "Kode produk", type: "text", required: false, maxLength: ID },
+      { name: "dilihat", label: "Dilihat", type: "integer", required: true },
+      { name: "klik", label: "Klik", type: "integer", required: true },
+      { name: "konversi", label: "Konversi", type: "integer", required: true },
+      { name: "konversi_langsung", label: "Konversi langsung", type: "integer", required: false },
+      { name: "produk_terjual", label: "Produk terjual", type: "integer", required: true },
+      { name: "terjual_langsung", label: "Terjual langsung", type: "integer", required: false },
+      { name: "omzet_iklan", label: "Omzet dari iklan", type: "integer", required: true },
+      { name: "omzet_langsung", label: "Omzet langsung", type: "integer", required: false },
+      { name: "biaya", label: "Biaya iklan", type: "integer", required: true },
     ],
   },
   penjualan_hsl: {
