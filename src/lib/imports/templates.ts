@@ -109,6 +109,8 @@ export const TEMPLATES: Record<TemplateKey, TemplateSpec> = {
       { name: "pengunjung_produk", label: "Pengunjung produk", type: "integer", required: false },
       { name: "klik_produk", label: "Klik produk", type: "integer", required: false },
       { name: "pesanan_batal", label: "Pesanan batal", type: "integer", required: false },
+      /** Optional internal SKU (e.g. Shopee "SKU Induk"): maps a new/unmapped listing automatically. */
+      { name: "sku_internal", label: "SKU internal", type: "text", required: false, maxLength: 64 },
     ],
   },
   target_bulanan: {

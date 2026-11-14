@@ -161,7 +161,9 @@ export function ImportSourcePicker({ apiConfigured = false }: { apiConfigured?: 
                   {reportType === "auto" ? (
                     <>
                       Jenis dikenali dari baris header. Workbook .xlsx boleh berisi beberapa sheet bernama sesuai jenis
-                      data (mis. <code>kinerja_toko_harian</code>); setiap sheet menjadi satu batch.
+                      data (mis. <code>kinerja_toko_harian</code>); setiap sheet menjadi satu batch. Ekspor{" "}
+                      <strong>Performa Produk Shopee</strong> (<code>parentskudetail.…xlsx</code>, per hari) juga
+                      dikenali langsung; jangan ganti nama filenya.
                     </>
                   ) : (
                     <>
