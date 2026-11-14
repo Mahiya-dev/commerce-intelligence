@@ -56,3 +56,32 @@ describe("parseDatabaseConfig", () => {
     expect(parseDatabaseConfig({ ...base, DB_CONNECTION_LIMIT: "500" }).connectionLimit).toBe(5);
   });
 });
+
+describe("database TLS (DB_SSL)", () => {
+  const base = { DB_HOST: "db.example.test", DB_USER: "u", DB_PASSWORD: "p", DB_NAME: "d" };
+
+  it("is off by default (cPanel localhost)", () => {
+    expect(parseDatabaseConfig(base).ssl).toBeUndefined();
+    expect(parseDatabaseConfig({ ...base, DB_SSL: "false" }).ssl).toBeUndefined();
+  });
+
+  it("enables verified TLS, with an optional provider CA (\\n-escaped PEM)", () => {
+    expect(parseDatabaseConfig({ ...base, DB_SSL: "true" }).ssl).toEqual({
+      rejectUnauthorized: true,
+      minVersion: "TLSv1.2",
+    });
+    const ca = parseDatabaseConfig({
+      ...base,
+      DB_SSL: "true",
+      DB_SSL_CA: "-----BEGIN CERTIFICATE-----\\nABC\\n-----END CERTIFICATE-----",
+    }).ssl?.ca;
+    expect(ca).toBe("-----BEGIN CERTIFICATE-----\nABC\n-----END CERTIFICATE-----");
+    expect(parseDatabaseConfig({ DATABASE_URL: "mysql://u:p@h:4000/d", DB_SSL: "1" }).ssl?.rejectUnauthorized).toBe(
+      true,
+    );
+  });
+
+  it("rejects an unclear value", () => {
+    expect(() => parseDatabaseConfig({ ...base, DB_SSL: "yes" })).toThrow(/DB_SSL/);
+  });
+});

@@ -1,5 +1,13 @@
 import { excelSerialToIsoDate } from "@/lib/imports/xlsx";
-import { MARKETPLACE_CHANNELS, TEMPLATE_LIST, type ColumnSpec, type TemplateSpec } from "@/lib/imports/templates";
+import {
+  MARKETPLACE_CHANNELS,
+  TOUCHPOINTS,
+  TEMPLATE_LIST,
+  TEMPLATES,
+  type ColumnSpec,
+  type TemplateKey,
+  type TemplateSpec,
+} from "@/lib/imports/templates";
 
 /**
  * Pure validation of a parsed table (header row + data rows) against the
@@ -15,6 +23,7 @@ export type IssueCode =
   | "invalid_month"
   | "future_date"
   | "unknown_channel"
+  | "unknown_touchpoint"
   | "invalid_number"
   | "negative_value"
   | "below_minimum"
@@ -22,7 +31,8 @@ export type IssueCode =
   | "invalid_format"
   | "duplicate_key"
   | "conversion_over_100"
-  | "cancelled_exceeds_total";
+  | "cancelled_exceeds_total"
+  | "exceeds_impressions";
 
 export type RowIssue = {
   column: string;
@@ -62,6 +72,8 @@ export type ValidateOptions = {
   today: string;
   /** File or sheet name; used to break ties when picking a template. */
   nameHint?: string;
+  /** Report type chosen by the user; skips auto-detection. */
+  expectedTemplate?: TemplateKey;
   /** Set for .xlsx sources: numeric cells in date columns are Excel serials. */
   excelDates?: { date1904: boolean };
 };
@@ -186,6 +198,18 @@ function parseCell(raw: string, col: ColumnSpec, opts: ValidateOptions): { value
         issue: issue(col.name, "unknown_channel", `Channel '${value}' tidak dikenal (${CHANNEL_LIST}).`),
       };
     }
+    case "touchpoint": {
+      const code = value.toLowerCase();
+      if ((TOUCHPOINTS as readonly string[]).includes(code)) return { value: code };
+      return {
+        value: null,
+        issue: issue(
+          col.name,
+          "unknown_touchpoint",
+          `Touchpoint '${value}' tidak dikenal (${TOUCHPOINTS.join(" | ")}).`,
+        ),
+      };
+    }
     case "integer": {
       if (!INTEGER_RE.test(value) || !Number.isSafeInteger(Number(value))) {
         return {
@@ -212,6 +236,12 @@ function parseCell(raw: string, col: ColumnSpec, opts: ValidateOptions): { value
           issue: issue(col.name, "too_long", `${col.label} melebihi ${col.maxLength} karakter.`),
         };
       }
+      if (col.pattern && !col.pattern.re.test(value)) {
+        return {
+          value: null,
+          issue: issue(col.name, "invalid_format", `${col.label} '${value}' tidak valid (${col.pattern.hint}).`),
+        };
+      }
       if (col.name === "sku_internal" && !SKU_RE.test(value)) {
         return {
           value: null,
@@ -227,6 +257,22 @@ function parseCell(raw: string, col: ColumnSpec, opts: ValidateOptions): { value
 function crossChecks(template: TemplateSpec, v: Record<string, CellValue>): RowIssue[] {
   const out: RowIssue[] = [];
   const num = (k: string) => (typeof v[k] === "number" ? (v[k] as number) : null);
+  if (template.key === "meta_ads_harian") {
+    const imp = num("impresi");
+    const pairs: [string, string][] = [
+      ["klik", "Klik tautan"],
+      ["jangkauan", "Jangkauan"],
+    ];
+    for (const [col, label] of pairs) {
+      const x = num(col);
+      if (x !== null && imp !== null && x > imp) {
+        out.push(
+          issue(col, "exceeds_impressions", `${label} (${x}) > impresi (${imp}). Periksa sumber data.`, "warning"),
+        );
+      }
+    }
+    return out;
+  }
   const visitorsCol =
     template.key === "kinerja_toko_harian"
       ? "pengunjung"
@@ -269,7 +315,11 @@ function crossChecks(template: TemplateSpec, v: Record<string, CellValue>): RowI
   return out;
 }
 
-function pickTemplate(headers: string[], nameHint?: string): { template?: TemplateSpec; message?: string } {
+function pickTemplate(
+  headers: string[],
+  nameHint?: string,
+  expected?: TemplateKey,
+): { template?: TemplateSpec; message?: string } {
   const set = new Set(headers);
   const scored = TEMPLATE_LIST.map((t) => {
     const names = new Set(t.columns.map((c) => c.name));
@@ -282,6 +332,21 @@ function pickTemplate(headers: string[], nameHint?: string): { template?: Templa
     };
   });
   const exact = scored.filter((s) => s.missing.length === 0 && s.unknown.length === 0);
+
+  if (expected) {
+    const chosen = scored.find((s) => s.t.key === expected)!;
+    if (chosen.missing.length === 0 && chosen.unknown.length === 0) return { template: chosen.t };
+    const parts: string[] = [];
+    if (chosen.missing.length) parts.push(`kolom wajib tidak ada: ${chosen.missing.join(", ")}`);
+    if (chosen.unknown.length) parts.push(`kolom tidak dikenal: ${chosen.unknown.join(", ")}`);
+    const other = exact[0];
+    return {
+      message:
+        `File tidak sesuai jenis data "${TEMPLATES[expected].title}" — ${parts.join("; ")}.` +
+        (other ? ` Kolomnya cocok dengan "${other.t.title}"; pilih jenis data itu atau Deteksi otomatis.` : ""),
+    };
+  }
+
   const fit = exact.find((s) => s.hinted) ?? exact[0];
   if (fit) return { template: fit.t };
 
@@ -310,7 +375,7 @@ export function validateTable(table: string[][], opts: ValidateOptions): Validat
   const dup = headers.find((h, i) => headers.indexOf(h) !== i);
   if (dup) return { ok: false, message: `Kolom '${dup}' muncul lebih dari sekali di header.` };
 
-  const picked = pickTemplate(headers, opts.nameHint);
+  const picked = pickTemplate(headers, opts.nameHint, opts.expectedTemplate);
   if (!picked.template) return { ok: false, message: picked.message! };
   const template = picked.template;
   const index = new Map(headers.map((h, i) => [h, i]));

@@ -7,7 +7,7 @@ import { requireNavItem } from "@/config/navigation";
 import { formatDateTime, MISSING } from "@/lib/format";
 import { REPORT_TYPE_LABELS, TEMPLATE_LIST } from "@/lib/imports/templates";
 import { getImportBatch } from "@/lib/imports/staging";
-import { previewCommit, type CommitPlan } from "@/lib/imports/commit";
+import { canCommitReportType, previewCommit, type CommitPlan } from "@/lib/imports/commit";
 import { PageHeader } from "@/components/shared/page-header";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -50,6 +50,7 @@ const COMMIT_MESSAGES: Record<string, { tone: "ok" | "bad"; text: string }> = {
   unknown_skus: { tone: "bad", text: "Ada SKU internal yang tidak ditemukan di Master Produk (lihat di bawah)." },
   status: { tone: "bad", text: "Batch ini tidak lagi dapat disimpan (sudah tersimpan atau dibatalkan)." },
   empty: { tone: "bad", text: "Tidak ada baris valid untuk disimpan." },
+  targets_forbidden: { tone: "bad", text: "Target bulanan hanya dapat disimpan oleh Admin atau Owner." },
   error: { tone: "bad", text: "Penyimpanan gagal karena gangguan layanan. Tidak ada data yang berubah; coba lagi." },
 };
 
@@ -58,6 +59,9 @@ const PLAN_NOUN: Record<string, string> = {
   marketplace_product_performance: "baris kinerja produk harian",
   sales_target: "target bulanan",
   channel_listing_master: "listing",
+  touchpoint_performance: "baris kinerja touchpoint harian",
+  meta_ads_performance: "baris performa iklan Meta harian",
+  shopee_hsl_affiliate: "baris penjualan afiliasi HSL",
 };
 
 function CommitPanel({ batchId, plan, warningRows }: { batchId: string; plan: CommitPlan; warningRows: number }) {
@@ -133,7 +137,8 @@ export default async function ImportBatchPage({ params, searchParams }: PageProp
   const columns = template?.columns.map((c) => c.name) ?? Object.keys(preview[0]?.normalized ?? {});
   const cancellable = ["uploaded", "validated", "failed"].includes(batch.status);
   const committable = batch.status === "validated" && (batch.invalidRows ?? 0) === 0 && (batch.validRows ?? 0) > 0;
-  const plan = committable ? await previewCommit(session, batch.id) : null;
+  const mayCommit = canCommitReportType(session, batch.reportType);
+  const plan = committable && mayCommit ? await previewCommit(session, batch.id) : null;
 
   return (
     <div className="space-y-6">
@@ -203,6 +208,16 @@ export default async function ImportBatchPage({ params, searchParams }: PageProp
       ) : null}
 
       {plan ? <CommitPanel batchId={batch.id} plan={plan} warningRows={warningRows} /> : null}
+      {committable && !mayCommit ? (
+        <Alert>
+          <Info aria-hidden />
+          <AlertDescription>
+            File target sudah lolos validasi. Target bulanan menentukan status On Track / Watch / At Risk, jadi hanya
+            Admin atau Owner yang dapat menyimpannya. Minta Admin membuka batch ini dari menu Impor Data lalu klik
+            simpan.
+          </AlertDescription>
+        </Alert>
+      ) : null}
 
       <Card>
         <CardHeader>

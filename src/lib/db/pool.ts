@@ -18,6 +18,7 @@ export function createPool(config: DatabaseConfig): Pool {
     password: config.password,
     database: config.database,
     connectionLimit: config.connectionLimit,
+    ...(config.ssl ? { ssl: config.ssl } : {}),
     maxIdle: config.connectionLimit,
     idleTimeout: 60_000,
     enableKeepAlive: true,

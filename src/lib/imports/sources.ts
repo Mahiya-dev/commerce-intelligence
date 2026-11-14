@@ -1,6 +1,6 @@
 import { parseCsv, CsvParseError } from "@/lib/imports/csv";
 import { readXlsx, XlsxReadError } from "@/lib/imports/xlsx";
-import { TEMPLATE_LIST } from "@/lib/imports/templates";
+import { TEMPLATE_LIST, TEMPLATES, type TemplateKey } from "@/lib/imports/templates";
 
 /** Upload limits. Keep MAX_FILE_BYTES below serverActions.bodySizeLimit in next.config.ts. */
 export const MAX_FILE_BYTES = 10 * 1024 * 1024;
@@ -67,7 +67,12 @@ export function csvTables(name: string, buf: Buffer): SourceTable[] {
 
 const hasData = (rows: string[][]) => rows.slice(1).some((r) => r.some((c) => c.trim() !== ""));
 
-export function xlsxTables(buf: Buffer): SourceTable[] {
+/**
+ * Template sheets of a workbook. Without `expected`: every sheet named after a
+ * report type (or the first sheet with data). With `expected`: only that
+ * report type's sheet (or the first sheet with data if none is named so).
+ */
+export function xlsxTables(buf: Buffer, expected?: TemplateKey): SourceTable[] {
   let wb;
   try {
     // Header + MAX_ROWS data rows, with headroom for title/blank rows above the header.
@@ -77,18 +82,28 @@ export function xlsxTables(buf: Buffer): SourceTable[] {
     throw error;
   }
   const excelDates = { date1904: wb.date1904 };
-  const keys = TEMPLATE_LIST.map((t) => t.key as string);
+  const keys = expected ? [expected as string] : TEMPLATE_LIST.map((t) => t.key as string);
   const named = wb.sheets.filter((s) => keys.includes(s.name.trim().toLowerCase()) && hasData(s.rows));
   const picked = named.length > 0 ? named : wb.sheets.filter((s) => hasData(s.rows)).slice(0, 1);
-  if (picked.length === 0) throw new ImportInputError("Workbook tidak berisi data (semua sheet kosong).");
+  if (picked.length === 0) {
+    throw new ImportInputError(
+      expected
+        ? `Workbook tidak berisi data untuk jenis "${TEMPLATES[expected].title}".`
+        : "Workbook tidak berisi data (semua sheet kosong).",
+    );
+  }
   return picked.map((s) => ({ name: s.name, table: s.rows, excelDates }));
 }
 
-export function readUploadedFile(fileName: string, buf: Buffer): { kind: FileKind; tables: SourceTable[] } {
+export function readUploadedFile(
+  fileName: string,
+  buf: Buffer,
+  expected?: TemplateKey,
+): { kind: FileKind; tables: SourceTable[] } {
   if (buf.length === 0) throw new ImportInputError("File kosong.");
   if (buf.length > MAX_FILE_BYTES) {
     throw new ImportInputError(`Ukuran file melebihi ${MAX_FILE_BYTES / 1024 / 1024} MB.`);
   }
   const kind = detectFileKind(fileName, buf);
-  return { kind, tables: kind === "xlsx" ? xlsxTables(buf) : csvTables(fileName, buf) };
+  return { kind, tables: kind === "xlsx" ? xlsxTables(buf, expected) : csvTables(fileName, buf) };
 }

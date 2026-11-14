@@ -6,13 +6,19 @@ import { logger } from "@/lib/logger";
 import { todayInTimeZone } from "@/lib/imports/validate";
 import {
   addMonths,
+  cumulativeVsTarget,
+  dailyGmvSeries,
   incompleteChannels,
   momEquivalent,
   monthlySummary,
   monthStart,
   targetScorecard,
+  totals,
   type DailyFact,
+  type Totals,
 } from "@/lib/ecommerce/kpi";
+import { daysBetween, resolveRange, type RangeInput, type ResolvedRange } from "@/lib/ecommerce/date-range";
+import { getKpiSettings, type KpiSettings } from "@/lib/organization/settings";
 
 /**
  * E-commerce read model: loads committed facts for the caller's organization
@@ -44,13 +50,21 @@ export type EcommerceOverview =
       month: string;
       channels: ChannelInfo[];
       months: ReturnType<typeof monthlySummary>;
-      mom: ReturnType<typeof momEquivalent>;
       targets: ReturnType<typeof targetScorecard>;
       incomplete: ReturnType<typeof incompleteChannels>;
+      mom: ReturnType<typeof momEquivalent>;
       skus: SkuContribution[];
       /** Listing GMV vs shop GMV for the month (product reports may lag the shop report). */
       skuCoverage: { listingGmv: number; shopGmv: number };
+      /** Series for the dashboard charts. */
+      charts: {
+        /** Daily GMV per channel from the start of the previous month to the as-of date. */
+        daily: ReturnType<typeof dailyGmvSeries>;
+        /** Cumulative GMV vs straight-line target pace for the as-of month; null without targets. */
+        cumulative: ReturnType<typeof cumulativeVsTarget>;
+      };
       lastImportAt: string | null;
+      kpi: KpiSettings;
     };
 
 const iso = (d: Date | string) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d).slice(0, 10));
@@ -82,7 +96,8 @@ export async function getEcommerceOverview(
     const asOf = iso(latest.d);
     const from = addMonths(asOf, -(months - 1));
 
-    const [channelRows, factRows, targetRows, skuRows, coverage, lastImport] = await Promise.all([
+    const [kpi, channelRows, factRows, targetRows, skuRows, coverage, lastImport] = await Promise.all([
+      getKpiSettings(session),
       queryRows<ChannelInfo>("SELECT code, name FROM channels WHERE kind = 'marketplace' ORDER BY sort_order"),
       queryRows<{
         code: string;
@@ -134,6 +149,7 @@ export async function getEcommerceOverview(
       units: r.units_sold,
       visitors: r.visitors,
     }));
+    const targets = targetRows.map((t) => ({ channel: t.code, targetGmv: n(t.target_gmv) }));
     const skus = skuRows.map((r) => ({ sku: r.sku, name: r.name, gmv: n(r.gmv), units: n(r.units) }));
 
     return {
@@ -143,16 +159,178 @@ export async function getEcommerceOverview(
       channels: channelRows,
       months: monthlySummary(facts, channels, asOf, months),
       mom: momEquivalent(facts, channels, asOf),
-      targets: targetScorecard(
-        facts,
-        targetRows.map((t) => ({ channel: t.code, targetGmv: n(t.target_gmv) })),
-        channels,
-        asOf,
-      ),
+      targets: targetScorecard(facts, targets, channels, asOf, kpi.thresholds),
       incomplete: incompleteChannels(facts, channels, asOf),
       skus,
       skuCoverage: { listingGmv: skus.reduce((s, r) => s + r.gmv, 0), shopGmv: n(coverage?.gmv ?? null) },
+      charts: {
+        daily: dailyGmvSeries(facts, channels, addMonths(asOf, -1), asOf),
+        cumulative: cumulativeVsTarget(facts, targets, asOf),
+      },
       lastImportAt: lastImport?.at ? lastImport.at.toISOString() : null,
+      kpi,
     };
   });
+}
+
+export type RangeChannelRow = {
+  code: string;
+  name: string;
+  current: Totals;
+  previous: Totals;
+  gmvChange: number | null;
+  ordersChange: number | null;
+  aovChange: number | null;
+};
+
+export type SalesForRange =
+  | { status: "empty" }
+  | {
+      status: "ok";
+      asOf: string;
+      /** Earliest shop data date (lower bound for the date picker). */
+      dataFrom: string;
+      range: ResolvedRange;
+      current: Totals;
+      previous: Totals;
+      gmvChange: number | null;
+      ordersChange: number | null;
+      aovChange: number | null;
+      conversionChange: number | null;
+      channels: RangeChannelRow[];
+      /** Channels with fewer days of data than the range length (within data up to asOf). */
+      incomplete: { code: string; name: string; missingDays: number }[];
+      lastImportAt: string | null;
+      /** Only with { includeSkus: true }. */
+      skus?: SkuContribution[];
+      /** Listing GMV vs shop GMV in the range (product reports may lag the shop report). */
+      skuCoverage?: { listingGmv: number; shopGmv: number };
+      kpi: KpiSettings;
+    };
+
+const pctChange = (cur: number | null, prev: number | null) =>
+  cur === null || prev === null || prev === 0 ? null : cur / prev - 1;
+
+/**
+ * Shop KPIs for a dashboard date range (presets anchored on the as-of date)
+ * plus the comparison period. Tenant-scoped like every read model.
+ */
+export async function getSalesForRange(
+  session: ActiveSession,
+  input: RangeInput,
+  {
+    today = todayInTimeZone(session.organization.timezone),
+    includeSkus = false,
+  }: { today?: string; includeSkus?: boolean } = {},
+): Promise<SalesForRange> {
+  if (!hasRole(session.role, "viewer")) throw new AuthorizationError("viewer");
+  const org = session.organization.id;
+
+  return guarded("sales_for_range", async () => {
+    const [bounds, kpi] = await Promise.all([
+      queryOne<{ first: Date | string | null; last: Date | string | null }>(
+        `SELECT MIN(fact_date) AS first, MAX(fact_date) AS last
+           FROM sales_daily_facts WHERE organization_id = ? AND fact_date <= ?`,
+        [org, today],
+      ),
+      getKpiSettings(session),
+    ]);
+    if (!bounds?.last || !bounds.first) return { status: "empty" };
+    const asOf = iso(bounds.last);
+    const range = resolveRange(input, asOf, kpi.defaultRange);
+
+    const [channelRows, factRows, lastImport, skuRows] = await Promise.all([
+      queryRows<ChannelInfo>("SELECT code, name FROM channels WHERE kind = 'marketplace' ORDER BY sort_order"),
+      queryRows<{
+        code: string;
+        fact_date: Date | string;
+        gmv: string | number;
+        orders: number;
+        units_sold: number;
+        visitors: number;
+      }>(
+        `SELECT c.code, f.fact_date, f.gmv, f.orders, f.units_sold, f.visitors
+           FROM sales_daily_facts f JOIN channels c ON c.id = f.channel_id
+          WHERE f.organization_id = ?
+            AND (f.fact_date BETWEEN ? AND ? OR f.fact_date BETWEEN ? AND ?)`,
+        [org, range.from, range.to, range.compare.from, range.compare.to],
+      ),
+      queryOne<{ at: Date | null }>(
+        `SELECT MAX(committed_at) AS at FROM import_batches
+          WHERE organization_id = ? AND status = 'committed'`,
+        [org],
+      ),
+      includeSkus
+        ? queryRows<{ sku: string | null; name: string | null; gmv: string | number; units: string | number }>(
+            `SELECT v.sku, v.name, SUM(f.gmv) AS gmv, SUM(f.units_sold * l.units_per_listing) AS units
+               FROM listing_daily_facts f
+               JOIN channel_listings l ON l.organization_id = f.organization_id AND l.id = f.listing_id
+               LEFT JOIN product_variants v ON v.organization_id = l.organization_id AND v.id = l.variant_id
+              WHERE f.organization_id = ? AND f.fact_date BETWEEN ? AND ?
+              GROUP BY v.sku, v.name
+              ORDER BY gmv DESC`,
+            [org, range.from, range.to],
+          )
+        : Promise.resolve(null),
+    ]);
+
+    const facts: DailyFact[] = factRows.map((r) => ({
+      channel: r.code,
+      date: iso(r.fact_date),
+      gmv: n(r.gmv),
+      orders: r.orders,
+      units: r.units_sold,
+      visitors: r.visitors,
+    }));
+    const inCur = facts.filter((f) => f.date >= range.from && f.date <= range.to);
+    const inPrev = facts.filter((f) => f.date >= range.compare.from && f.date <= range.compare.to);
+    const current = totals(inCur);
+    const previous = totals(inPrev);
+
+    // Days that SHOULD have data: the range clipped to the as-of date.
+    const lastExpected = range.to < asOf ? range.to : asOf;
+    const expectedDays = lastExpected < range.from ? 0 : daysBetween(range.from, lastExpected);
+
+    const channels = channelRows.map((c) => {
+      const cur = totals(inCur.filter((f) => f.channel === c.code));
+      const prev = totals(inPrev.filter((f) => f.channel === c.code));
+      return {
+        code: c.code,
+        name: c.name,
+        current: cur,
+        previous: prev,
+        gmvChange: pctChange(cur.gmv, prev.gmv),
+        ordersChange: pctChange(cur.orders, prev.orders),
+        aovChange: pctChange(cur.aov, prev.aov),
+      };
+    });
+
+    return {
+      status: "ok",
+      asOf,
+      dataFrom: iso(bounds.first),
+      range,
+      current,
+      previous,
+      gmvChange: pctChange(current.gmv, previous.gmv),
+      ordersChange: pctChange(current.orders, previous.orders),
+      aovChange: pctChange(current.aov, previous.aov),
+      conversionChange: pctChange(current.conversionRate, previous.conversionRate),
+      channels,
+      incomplete: channels
+        .map((c) => ({ code: c.code, name: c.name, missingDays: expectedDays - c.current.days }))
+        .filter((c) => c.missingDays > 0),
+      lastImportAt: lastImport?.at ? lastImport.at.toISOString() : null,
+      kpi,
+      ...(skuRows ? skuSection(skuRows, current.gmv) : {}),
+    };
+  });
+}
+
+function skuSection(
+  rows: { sku: string | null; name: string | null; gmv: string | number; units: string | number }[],
+  shopGmv: number,
+) {
+  const skus = rows.map((r) => ({ sku: r.sku, name: r.name, gmv: n(r.gmv), units: n(r.units) }));
+  return { skus, skuCoverage: { listingGmv: skus.reduce((s, r) => s + r.gmv, 0), shopGmv } };
 }

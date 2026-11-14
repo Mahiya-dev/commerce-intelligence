@@ -40,6 +40,21 @@
   --sidebar-accent: oklch(0.94 0.025 80);
   --sidebar-accent-foreground: oklch(0.3 0.06 55);
   --sidebar-border: oklch(0.91 0.008 80);
+  /* Data-viz categorical slots (validated: dataviz validate_palette.js, light on #ffffff).
+     Fixed order — never cycled. Slots 3–5 are < 3:1 on light: charts using them ship a legend + table. */
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  /* Chart tokens (validated categorical palette, fixed per channel). */
+  --chart-shopee: #2a78d6;
+  --chart-tiktok-shop: #eb6834;
+  --chart-tokopedia: #1baf7a;
+  --chart-other: #898781;
+  --chart-pace: #898781;
+  --chart-grid: #e1e0d9;
+  --chart-axis: #c3c2b7;
 }
 
 .dark {
@@ -72,6 +87,19 @@
   --sidebar-accent: oklch(0.28 0.02 65);
   --sidebar-accent-foreground: oklch(0.96 0.004 85);
   --sidebar-border: oklch(1 0 0 / 10%);
+  /* Same hues stepped for the dark surface (validated on #201e1b). */
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-shopee: #3987e5;
+  --chart-tiktok-shop: #d95926;
+  --chart-tokopedia: #199e70;
+  --chart-other: #898781;
+  --chart-pace: #898781;
+  --chart-grid: #2c2c2a;
+  --chart-axis: #383835;
 }
 
 @theme inline {
@@ -99,6 +127,12 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-grid: var(--chart-grid);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);

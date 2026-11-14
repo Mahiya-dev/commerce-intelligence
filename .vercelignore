@@ -1,0 +1,11 @@
+# Never upload credentials or local build output with `vercel deploy`.
+.env*
+!.env.example
+.vercel
+.next
+dist
+node_modules
+# Not needed at runtime (DEMO data is seeded from a laptop; tests run in CI).
+samples
+tests
+scripts/samples

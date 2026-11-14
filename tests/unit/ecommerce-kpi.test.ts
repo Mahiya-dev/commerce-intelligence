@@ -5,6 +5,9 @@ import { csvTables } from "@/lib/imports/sources";
 import { validateTable } from "@/lib/imports/validate";
 import {
   addMonths,
+  cumulativeVsTarget,
+  dailyGmvSeries,
+  dateRange,
   daysInMonth,
   incompleteChannels,
   momEquivalent,
@@ -131,5 +134,38 @@ describe("edge cases", () => {
 
   it("caps the previous period at the end of a shorter month", () => {
     expect(momEquivalent([], CHANNELS, "2026-03-31").previous).toEqual({ from: "2026-02-01", to: "2026-02-28" });
+  });
+});
+
+describe("chart series", () => {
+  it("lists every date in a range, across month ends", () => {
+    expect(dateRange("2026-10-30", "2026-11-02")).toEqual(["2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02"]);
+  });
+
+  it("daily GMV per channel keeps missing days as null, not zero", () => {
+    const series = dailyGmvSeries(facts, CHANNELS, "2026-10-01", AS_OF);
+    expect(series.map((s) => s.channel)).toEqual(CHANNELS);
+    expect(series[0].points).toHaveLength(41);
+    const sum = (ch: number) =>
+      series[ch].points.filter((p) => p.date >= "2026-11-01").reduce((s, p) => s + (p.value ?? 0), 0);
+    expect(sum(0)).toBe(110481400);
+    const gapped = dailyGmvSeries(
+      facts.filter((f) => !(f.channel === "shopee" && f.date === "2026-11-05")),
+      CHANNELS,
+      "2026-11-01",
+      AS_OF,
+    );
+    expect(gapped[0].points.find((p) => p.date === "2026-11-05")?.value).toBeNull();
+  });
+
+  it("cumulative GMV ends at the scorecard actual and the pace reaches the full target", () => {
+    const c = cumulativeVsTarget(facts, targets, AS_OF)!;
+    const card = targetScorecard(facts, targets, CHANNELS, AS_OF).all!;
+    expect(c).toHaveLength(30);
+    expect(c[9]).toMatchObject({ date: AS_OF, actual: card.actual });
+    expect(c[9].pace).toBeCloseTo(card.expected, 6);
+    expect(c[10].actual).toBeNull();
+    expect(c[29].pace).toBeCloseTo(card.target, 6);
+    expect(cumulativeVsTarget(facts, [], AS_OF)).toBeNull();
   });
 });

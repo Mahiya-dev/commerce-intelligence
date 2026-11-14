@@ -24,7 +24,7 @@ describe("migration runner", () => {
     expect(await runMigrations(conn, files)).toEqual(files.map((f) => f.version));
     expect(await runMigrations(conn, files)).toEqual([]);
     const [tables] = await conn.query("SHOW TABLES");
-    expect((tables as unknown[]).length).toBe(18); // 17 app tables + schema_migrations
+    expect((tables as unknown[]).length).toBe(36); // 35 app tables + schema_migrations
     await conn.end();
   });
 

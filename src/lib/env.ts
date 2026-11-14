@@ -23,13 +23,33 @@ const envSchema = z.object({
   DB_NAME: optionalString,
   /** Pool size. Keep small on shared hosting (cPanel limits connections per user). */
   DB_CONNECTION_LIMIT: optionalString,
+  /**
+   * TLS to the database: "true" for a cloud MySQL (Aiven, TiDB Cloud, …) on a
+   * serverless host such as Vercel. Not needed on cPanel (localhost).
+   */
+  DB_SSL: optionalString,
+  /** PEM CA certificate of the database provider (newlines may be written as \n). */
+  DB_SSL_CA: optionalString,
   /** Public origin, e.g. https://intel.maduuray.com. Drives the Secure cookie flag. */
   APP_URL: optionalString,
-  /** Gemini API key for the AI Analyst (Phase 6). */
+  /** Groq API key for AI insights (console.groq.com). Server-side only. */
+  GROQ_API_KEY: optionalString,
+  /** Groq model id; must support structured outputs (json_schema). */
+  GROQ_MODEL: optionalString,
+  /** Optional OpenAI-compatible base URL (default https://api.groq.com/openai/v1). */
+  GROQ_BASE_URL: optionalString,
+  /** Server-wide Gemini key (fallback when an organization stores none in the dashboard). */
   GEMINI_API_KEY: optionalString,
-  /** Gemini model id for the AI Analyst. Selected and validated in Phase 6. */
+  /** Gemini model id for GEMINI_API_KEY. */
   GEMINI_MODEL: optionalString,
   LOG_LEVEL: optionalString,
+  /**
+   * 32-byte key (base64 or 64 hex chars) that encrypts secrets stored in the
+   * database, e.g. the Groq API key entered by the Owner. Generate with
+   * `openssl rand -base64 32`. Changing it makes stored secrets unreadable
+   * (they must be entered again).
+   */
+  APP_ENCRYPTION_KEY: optionalString,
 });
 
 export type DatabaseConfig = {
@@ -39,6 +59,8 @@ export type DatabaseConfig = {
   password: string;
   database: string;
   connectionLimit: number;
+  /** Present when DB_SSL=true: verified TLS (provider CA, or the system CAs). */
+  ssl?: { ca?: string; rejectUnauthorized: true; minVersion: "TLSv1.2" };
 };
 
 export class ConfigurationError extends Error {
@@ -57,6 +79,18 @@ export function parseDatabaseConfig(raw: RawEnv): DatabaseConfig {
   const env = envSchema.parse(raw);
   const limit = Number(env.DB_CONNECTION_LIMIT ?? 5);
   const connectionLimit = Number.isInteger(limit) && limit >= 1 && limit <= 50 ? limit : 5;
+  const sslFlag = (env.DB_SSL ?? "").toLowerCase();
+  if (sslFlag && !["true", "false", "1", "0"].includes(sslFlag)) {
+    throw new ConfigurationError(["DB_SSL harus true atau false"]);
+  }
+  const ssl =
+    sslFlag === "true" || sslFlag === "1"
+      ? {
+          ...(env.DB_SSL_CA ? { ca: env.DB_SSL_CA.replace(/\\n/g, "\n") } : {}),
+          rejectUnauthorized: true as const,
+          minVersion: "TLSv1.2" as const,
+        }
+      : undefined;
 
   if (env.DATABASE_URL) {
     let url: URL;
@@ -79,6 +113,7 @@ export function parseDatabaseConfig(raw: RawEnv): DatabaseConfig {
       password: decodeURIComponent(url.password),
       database,
       connectionLimit,
+      ...(ssl ? { ssl } : {}),
     };
   }
 
@@ -97,6 +132,7 @@ export function parseDatabaseConfig(raw: RawEnv): DatabaseConfig {
     password: env.DB_PASSWORD!,
     database: env.DB_NAME!,
     connectionLimit,
+    ...(ssl ? { ssl } : {}),
   };
 }
 
@@ -120,7 +156,39 @@ export function isSecureOrigin(): boolean {
   return process.env.NODE_ENV === "production";
 }
 
-export function getAiConfig(): { apiKey: string; model: string | undefined } | null {
+/** Default Groq model: supports strict structured outputs (json_schema). */
+export const DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b";
+
+export type GroqEnvConfig = { provider: "groq"; apiKey: string; model: string; baseUrl: string | undefined };
+
+/**
+ * Server-wide Groq settings from the environment, or null without GROQ_API_KEY.
+ * A key stored by the Owner in Pengaturan → Organisasi takes precedence
+ * (src/lib/organization/ai-credentials.ts).
+ */
+export function getGroqEnvConfig(): GroqEnvConfig | null {
+  const env = envSchema.parse(process.env);
+  return env.GROQ_API_KEY
+    ? {
+        provider: "groq",
+        apiKey: env.GROQ_API_KEY,
+        model: env.GROQ_MODEL ?? DEFAULT_GROQ_MODEL,
+        baseUrl: env.GROQ_BASE_URL,
+      }
+    : null;
+}
+
+/** Server-wide Gemini settings from the environment (fallback), or null without GEMINI_API_KEY. */
+export function getGeminiEnvConfig(): { apiKey: string; model: string | undefined } | null {
   const env = envSchema.parse(process.env);
   return env.GEMINI_API_KEY ? { apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL } : null;
+}
+
+/** Parsed APP_ENCRYPTION_KEY, or null when missing/invalid (secret storage disabled). */
+export function getEncryptionKey(raw: RawEnv = process.env): Buffer | null {
+  const value = envSchema.parse(raw).APP_ENCRYPTION_KEY;
+  if (!value) return null;
+  if (/^[0-9a-fA-F]{64}$/.test(value)) return Buffer.from(value, "hex");
+  const buf = Buffer.from(value, "base64");
+  return buf.length === 32 && /^[A-Za-z0-9+/]+={0,2}$/.test(value) ? buf : null;
 }

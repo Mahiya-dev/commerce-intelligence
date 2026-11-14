@@ -7,8 +7,8 @@ import { queryOne } from "@/lib/db/pool";
 import type { ActiveSession } from "@/lib/auth/sessions";
 import { importTables, sha256 } from "@/lib/imports/pipeline";
 import { csvTables, MIME_TYPES, readUploadedFile, type SourceTable } from "@/lib/imports/sources";
-import { commitImportBatch, previewCommit } from "@/lib/imports/commit";
-import { getEcommerceOverview } from "@/lib/data/ecommerce";
+import { canCommitReportType, commitImportBatch, previewCommit } from "@/lib/imports/commit";
+import { getEcommerceOverview, getSalesForRange } from "@/lib/data/ecommerce";
 import { createOrganization, createUser, setMembership } from "@/lib/admin/users";
 import { expectDbError, sessionFor, setupTestDatabase } from "./helpers";
 
@@ -19,6 +19,7 @@ const expected = JSON.parse(readFileSync(join(SAMPLES, "expected.json"), "utf8")
 
 let teardown: () => Promise<void>;
 let analyst: ActiveSession;
+let admin: ActiveSession;
 let viewer: ActiveSession;
 let outsider: ActiveSession;
 
@@ -47,6 +48,7 @@ beforeAll(async () => {
   ({ teardown } = await setupTestDatabase("facts"));
   await seedDemo({ withUsers: true });
   analyst = await sessionFor(await userId("analyst.demo@uray.local"));
+  admin = await sessionFor(await userId("admin.demo@uray.local"));
   viewer = await sessionFor(await userId("viewer.demo@uray.local"));
   await createOrganization({ name: "Other Org (TEST)", slug: "other-facts", isDemo: true });
   await createUser({ email: "outsider@facts.test", password: "MaduHutan2026" });
@@ -99,6 +101,17 @@ describe("commit guards", () => {
     expect(await previewCommit(outsider, id)).toBeNull();
     await expect(commitImportBatch(viewer, id)).rejects.toBeInstanceOf(AuthorizationError);
   });
+
+  it("lets analysts stage targets but only admins/owners save them", async () => {
+    const id = (await queryOne<{ id: string }>(
+      "SELECT id FROM import_batches WHERE report_type = 'sales_target' AND status = 'validated'",
+    ))!.id;
+    expect(canCommitReportType(analyst, "sales_target")).toBe(false);
+    expect(canCommitReportType(analyst, "marketplace_sales_daily")).toBe(true);
+    expect(canCommitReportType(admin, "sales_target")).toBe(true);
+    expect(await commitImportBatch(analyst, id, {})).toEqual({ status: "rejected", reason: "targets_forbidden" });
+    expect(await count("SELECT COUNT(*) AS n FROM sales_targets")).toBe(0);
+  });
 });
 
 describe("DEMO data end to end", () => {
@@ -117,7 +130,8 @@ describe("DEMO data end to end", () => {
     expect(await previewCommit(analyst, productId)).toMatchObject({ rows: 708, newListings: 0 });
 
     for (const id of [listingId, targetsId, shopId, productId]) {
-      expect((await commitImportBatch(analyst, id)).status, id).toBe("committed");
+      const by = id === targetsId ? admin : analyst;
+      expect((await commitImportBatch(by, id)).status, id).toBe("committed");
     }
     expect(await count("SELECT COUNT(*) AS n FROM sales_daily_facts WHERE fact_date >= '2026-09-01'")).toBe(212);
     expect(await count("SELECT COUNT(*) AS n FROM listing_daily_facts")).toBe(708);
@@ -137,18 +151,31 @@ describe("DEMO data end to end", () => {
     const nov = o.months[2];
     expect(nov.all.gmv).toBe(expected.sec1["Nov 2026 (MTD)|SEMUA"].H);
     expect(o.months[1].rows[2].totals.days).toBe(expected.sec1["Okt 2026|tokopedia"].F);
-    expect(o.mom.all.gmvChange).toBeCloseTo(expected.sec2.SEMUA.D, 12);
+    // MoM (equivalent period) and SKU contribution now come from the date-range read model (MTD).
+    const mtd = await getSalesForRange(viewer, { range: "mtd" }, { today: TODAY, includeSkus: true });
+    if (mtd.status !== "ok") throw new Error("expected data");
+    expect(mtd.gmvChange).toBeCloseTo(expected.sec2.SEMUA.D, 12);
     for (const r of o.targets.rows) {
       expect(r.result?.progress).toBeCloseTo(expected.sec3[r.channel].E, 12);
       expect(r.result?.runRateNeeded).toBeCloseTo(expected.sec3[r.channel].I, 6);
     }
 
     // §5: GMV per internal SKU via the listing mapping; unmapped listings grouped as null.
-    const bySku = Object.fromEntries(o.skus.map((s) => [s.sku ?? "BELUM DIPETAKAN", s.gmv]));
+    const bySku = Object.fromEntries((mtd.skus ?? []).map((s) => [s.sku ?? "BELUM DIPETAKAN", s.gmv]));
     expect(bySku).toEqual(
       Object.fromEntries(Object.entries(expected.sec5).map(([k, v]) => [k, (v as { B: number }).B])),
     );
+    expect(mtd.skuCoverage).toEqual({ listingGmv: nov.all.gmv, shopGmv: nov.all.gmv });
     expect(o.skuCoverage).toEqual({ listingGmv: nov.all.gmv, shopGmv: nov.all.gmv });
+
+    // Chart series agree with the KPI cards they illustrate.
+    expect(o.charts.daily[0].points[0].date).toBe("2026-10-01");
+    expect(o.charts.daily.at(-1)!.points.at(-1)!.date).toBe("2026-11-10");
+    const novDaily = o.charts.daily.flatMap((s) => s.points.filter((p) => p.date >= "2026-11-01"));
+    expect(novDaily.reduce((sum, p) => sum + (p.value ?? 0), 0)).toBe(nov.all.gmv);
+    const cumulative = o.charts.cumulative!;
+    expect(cumulative.find((p) => p.date === o.asOf)?.actual).toBe(o.targets.all!.actual);
+    expect(cumulative.at(-1)!.pace).toBeCloseTo(o.targets.all!.target, 6);
   });
 
   it("re-importing the same period overwrites instead of double counting", async () => {

@@ -7,6 +7,9 @@ import { resolve } from "node:path";
  * On cPanel, put a .env file next to server.js (outside public_html).
  */
 export function loadEnv(): void {
+  // Set by the *:vercel scripts, which pass their own file via `node --env-file`:
+  // never mix in .env.local (it would silently fill e.g. the local DB_NAME).
+  if (process.env.UCI_SKIP_DOTENV === "1") return;
   for (const file of [".env.local", ".env"]) {
     const path = resolve(process.cwd(), file);
     if (existsSync(path)) {
