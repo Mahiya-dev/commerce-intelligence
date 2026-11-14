@@ -47,8 +47,13 @@ describe("E-Commerce without a shop report", () => {
     if (out.status !== "partial") throw new Error("unreachable");
     expect(out.asOf).toBe("2026-10-20");
     expect(out.range).toMatchObject({ from: "2026-10-01", to: "2026-10-20" });
-    // No Master Produk yet: every listing is unmapped, GMV = ready-to-ship sum of the sample.
-    expect(out.skus).toEqual([{ sku: null, name: null, gmv: 3910000 + 2640000 + 1650000 + 1150500, units: 79 }]);
+    // No Master Produk yet: the SKUs named by the export (SKU Induk) are created and mapped on save,
+    // so nothing is left unmapped. GMV = ready-to-ship sum of the sample.
+    expect(out.skus).toHaveLength(4);
+    expect(out.skus.every((s) => s.sku !== null && s.name !== null)).toBe(true);
+    expect(out.skus.find((s) => s.sku === "MU-RANDU-500")?.gmv).toBe(3910000);
+    expect(out.skus.reduce((sum, s) => sum + s.gmv, 0)).toBe(3910000 + 2640000 + 1650000 + 1150500);
+    expect(out.skus.reduce((sum, s) => sum + s.units, 0)).toBe(79);
     expect(out.skuCoverage).toEqual({ listingGmv: 9350500, shopGmv: null });
     expect(out).not.toHaveProperty("current");
   });

@@ -114,8 +114,10 @@ Cara aplikasi membaca file:
 - GMV memakai **Pesanan Siap Dikirim**, bukan Pesanan Dibuat (keputusan pemilik bisnis, Nov 2026). Angka Shopee
   untuk satu tanggal bisa berubah beberapa hari kemudian; unggah ulang file tanggal itu untuk memperbaruinya.
 - **Pemetaan otomatis**: bila **SKU Induk** sama dengan SKU di Master Produk, listing baru (atau listing yang belum
-  dipetakan) langsung terhubung ke SKU tersebut. Listing yang sudah dipetakan tidak diubah. SKU yang tidak ada di
-  Master Produk ditampilkan saat menyimpan; datanya tetap tersimpan sebagai **belum dipetakan**.
+  dipetakan) langsung terhubung ke SKU tersebut. Listing yang sudah dipetakan tidak diubah. SKU Induk yang **belum
+  ada** di Master Produk **dibuat otomatis** saat menyimpan (nama diambil dari nama listing) dan daftarnya
+  ditampilkan lebih dulu. Periksa ejaannya: SKU yang salah ketik menjadi produk terpisah. Listing dengan SKU Induk
+  kosong tetap tersimpan sebagai **belum dipetakan**.
 - File ini hanya mengisi **kontribusi per produk/SKU**. KPI toko (GMV, pesanan, pengunjung toko) tetap dari laporan
   `kinerja_toko_harian`.
 
@@ -194,7 +196,9 @@ Di halaman batch yang tervalidasi tanpa error, panel **Simpan ke data e-commerce
 
 - **data baru**: tanggal/channel yang belum pernah ada;
 - **data yang akan ditimpa**: tanggal/channel yang sudah ada akan diganti dengan isi file ini;
-- **listing baru** (laporan produk): listing yang belum dikenal dibuat dengan status **belum dipetakan**.
+- **listing baru** (laporan produk): listing yang belum dikenal dibuat; dipetakan otomatis bila barisnya punya SKU,
+  selain itu berstatus **belum dipetakan**;
+- **SKU baru**: SKU di file yang belum ada di Master Produk dan akan dibuat otomatis.
 
 Klik **Simpan ke data e-commerce**. Semua baris disimpan sekaligus, atau tidak sama sekali bila terjadi gangguan.
 
@@ -221,6 +225,19 @@ langsung.
   daftar SKU-nya ditampilkan.
 - `sku_internal` yang dikosongkan **tidak menghapus** pemetaan yang sudah ada.
 - `isi_per_listing` dipakai untuk menghitung unit SKU. Contoh: listing "Isi 2" yang terjual 10 = 20 unit SKU.
+
+### Memetakan listing di Master Data → Listing (Analyst ke atas)
+
+Portofolio Produk dan kontribusi SKU dihitung **per SKU internal**, jadi listing yang belum dipetakan tidak muncul di
+sana. Listing yang belum dipetakan tampil paling atas.
+
+- **Petakan otomatis**: memetakan semua listing yang belum dipetakan memakai kolom SKU dari laporan produk yang sudah
+  tersimpan (mis. SKU Induk Shopee). SKU yang belum ada di Master Produk dibuat otomatis. Listing yang sudah
+  dipetakan tidak diubah. Tidak perlu impor ulang.
+- **Petakan / Ubah** (per listing): ketik SKU internal (ada saran dari Master Produk) dan isi per listing. Untuk SKU
+  yang belum ada, centang **Buat SKU baru**. **Lepas pemetaan** mengembalikan listing ke belum dipetakan.
+
+Pemetaan manual tidak pernah ditimpa oleh pemetaan otomatis. Semua perubahan tercatat di Audit Log.
 
 ## 7. Membaca Dashboard dan halaman E-Commerce
 
@@ -274,7 +291,7 @@ membuat progres terlihat lebih baik.
 Diambil dari laporan **Kinerja Produk Harian** dan dipetakan ke SKU lewat Master Listing.
 
 - **BELUM DIPETAKAN**: GMV dari listing yang belum punya SKU internal. Tetap dihitung di total channel. Petakan
-  lewat impor `master_listing` agar masuk ke SKU yang benar.
+  di **Master Data → Listing** (otomatis atau manual) agar masuk ke SKU yang benar.
 - Paket (bundle) tampil sebagai SKU-nya sendiri, tidak dipecah ke komponennya.
 - Bila total GMV produk berbeda dengan GMV toko, biasanya laporan produk belum diimpor untuk semua hari atau channel.
   Selisihnya ditampilkan di bawah tabel.

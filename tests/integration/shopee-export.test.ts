@@ -43,15 +43,29 @@ describe("Shopee Seller Center export end to end", () => {
       rows: 4,
       inserts: 4,
       newListings: 3,
-      autoMapped: 2,
-      unmatchedSkus: ["MU-TIDAK-ADA"],
+      autoMapped: 3,
+      newSkus: ["MU-TIDAK-ADA"],
       unknownSkus: [],
     });
     expect((await commitImportBatch(analyst, batchId)).status).toBe("committed");
 
     expect(await listing("DEMO-SP-2001")).toMatchObject({ sku: "MU-RANDU-500", mapping_source: "auto" });
     expect(await listing("DEMO-SP-2002")).toMatchObject({ sku: "MU-HUTAN-1000", mapping_source: "auto" });
-    expect(await listing("DEMO-SP-2003")).toMatchObject({ sku: null, mapping_source: null });
+    // SKU Induk unknown to Master Produk: created from the listing, then mapped.
+    expect(await listing("DEMO-SP-2003")).toMatchObject({ sku: "MU-TIDAK-ADA", mapping_source: "auto" });
+    const created = await queryOne<{ name: string; product_type: string }>(
+      `SELECT p.name, p.product_type FROM product_variants v
+         JOIN products p ON p.organization_id = v.organization_id AND p.id = v.product_id
+        WHERE v.organization_id = ? AND v.sku = 'MU-TIDAK-ADA'`,
+      [analyst.organization.id],
+    );
+    expect(created?.product_type).toBe("single");
+    expect(created?.name.length).toBeGreaterThan(1);
+    expect(
+      await queryOne("SELECT id FROM audit_logs WHERE organization_id = ? AND action = 'product.auto_created'", [
+        analyst.organization.id,
+      ]),
+    ).not.toBeNull();
     expect(await listing("DEMO-SP-1002")).toMatchObject({ sku: "MU-KLG-500", mapping_source: "manual" });
 
     const facts = await queryRows<{ gmv: string; orders: number; units_sold: number }>(
@@ -63,8 +77,8 @@ describe("Shopee Seller Center export end to end", () => {
     expect(facts.map((f) => [Number(f.gmv), f.orders, f.units_sold])).toEqual([[3910000, 46, 51]]);
   });
 
-  it("maps a listing that was created unmapped once its SKU is known, without remapping mapped ones", async () => {
-    // Same listings, another day, with DEMO-SP-2003 now carrying a known SKU.
+  it("never remaps a listing that is already mapped", async () => {
+    // Same listings, another day, carrying a different SKU: existing mappings win.
     const csv = Buffer.from(
       "tanggal,channel,id_produk_channel,id_sku_channel,nama_listing,gmv,pesanan,unit_terjual,sku_internal\n" +
         "2026-10-21,shopee,DEMO-SP-2003,,Madu Uray Edisi Terbatas (DEMO),100000,1,1,MU-KLC-150\n" +
@@ -72,9 +86,9 @@ describe("Shopee Seller Center export end to end", () => {
     );
     const res = await importUploadedFiles(analyst, [{ name: "koreksi.csv", buffer: csv }], { now: NOW });
     const batchId = res.staged[0].batchId;
-    expect(await previewCommit(analyst, batchId)).toMatchObject({ newListings: 0, autoMapped: 1 });
+    expect(await previewCommit(analyst, batchId)).toMatchObject({ newListings: 0, autoMapped: 0, newSkus: [] });
     expect((await commitImportBatch(analyst, batchId)).status).toBe("committed");
-    expect(await listing("DEMO-SP-2003")).toMatchObject({ sku: "MU-KLC-150", mapping_source: "auto" });
+    expect(await listing("DEMO-SP-2003")).toMatchObject({ sku: "MU-TIDAK-ADA", mapping_source: "auto" });
     expect(await listing("DEMO-SP-2001")).toMatchObject({ sku: "MU-RANDU-500" });
   });
 });
