@@ -7,6 +7,7 @@ import { getEcommerceOverview, getSalesForRange } from "@/lib/data/ecommerce";
 import { getMarketplaceAds } from "@/lib/data/marketplace-ads";
 import { dateRange } from "@/lib/ecommerce/kpi";
 import { MarketplaceAdsCard } from "./marketplace-ads-card";
+import { SkuContributionCard } from "./sku-contribution-card";
 import { RANGE_PRESET_LABELS } from "@/lib/ecommerce/date-range";
 import { formatDate, formatIDR, formatNumber, formatPercent, MISSING } from "@/lib/format";
 import { hasRole } from "@/lib/auth/roles";
@@ -67,6 +68,64 @@ export default async function EcommercePage({ searchParams }: PageProps<"/ecomme
     </>
   );
 
+  if (ranged.status === "partial") {
+    const { range } = ranged;
+    const ads = await getMarketplaceAds(session, { from: range.from, to: range.to });
+    return (
+      <div className="space-y-6">
+        {header}
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div className="space-y-1">
+            <p className="text-sm">
+              <span className="font-medium">
+                {RANGE_PRESET_LABELS[range.preset]}: {period(range.from, range.to)}
+              </span>{" "}
+              · data s.d. {day(ranged.asOf)}
+            </p>
+            <DataSourceLabel
+              source="Laporan produk & iklan marketplace"
+              updatedAt={ranged.lastImportAt}
+              timeZone={organization.timezone}
+            />
+          </div>
+          <DateRangeFilter
+            key={`${range.preset}|${range.from}|${range.to}`}
+            action="/ecommerce"
+            preset={range.preset}
+            from={range.from}
+            to={range.to}
+            min={ranged.dataFrom}
+            max={ranged.asOf}
+          />
+        </div>
+        {range.error ? <p className="text-xs text-destructive">{range.error}</p> : null}
+        <Alert variant="warning">
+          <AlertTriangle aria-hidden />
+          <AlertDescription>
+            <p>
+              KPI toko (GMV, pesanan, AOV, conversion rate, target, forecast) belum bisa dihitung karena laporan{" "}
+              <strong>Kinerja Toko Harian</strong> belum diimpor. Yang tampil di bawah berasal dari laporan produk dan
+              iklan. Total GMV per produk tidak dipakai sebagai GMV toko karena pesanan dan pengunjung tidak bisa
+              dijumlahkan per produk.
+            </p>
+          </AlertDescription>
+        </Alert>
+        <MarketplaceAdsCard
+          rows={ads}
+          shopGmv={{}}
+          rangeDays={dateRange(range.from, range.to).length}
+          periodLabel={period(range.from, range.to)}
+        />
+        <SkuContributionCard
+          skus={ranged.skus}
+          listingGmv={ranged.skuCoverage.listingGmv}
+          shopGmv={null}
+          periodLabel={period(range.from, range.to)}
+        />
+      </div>
+    );
+  }
+
   if (data.status === "empty" || ranged.status === "empty") {
     return (
       <div className="space-y-6">
@@ -102,7 +161,6 @@ export default async function EcommercePage({ searchParams }: PageProps<"/ecomme
   const targetSentence = targetNote ? `Ditandai bila di bawah ${targetNote}.` : "";
   const skus = ranged.skus ?? [];
   const skuCoverage = ranged.skuCoverage ?? { listingGmv: 0, shopGmv: 0 };
-  const skuGap = skuCoverage.shopGmv - skuCoverage.listingGmv;
   const rangeLabel = `${RANGE_PRESET_LABELS[range.preset]}: ${period(range.from, range.to)}`;
   const channelRows = [
     ...ranged.channels.map((c) => ({ key: c.code, label: c.name, ...c })),
@@ -335,56 +393,12 @@ export default async function EcommercePage({ searchParams }: PageProps<"/ecomme
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-sm">Kontribusi SKU internal · {period(range.from, range.to)}</CardTitle>
-          <CardDescription>
-            Dari laporan Kinerja Produk Harian, dipetakan ke SKU lewat Master Listing. Unit = unit listing × isi per
-            listing. Paket (bundle) tampil sebagai SKU-nya sendiri.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="px-0">
-          {skus.length === 0 ? (
-            <p className="px-6 text-sm text-muted-foreground">
-              Laporan Kinerja Produk Harian untuk rentang ini belum diimpor.
-            </p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>SKU</TableHead>
-                  <TableHead>Nama</TableHead>
-                  <TableHead className="text-right">GMV</TableHead>
-                  <TableHead className="text-right">Porsi</TableHead>
-                  <TableHead className="text-right">Unit SKU</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {skus.map((s) => (
-                  <TableRow key={s.sku ?? "unmapped"}>
-                    <TableCell className="font-mono text-xs">{s.sku ?? "BELUM DIPETAKAN"}</TableCell>
-                    <TableCell className={s.sku ? "" : "text-muted-foreground"}>
-                      {s.name ?? "Listing belum dipetakan ke SKU internal"}
-                    </TableCell>
-                    <TableCell className={NUM}>{formatIDR(s.gmv)}</TableCell>
-                    <TableCell className={NUM}>
-                      {pct(skuCoverage.listingGmv ? s.gmv / skuCoverage.listingGmv : null, 1)}
-                    </TableCell>
-                    <TableCell className={NUM}>{formatNumber(s.units)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-          {skus.length && skuGap !== 0 ? (
-            <p className="px-6 pt-3 text-xs text-muted-foreground">
-              Total GMV produk ({formatIDR(skuCoverage.listingGmv)}) berbeda {formatIDR(Math.abs(skuGap))} dari GMV toko
-              ({formatIDR(skuCoverage.shopGmv)}). Biasanya karena laporan produk belum diimpor untuk semua hari atau
-              channel.
-            </p>
-          ) : null}
-        </CardContent>
-      </Card>
+      <SkuContributionCard
+        skus={skus}
+        listingGmv={skuCoverage.listingGmv}
+        shopGmv={skuCoverage.shopGmv}
+        periodLabel={period(range.from, range.to)}
+      />
     </div>
   );
 }

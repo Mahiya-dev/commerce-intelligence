@@ -80,7 +80,8 @@ export function MarketplaceAdsCard({
         {rows.some((r) => r.days < rangeDays) ? (
           <p className="px-6 pt-3 text-xs text-warning-foreground">
             Laporan iklan belum lengkap untuk semua hari di rentang ini; biaya dan omzet iklan hanya mencakup hari yang
-            ada laporannya, sedangkan GMV toko mencakup seluruh rentang.
+            ada laporannya
+            {Object.keys(shopGmv).length ? ", sedangkan GMV toko mencakup seluruh rentang" : ""}.
           </p>
         ) : null}
       </CardContent>

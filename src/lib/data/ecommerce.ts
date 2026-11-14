@@ -186,6 +186,21 @@ export type RangeChannelRow = {
 export type SalesForRange =
   | { status: "empty" }
   | {
+      /**
+       * No shop report yet, but product and/or marketplace-ads reports exist:
+       * the range is anchored on those so their sections can still be shown.
+       * Shop KPIs (GMV, orders, AOV, conversion) are unknown — never zero.
+       */
+      status: "partial";
+      asOf: string;
+      dataFrom: string;
+      range: ResolvedRange;
+      skus: SkuContribution[];
+      skuCoverage: { listingGmv: number; shopGmv: null };
+      lastImportAt: string | null;
+      kpi: KpiSettings;
+    }
+  | {
       status: "ok";
       asOf: string;
       /** Earliest shop data date (lower bound for the date picker). */
@@ -235,7 +250,7 @@ export async function getSalesForRange(
       ),
       getKpiSettings(session),
     ]);
-    if (!bounds?.last || !bounds.first) return { status: "empty" };
+    if (!bounds?.last || !bounds.first) return partialRange(org, input, today, kpi);
     const asOf = iso(bounds.last);
     const range = resolveRange(input, asOf, kpi.defaultRange);
 
@@ -260,18 +275,7 @@ export async function getSalesForRange(
           WHERE organization_id = ? AND status = 'committed'`,
         [org],
       ),
-      includeSkus
-        ? queryRows<{ sku: string | null; name: string | null; gmv: string | number; units: string | number }>(
-            `SELECT v.sku, v.name, SUM(f.gmv) AS gmv, SUM(f.units_sold * l.units_per_listing) AS units
-               FROM listing_daily_facts f
-               JOIN channel_listings l ON l.organization_id = f.organization_id AND l.id = f.listing_id
-               LEFT JOIN product_variants v ON v.organization_id = l.organization_id AND v.id = l.variant_id
-              WHERE f.organization_id = ? AND f.fact_date BETWEEN ? AND ?
-              GROUP BY v.sku, v.name
-              ORDER BY gmv DESC`,
-            [org, range.from, range.to],
-          )
-        : Promise.resolve(null),
+      includeSkus ? skuRowsFor(org, range) : Promise.resolve(null),
     ]);
 
     const facts: DailyFact[] = factRows.map((r) => ({
@@ -327,10 +331,55 @@ export async function getSalesForRange(
   });
 }
 
-function skuSection(
-  rows: { sku: string | null; name: string | null; gmv: string | number; units: string | number }[],
-  shopGmv: number,
-) {
+type SkuRow = { sku: string | null; name: string | null; gmv: string | number; units: string | number };
+
+function skuRowsFor(org: string, range: { from: string; to: string }) {
+  return queryRows<SkuRow>(
+    `SELECT v.sku, v.name, SUM(f.gmv) AS gmv, SUM(f.units_sold * l.units_per_listing) AS units
+       FROM listing_daily_facts f
+       JOIN channel_listings l ON l.organization_id = f.organization_id AND l.id = f.listing_id
+       LEFT JOIN product_variants v ON v.organization_id = l.organization_id AND v.id = l.variant_id
+      WHERE f.organization_id = ? AND f.fact_date BETWEEN ? AND ?
+      GROUP BY v.sku, v.name
+      ORDER BY gmv DESC`,
+    [org, range.from, range.to],
+  );
+}
+
+/** Range anchored on product / marketplace-ads reports when no shop report exists yet. */
+async function partialRange(org: string, input: RangeInput, today: string, kpi: KpiSettings): Promise<SalesForRange> {
+  const b = await queryOne<{ first: Date | string | null; last: Date | string | null }>(
+    `SELECT MIN(d) AS first, MAX(d) AS last FROM (
+       SELECT fact_date AS d FROM listing_daily_facts WHERE organization_id = ? AND fact_date <= ?
+       UNION ALL
+       SELECT fact_date AS d FROM marketplace_ad_daily_facts WHERE organization_id = ? AND fact_date <= ?
+     ) x`,
+    [org, today, org, today],
+  );
+  if (!b?.last || !b.first) return { status: "empty" };
+  const asOf = iso(b.last);
+  const range = resolveRange(input, asOf, kpi.defaultRange);
+  const [rows, lastImport] = await Promise.all([
+    skuRowsFor(org, range),
+    queryOne<{ at: Date | null }>(
+      `SELECT MAX(committed_at) AS at FROM import_batches WHERE organization_id = ? AND status = 'committed'`,
+      [org],
+    ),
+  ]);
+  const skus = rows.map((r) => ({ sku: r.sku, name: r.name, gmv: n(r.gmv), units: n(r.units) }));
+  return {
+    status: "partial",
+    asOf,
+    dataFrom: iso(b.first),
+    range,
+    skus,
+    skuCoverage: { listingGmv: skus.reduce((s, r) => s + r.gmv, 0), shopGmv: null },
+    lastImportAt: lastImport?.at ? lastImport.at.toISOString() : null,
+    kpi,
+  };
+}
+
+function skuSection(rows: SkuRow[], shopGmv: number) {
   const skus = rows.map((r) => ({ sku: r.sku, name: r.name, gmv: n(r.gmv), units: n(r.units) }));
   return { skus, skuCoverage: { listingGmv: skus.reduce((s, r) => s + r.gmv, 0), shopGmv } };
 }

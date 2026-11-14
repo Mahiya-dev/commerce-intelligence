@@ -139,6 +139,10 @@ Hasilnya tampil di halaman **E-Commerce → Iklan marketplace** mengikuti rentan
 | ROAS / ACOS      | Omzet iklan ÷ biaya / biaya ÷ omzet iklan (versi Shopee: "Efektivitas Iklan" dan "ACOS")  |
 | Biaya ÷ GMV toko | Biaya iklan ÷ GMV toko dari laporan toko harian: porsi biaya iklan terhadap seluruh omzet |
 
+Kartu ini (dan **Kontribusi SKU**) tetap tampil walaupun laporan **Kinerja Toko Harian** belum diimpor. Dalam
+keadaan itu halaman E-Commerce memberi peringatan bahwa KPI toko belum bisa dihitung, rentang tanggal mengikuti data
+produk/iklan terakhir, dan kolom **Biaya ÷ GMV toko** kosong (—).
+
 **Penting:** omzet iklan menurut Shopee termasuk pesanan yang belum dikirim dan bisa tumpang tindih dengan penjualan
 organik, jadi **jangan dijumlahkan dengan GMV toko**. Untuk menilai efisiensi biaya iklan terhadap bisnis secara
 keseluruhan, pakai **Biaya ÷ GMV toko**.
