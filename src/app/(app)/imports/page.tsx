@@ -1,27 +1,50 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { History } from "lucide-react";
+import { ChevronLeft, ChevronRight, History } from "lucide-react";
 import { requireRole } from "@/lib/auth/guards";
 import { requireNavItem } from "@/config/navigation";
 import { isDatabaseConfigured } from "@/lib/env";
 import { formatDateTime } from "@/lib/format";
 import { REPORT_TYPE_LABELS } from "@/lib/imports/templates";
-import { listImportBatches } from "@/lib/imports/staging";
+import { IMPORT_HISTORY_PAGE_SIZE, listImportBatchesPage } from "@/lib/imports/staging";
 import { PageHeader } from "@/components/shared/page-header";
 import { DataSourceLabel } from "@/components/shared/data-source-label";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ImportSourcePicker } from "./import-source-picker";
-import { BatchStatusBadge, formatPeriod, SOURCE_LABELS } from "./batch-ui";
+import { formatPeriod, SOURCE_LABELS } from "./batch-ui";
+import { ImportHistoryTable } from "./import-history-table";
 
 export const metadata: Metadata = { title: "Impor Data" };
 
-export default async function Page() {
+function PageLink({ page, disabled, children }: { page: number; disabled: boolean; children: React.ReactNode }) {
+  if (disabled) {
+    return (
+      <Button size="sm" variant="outline" disabled>
+        {children}
+      </Button>
+    );
+  }
+  return (
+    <Button asChild size="sm" variant="outline">
+      <Link href={page <= 1 ? "/imports" : `/imports?page=${page}`} scroll={false}>
+        {children}
+      </Link>
+    </Button>
+  );
+}
+
+export default async function Page({ searchParams }: PageProps<"/imports">) {
   const item = requireNavItem("/imports");
   const session = await requireRole(item.minRole);
   const { organization } = session;
-  const batches = isDatabaseConfigured() ? await listImportBatches(session) : [];
+  const pageParam = (await searchParams).page;
+  const requested = Number.parseInt(Array.isArray(pageParam) ? (pageParam[0] ?? "") : (pageParam ?? ""), 10) || 1;
+  const history = isDatabaseConfigured()
+    ? await listImportBatchesPage(session, requested)
+    : { items: [], total: 0, page: 1, pageCount: 1 };
+  const batches = history.items;
 
   return (
     <div className="space-y-6">
@@ -47,43 +70,41 @@ export default async function Page() {
               <CardTitle>Riwayat impor</CardTitle>
             </CardHeader>
             <CardContent className="px-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Waktu</TableHead>
-                    <TableHead>Jenis laporan</TableHead>
-                    <TableHead>Sumber</TableHead>
-                    <TableHead>Periode</TableHead>
-                    <TableHead className="text-right">Valid / total</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {batches.map((b) => (
-                    <TableRow key={b.id}>
-                      <TableCell className="whitespace-nowrap">
-                        <Link href={`/imports/${b.id}`} className="underline-offset-4 hover:underline">
-                          {formatDateTime(b.createdAt, organization.timezone)}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap">
-                        {REPORT_TYPE_LABELS[b.reportType] ?? b.reportType}
-                        {b.channelName ? <span className="text-muted-foreground"> · {b.channelName}</span> : null}
-                      </TableCell>
-                      <TableCell className="max-w-64 truncate" title={b.fileName}>
-                        <span className="text-muted-foreground">{SOURCE_LABELS[b.sourceKind]}:</span> {b.fileName}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap">{formatPeriod(b.periodStart, b.periodEnd)}</TableCell>
-                      <TableCell className="text-right tabular-nums">
-                        {b.validRows ?? "—"} / {b.totalRows ?? "—"}
-                      </TableCell>
-                      <TableCell>
-                        <BatchStatusBadge status={b.status} />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <ImportHistoryTable
+                key={history.page}
+                rows={batches.map((b) => ({
+                  id: b.id,
+                  time: formatDateTime(b.createdAt, organization.timezone),
+                  type: REPORT_TYPE_LABELS[b.reportType] ?? b.reportType,
+                  channel: b.channelName,
+                  source: SOURCE_LABELS[b.sourceKind],
+                  fileName: b.fileName,
+                  period: formatPeriod(b.periodStart, b.periodEnd),
+                  validRows: b.validRows,
+                  totalRows: b.totalRows,
+                  status: b.status,
+                }))}
+              />
+              <nav
+                aria-label="Halaman riwayat impor"
+                className="flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3 text-sm"
+              >
+                <span className="text-muted-foreground tabular-nums">
+                  {(history.page - 1) * IMPORT_HISTORY_PAGE_SIZE + 1}–
+                  {(history.page - 1) * IMPORT_HISTORY_PAGE_SIZE + batches.length} dari {history.total} impor
+                </span>
+                <div className="flex items-center gap-2">
+                  <PageLink page={history.page - 1} disabled={history.page <= 1}>
+                    <ChevronLeft aria-hidden /> Sebelumnya
+                  </PageLink>
+                  <span className="tabular-nums">
+                    Halaman {history.page} dari {history.pageCount}
+                  </span>
+                  <PageLink page={history.page + 1} disabled={history.page >= history.pageCount}>
+                    Berikutnya <ChevronRight aria-hidden />
+                  </PageLink>
+                </div>
+              </nav>
             </CardContent>
           </Card>
         )}

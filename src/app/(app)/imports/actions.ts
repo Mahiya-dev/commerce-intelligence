@@ -176,3 +176,69 @@ export async function commitImport(formData: FormData): Promise<void> {
   revalidatePath("/ecommerce");
   redirect(`/imports/${batchId}?commit=${result}`);
 }
+
+const BULK_REASONS: Record<string, string> = {
+  status: "sudah tersimpan/dibatalkan",
+  invalid_rows: "ada baris yang ditolak",
+  unknown_skus: "ada SKU yang tidak ditemukan di Master Produk",
+  warnings_not_acknowledged: "ada peringatan yang belum ditinjau",
+  empty: "tidak ada baris valid",
+  targets_forbidden: "target bulanan hanya untuk Admin/Owner",
+  not_found: "tidak ditemukan",
+  not_cancellable: "tidak dapat dibatalkan (sudah tersimpan/dibatalkan)",
+  error: "gangguan layanan",
+};
+
+export type BulkImportState = {
+  status: "idle" | "error" | "success";
+  message?: string;
+  /** Batches that were not processed, with the reason (shown per file by the table). */
+  skipped?: { batchId: string; reason: string }[];
+};
+
+/**
+ * Saves or cancels the batches ticked in the import history. Each batch is its
+ * own all-or-nothing transaction (same rules as the single-batch buttons); one
+ * batch failing never blocks the others. Oldest first, so a master/listing file
+ * uploaded before a sales file is saved before it.
+ */
+export async function bulkImportAction(_prev: BulkImportState, formData: FormData): Promise<BulkImportState> {
+  const session = await requireRole("analyst");
+  if (!isDatabaseConfigured()) return { status: "error", message: NOT_CONFIGURED.message };
+  const intent = formData.get("intent");
+  if (intent !== "commit" && intent !== "cancel") return { status: "error", message: "Pilih tindakan." };
+  const ids = [...new Set(formData.getAll("batchId").map(String))].filter((id) => /^[0-9a-f-]{36}$/.test(id));
+  if (ids.length === 0) return { status: "error", message: "Centang minimal satu impor." };
+  if (ids.length > 100) return { status: "error", message: "Maksimal 100 impor sekali proses." };
+
+  const ipAddress = await getClientIp();
+  const acknowledgeWarnings = formData.get("acknowledgeWarnings") === "on";
+  const skipped: { batchId: string; reason: string }[] = [];
+  let done = 0;
+  for (const batchId of ids.reverse()) {
+    let reason: string | null = null;
+    try {
+      if (intent === "commit") {
+        const outcome = await commitImportBatch(session, batchId, { acknowledgeWarnings, ipAddress });
+        if (outcome.status !== "committed") reason = outcome.status === "not_found" ? "not_found" : outcome.reason;
+      } else {
+        const outcome = await cancelImportBatch(session, batchId, ipAddress);
+        if (outcome !== "cancelled") reason = outcome;
+      }
+    } catch (error) {
+      logger.error("imports.bulk.error", { intent, batchId, error });
+      reason = "error";
+    }
+    if (reason) skipped.push({ batchId, reason: BULK_REASONS[reason] ?? reason });
+    else done++;
+  }
+
+  revalidatePath("/imports");
+  if (intent === "commit" && done > 0) {
+    revalidatePath("/dashboard");
+    revalidatePath("/ecommerce");
+  }
+  const verb = intent === "commit" ? "disimpan ke dashboard" : "dibatalkan";
+  const message = `${done} impor ${verb}` + (skipped.length ? `, ${skipped.length} dilewati.` : ".");
+  return { status: done > 0 ? "success" : "error", message, skipped };
+}

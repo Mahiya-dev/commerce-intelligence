@@ -237,6 +237,33 @@ export async function listImportBatches(session: ActiveSession, limit = 25): Pro
   });
 }
 
+export const IMPORT_HISTORY_PAGE_SIZE = 10;
+
+export type ImportBatchPage = { items: ImportBatchSummary[]; total: number; page: number; pageCount: number };
+
+/** Import history, newest first. `page` is 1-based and clamped to the last page. */
+export async function listImportBatchesPage(
+  session: ActiveSession,
+  page = 1,
+  pageSize = IMPORT_HISTORY_PAGE_SIZE,
+): Promise<ImportBatchPage> {
+  assertCanManage(session);
+  const size = Math.min(Math.max(Math.trunc(pageSize) || IMPORT_HISTORY_PAGE_SIZE, 1), 100);
+  return guarded("import_batches_page", async () => {
+    const count = await queryOne<{ n: number }>("SELECT COUNT(*) AS n FROM import_batches WHERE organization_id = ?", [
+      session.organization.id,
+    ]);
+    const total = Number(count?.n ?? 0);
+    const pageCount = Math.max(1, Math.ceil(total / size));
+    const current = Math.min(Math.max(Math.trunc(page) || 1, 1), pageCount);
+    const rows = await queryRows<BatchRow>(
+      `${BATCH_SELECT} WHERE b.organization_id = ? ORDER BY b.created_at DESC, b.id DESC LIMIT ? OFFSET ?`,
+      [session.organization.id, size, (current - 1) * size],
+    );
+    return { items: rows.map(mapBatch), total, page: current, pageCount };
+  });
+}
+
 export type ImportRowView = {
   line: number;
   status: "pending" | "valid" | "invalid" | "skipped" | "committed";
