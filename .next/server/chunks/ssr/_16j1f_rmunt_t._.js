@@ -1,0 +1,3 @@
+(()=>{"use strict";module.exports=[25933,a=>{var b=a.i(17685);a.S([b,"00155ce2e1b52a70621370458e4edc407dfb55f0fc,_,6030bc5e61bd095e7a760ca4839df8201fa924212c,W,606245313da25174d04f8ebed02ccf0aee7d7bc430,O"],25933)},21140,a=>{var b=a.i(54757);a.s(["z",0,b])},26322,a=>{a.s(["f",0,function(a,b="/dashboard"){if("string"!=typeof a)return b;let c=a.trim();if(""===c||c.length>512||!c.startsWith("/")||c.startsWith("//")||c.startsWith("/\\")||/[\u0000-\u001f\u007f]/.test(c))return b;try{let a=new URL(c,"http://internal.invalid");if("http://internal.invalid"!==a.origin||"/login"===a.pathname||a.pathname.startsWith("/auth/"))return b;return`${a.pathname}${a.search}${a.hash}`}catch{return b}}])}]})();
+
+//# sourceMappingURL=_16j1f_rmunt_t._.js.map

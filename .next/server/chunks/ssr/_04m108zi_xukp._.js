@@ -1,3 +1,0 @@
-(()=>{"use strict";module.exports=[25933,a=>{var b=a.i(17685);a.S([b,"002358421fa1861a62b751bf475eb2a52606d50258,_,60388f35cc13f27031c54b9728134df3dbeff20b6c,O,609d4f31d63dd1463555d43f21d85b45fdc17c41c7,W"],25933)},26322,a=>{a.s(["f",0,function(a,b="/dashboard"){if("string"!=typeof a)return b;let c=a.trim();if(""===c||c.length>512||!c.startsWith("/")||c.startsWith("//")||c.startsWith("/\\")||/[\u0000-\u001f\u007f]/.test(c))return b;try{let a=new URL(c,"http://internal.invalid");if("http://internal.invalid"!==a.origin||"/login"===a.pathname||a.pathname.startsWith("/auth/"))return b;return`${a.pathname}${a.search}${a.hash}`}catch{return b}}])}]})();
-
-//# sourceMappingURL=_04m108zi_xukp._.js.map

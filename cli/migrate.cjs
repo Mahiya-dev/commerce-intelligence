@@ -34638,13 +34638,33 @@ var envSchema = external_exports.object({
   DB_NAME: optionalString,
   /** Pool size. Keep small on shared hosting (cPanel limits connections per user). */
   DB_CONNECTION_LIMIT: optionalString,
+  /**
+   * TLS to the database: "true" for a cloud MySQL (Aiven, TiDB Cloud, …) on a
+   * serverless host such as Vercel. Not needed on cPanel (localhost).
+   */
+  DB_SSL: optionalString,
+  /** PEM CA certificate of the database provider (newlines may be written as \n). */
+  DB_SSL_CA: optionalString,
   /** Public origin, e.g. https://intel.maduuray.com. Drives the Secure cookie flag. */
   APP_URL: optionalString,
-  /** Gemini API key for the AI Analyst (Phase 6). */
+  /** Groq API key for AI insights (console.groq.com). Server-side only. */
+  GROQ_API_KEY: optionalString,
+  /** Groq model id; must support structured outputs (json_schema). */
+  GROQ_MODEL: optionalString,
+  /** Optional OpenAI-compatible base URL (default https://api.groq.com/openai/v1). */
+  GROQ_BASE_URL: optionalString,
+  /** Server-wide Gemini key (fallback when an organization stores none in the dashboard). */
   GEMINI_API_KEY: optionalString,
-  /** Gemini model id for the AI Analyst. Selected and validated in Phase 6. */
+  /** Gemini model id for GEMINI_API_KEY. */
   GEMINI_MODEL: optionalString,
-  LOG_LEVEL: optionalString
+  LOG_LEVEL: optionalString,
+  /**
+   * 32-byte key (base64 or 64 hex chars) that encrypts secrets stored in the
+   * database, e.g. the Groq API key entered by the Owner. Generate with
+   * `openssl rand -base64 32`. Changing it makes stored secrets unreadable
+   * (they must be entered again).
+   */
+  APP_ENCRYPTION_KEY: optionalString
 });
 var ConfigurationError = class extends Error {
   constructor(issues) {
@@ -34657,6 +34677,15 @@ function parseDatabaseConfig(raw) {
   const env = envSchema.parse(raw);
   const limit = Number(env.DB_CONNECTION_LIMIT ?? 5);
   const connectionLimit = Number.isInteger(limit) && limit >= 1 && limit <= 50 ? limit : 5;
+  const sslFlag = (env.DB_SSL ?? "").toLowerCase();
+  if (sslFlag && !["true", "false", "1", "0"].includes(sslFlag)) {
+    throw new ConfigurationError(["DB_SSL harus true atau false"]);
+  }
+  const ssl = sslFlag === "true" || sslFlag === "1" ? {
+    ...env.DB_SSL_CA ? { ca: env.DB_SSL_CA.replace(/\\n/g, "\n") } : {},
+    rejectUnauthorized: true,
+    minVersion: "TLSv1.2"
+  } : void 0;
   if (env.DATABASE_URL) {
     let url2;
     try {
@@ -34677,7 +34706,8 @@ function parseDatabaseConfig(raw) {
       user: decodeURIComponent(url2.username),
       password: decodeURIComponent(url2.password),
       database,
-      connectionLimit
+      connectionLimit,
+      ...ssl ? { ssl } : {}
     };
   }
   const issues = [];
@@ -34693,7 +34723,8 @@ function parseDatabaseConfig(raw) {
     user: env.DB_USER,
     password: env.DB_PASSWORD,
     database: env.DB_NAME,
-    connectionLimit
+    connectionLimit,
+    ...ssl ? { ssl } : {}
   };
 }
 function getDatabaseConfig() {
@@ -34788,6 +34819,7 @@ function buildImportBundle(files) {
 var import_node_fs2 = require("node:fs");
 var import_node_path2 = require("node:path");
 function loadEnv() {
+  if (process.env.UCI_SKIP_DOTENV === "1") return;
   for (const file2 of [".env.local", ".env"]) {
     const path = (0, import_node_path2.resolve)(process.cwd(), file2);
     if ((0, import_node_fs2.existsSync)(path)) {

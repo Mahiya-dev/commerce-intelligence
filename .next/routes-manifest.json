@@ -54,6 +54,40 @@
   },
   "dynamicRoutes": [
     {
+      "page": "/creative/ads/[adId]",
+      "regex": "^/creative/ads/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPadId": "nxtPadId"
+      },
+      "namedRegex": "^/creative/ads/(?<nxtPadId>[^/]+?)(?:/)?$",
+      "prefetchSegmentDataRoutes": [
+        {
+          "destination": "/creative/ads/[adId].segments/!KGFwcCk/creative/ads/$d$adId$segment",
+          "source": "^/creative/ads/(?<nxtPadId>[^/]+?)\\.segments/!KGFwcCk/creative/ads/\\$d\\$adId(?<segment>/__PAGE__\\.segment\\.rsc|\\.segment\\.rsc)(?:/)?$",
+          "routeKeys": {
+            "nxtPadId": "nxtPadId"
+          }
+        }
+      ]
+    },
+    {
+      "page": "/events/[eventId]",
+      "regex": "^/events/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPeventId": "nxtPeventId"
+      },
+      "namedRegex": "^/events/(?<nxtPeventId>[^/]+?)(?:/)?$",
+      "prefetchSegmentDataRoutes": [
+        {
+          "destination": "/events/[eventId].segments/!KGFwcCk/events/$d$eventId$segment",
+          "source": "^/events/(?<nxtPeventId>[^/]+?)\\.segments/!KGFwcCk/events/\\$d\\$eventId(?<segment>/__PAGE__\\.segment\\.rsc|\\.segment\\.rsc)(?:/)?$",
+          "routeKeys": {
+            "nxtPeventId": "nxtPeventId"
+          }
+        }
+      ]
+    },
+    {
       "page": "/imports/[batchId]",
       "regex": "^/imports/([^/]+?)(?:/)?$",
       "routeKeys": {
@@ -66,6 +100,23 @@
           "source": "^/imports/(?<nxtPbatchId>[^/]+?)\\.segments/!KGFwcCk/imports/\\$d\\$batchId(?<segment>/__PAGE__\\.segment\\.rsc|\\.segment\\.rsc)(?:/)?$",
           "routeKeys": {
             "nxtPbatchId": "nxtPbatchId"
+          }
+        }
+      ]
+    },
+    {
+      "page": "/portfolio/[sku]",
+      "regex": "^/portfolio/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPsku": "nxtPsku"
+      },
+      "namedRegex": "^/portfolio/(?<nxtPsku>[^/]+?)(?:/)?$",
+      "prefetchSegmentDataRoutes": [
+        {
+          "destination": "/portfolio/[sku].segments/!KGFwcCk/portfolio/$d$sku$segment",
+          "source": "^/portfolio/(?<nxtPsku>[^/]+?)\\.segments/!KGFwcCk/portfolio/\\$d\\$sku(?<segment>/__PAGE__\\.segment\\.rsc|\\.segment\\.rsc)(?:/)?$",
+          "routeKeys": {
+            "nxtPsku": "nxtPsku"
           }
         }
       ]
@@ -121,6 +172,12 @@
       "namedRegex": "^/creative(?:/)?$"
     },
     {
+      "page": "/creative/assets",
+      "regex": "^/creative/assets(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/creative/assets(?:/)?$"
+    },
+    {
       "page": "/dashboard",
       "regex": "^/dashboard(?:/)?$",
       "routeKeys": {},
@@ -137,6 +194,12 @@
       "regex": "^/events(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/events(?:/)?$"
+    },
+    {
+      "page": "/events/cogs",
+      "regex": "^/events/cogs(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/events/cogs(?:/)?$"
     },
     {
       "page": "/favicon.ico",

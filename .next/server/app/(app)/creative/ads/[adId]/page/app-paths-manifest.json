@@ -1,0 +1,3 @@
+{
+  "/(app)/creative/ads/[adId]/page": "app/(app)/creative/ads/[adId]/page.js"
+}

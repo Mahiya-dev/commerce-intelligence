@@ -1,13 +1,21 @@
 {
   "node": {
-    "002358421fa1861a62b751bf475eb2a52606d50258": {
+    "00155ce2e1b52a70621370458e4edc407dfb55f0fc": {
       "workers": {
         "app/(app)/affiliates/page": {
-          "moduleId": 4641,
+          "moduleId": 47925,
           "async": false
         },
         "app/(app)/ai-analyst/page": {
           "moduleId": 3833,
+          "async": false
+        },
+        "app/(app)/creative/ads/[adId]/page": {
+          "moduleId": 15072,
+          "async": false
+        },
+        "app/(app)/creative/assets/page": {
+          "moduleId": 12360,
           "async": false
         },
         "app/(app)/creative/page": {
@@ -15,15 +23,23 @@
           "async": false
         },
         "app/(app)/dashboard/page": {
-          "moduleId": 21002,
+          "moduleId": 5534,
           "async": false
         },
         "app/(app)/ecommerce/page": {
           "moduleId": 35583,
           "async": false
         },
+        "app/(app)/events/[eventId]/page": {
+          "moduleId": 83722,
+          "async": false
+        },
+        "app/(app)/events/cogs/page": {
+          "moduleId": 82911,
+          "async": false
+        },
         "app/(app)/events/page": {
-          "moduleId": 10617,
+          "moduleId": 14654,
           "async": false
         },
         "app/(app)/imports/[batchId]/page": {
@@ -42,6 +58,10 @@
           "moduleId": 25766,
           "async": false
         },
+        "app/(app)/portfolio/[sku]/page": {
+          "moduleId": 94824,
+          "async": false
+        },
         "app/(app)/portfolio/page": {
           "moduleId": 77439,
           "async": false
@@ -55,7 +75,7 @@
           "async": false
         },
         "app/(app)/settings/organization/page": {
-          "moduleId": 98129,
+          "moduleId": 26912,
           "async": false
         },
         "app/(status)/no-access/page": {
@@ -66,7 +86,283 @@
       "filename": "src/app/(auth)/actions.ts",
       "exportedName": "signOut"
     },
-    "6075f55d36cbaef80aa00067f17c0a114d5c952d18": {
+    "000f03cfc7738094699edce9d97b6ece38a2cc18b8": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/affiliates/actions.ts",
+      "exportedName": "proposeAction"
+    },
+    "4049867e459a157a40089b6cdf886aa6a47c252cff": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/affiliates/actions.ts",
+      "exportedName": "approveAction"
+    },
+    "40a3cd2115a7533f9f03705d67b540e274f7e143e4": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/affiliates/actions.ts",
+      "exportedName": "toggleAffiliateAction"
+    },
+    "40b7b431123405deda866bf36f440b37cce300a3b4": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/affiliates/actions.ts",
+      "exportedName": "applyAction"
+    },
+    "40b883f538737085d9e41e283139b7b915ad7cd549": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/affiliates/actions.ts",
+      "exportedName": "rejectAction"
+    },
+    "605a65647f82660b7740da69ca037df2eae2a78d79": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/affiliates/actions.ts",
+      "exportedName": "allocationSettingsAction"
+    },
+    "60e7dd9bcd3f681a076994e353b286b075c1b6f8c4": {
+      "workers": {
+        "app/(app)/affiliates/page": {
+          "moduleId": 47925,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/affiliates/actions.ts",
+      "exportedName": "movementAction"
+    },
+    "408ad00f0b6c58af536a60112572f66b7844aaf09c": {
+      "workers": {
+        "app/(app)/creative/ads/[adId]/page": {
+          "moduleId": 15072,
+          "async": false
+        },
+        "app/(app)/creative/assets/page": {
+          "moduleId": 12360,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/creative/actions.ts",
+      "exportedName": "resetToParsed"
+    },
+    "408d8166e079b382ac1ee27c0f80384e83372bd2b7": {
+      "workers": {
+        "app/(app)/creative/ads/[adId]/page": {
+          "moduleId": 15072,
+          "async": false
+        },
+        "app/(app)/creative/assets/page": {
+          "moduleId": 12360,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/creative/actions.ts",
+      "exportedName": "deleteAssetAction"
+    },
+    "40c072cb44261402e84b9351c8c86912d6ff78b5e8": {
+      "workers": {
+        "app/(app)/creative/ads/[adId]/page": {
+          "moduleId": 15072,
+          "async": false
+        },
+        "app/(app)/creative/assets/page": {
+          "moduleId": 12360,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/creative/actions.ts",
+      "exportedName": "setAdAsset"
+    },
+    "6048be0e24d9a62f51653461cdcf5eda7ee89221ea": {
+      "workers": {
+        "app/(app)/creative/ads/[adId]/page": {
+          "moduleId": 15072,
+          "async": false
+        },
+        "app/(app)/creative/assets/page": {
+          "moduleId": 12360,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/creative/actions.ts",
+      "exportedName": "saveClassification"
+    },
+    "60b9a99700d9a6305ffb356971d6bd03ec91addacd": {
+      "workers": {
+        "app/(app)/creative/ads/[adId]/page": {
+          "moduleId": 15072,
+          "async": false
+        },
+        "app/(app)/creative/assets/page": {
+          "moduleId": 12360,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/creative/actions.ts",
+      "exportedName": "saveAssetAction"
+    },
+    "0077bacfbfca8c184ef7a7f77626f9a09672a19517": {
+      "workers": {
+        "app/(app)/dashboard/page": {
+          "moduleId": 5534,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/dashboard/actions.ts",
+      "exportedName": "generateInsight"
+    },
+    "40100d96b89e5e27cad46a3960e9eed55cc5337243": {
+      "workers": {
+        "app/(app)/events/[eventId]/page": {
+          "moduleId": 83722,
+          "async": false
+        },
+        "app/(app)/events/cogs/page": {
+          "moduleId": 82911,
+          "async": false
+        },
+        "app/(app)/events/page": {
+          "moduleId": 14654,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/events/actions.ts",
+      "exportedName": "deleteEventAction"
+    },
+    "407e4e36b24522e56375e62aa29deb987233ddd329": {
+      "workers": {
+        "app/(app)/events/[eventId]/page": {
+          "moduleId": 83722,
+          "async": false
+        },
+        "app/(app)/events/cogs/page": {
+          "moduleId": 82911,
+          "async": false
+        },
+        "app/(app)/events/page": {
+          "moduleId": 14654,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/events/actions.ts",
+      "exportedName": "deleteLineAction"
+    },
+    "60543c88476533c5b87c361db3d5722aeac30aa65a": {
+      "workers": {
+        "app/(app)/events/[eventId]/page": {
+          "moduleId": 83722,
+          "async": false
+        },
+        "app/(app)/events/cogs/page": {
+          "moduleId": 82911,
+          "async": false
+        },
+        "app/(app)/events/page": {
+          "moduleId": 14654,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/events/actions.ts",
+      "exportedName": "addCostAction"
+    },
+    "6059a698fca8938378e1b5ce020559b3aa7fa6e5b4": {
+      "workers": {
+        "app/(app)/events/[eventId]/page": {
+          "moduleId": 83722,
+          "async": false
+        },
+        "app/(app)/events/cogs/page": {
+          "moduleId": 82911,
+          "async": false
+        },
+        "app/(app)/events/page": {
+          "moduleId": 14654,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/events/actions.ts",
+      "exportedName": "addCogsAction"
+    },
+    "60b66ea01669f5223d8c340009d54d529390014f96": {
+      "workers": {
+        "app/(app)/events/[eventId]/page": {
+          "moduleId": 83722,
+          "async": false
+        },
+        "app/(app)/events/cogs/page": {
+          "moduleId": 82911,
+          "async": false
+        },
+        "app/(app)/events/page": {
+          "moduleId": 14654,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/events/actions.ts",
+      "exportedName": "addSaleAction"
+    },
+    "60d8bc6c009288e9f078bf482aae6a30ac70770fc4": {
+      "workers": {
+        "app/(app)/events/[eventId]/page": {
+          "moduleId": 83722,
+          "async": false
+        },
+        "app/(app)/events/cogs/page": {
+          "moduleId": 82911,
+          "async": false
+        },
+        "app/(app)/events/page": {
+          "moduleId": 14654,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/events/actions.ts",
+      "exportedName": "addLeadAction"
+    },
+    "60e7153d9bdd6d70304ec3c43f24bcab5916cb6a22": {
+      "workers": {
+        "app/(app)/events/[eventId]/page": {
+          "moduleId": 83722,
+          "async": false
+        },
+        "app/(app)/events/cogs/page": {
+          "moduleId": 82911,
+          "async": false
+        },
+        "app/(app)/events/page": {
+          "moduleId": 14654,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/events/actions.ts",
+      "exportedName": "saveEventAction"
+    },
+    "60367b144a7079509dfde3dd9583c9998139befebe": {
       "workers": {
         "app/(app)/imports/[batchId]/page": {
           "moduleId": 82540,
@@ -80,7 +376,7 @@
       "filename": "src/app/(app)/imports/actions.ts",
       "exportedName": "submitImport"
     },
-    "40345435cb9300bbab6755a9a26d2b0a9400665a66": {
+    "4001f027231503dd7df05a7212b2bf28d49f6baf4f": {
       "workers": {
         "app/(app)/imports/[batchId]/page": {
           "moduleId": 82540,
@@ -90,7 +386,7 @@
       "filename": "src/app/(app)/imports/actions.ts",
       "exportedName": "cancelImport"
     },
-    "406f399f784f9ec7b1026e9009bac900dceed9f593": {
+    "407dd83efdde28513aa5679054e8cf74123791d4d1": {
       "workers": {
         "app/(app)/imports/[batchId]/page": {
           "moduleId": 82540,
@@ -100,7 +396,37 @@
       "filename": "src/app/(app)/imports/actions.ts",
       "exportedName": "commitImport"
     },
-    "609d4f31d63dd1463555d43f21d85b45fdc17c41c7": {
+    "60d6ab0c055032c175461f1780c728559bfeb93992": {
+      "workers": {
+        "app/(app)/settings/organization/page": {
+          "moduleId": 26912,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/settings/organization/actions.ts",
+      "exportedName": "saveOrganizationSettings"
+    },
+    "403215a953009ef2ee82bd461febc7c291ec769c34": {
+      "workers": {
+        "app/(app)/settings/organization/page": {
+          "moduleId": 26912,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/settings/organization/actions.ts",
+      "exportedName": "removeAiKey"
+    },
+    "60cb5d90753d906c82519e925936c19624961f8860": {
+      "workers": {
+        "app/(app)/settings/organization/page": {
+          "moduleId": 26912,
+          "async": false
+        }
+      },
+      "filename": "src/app/(app)/settings/organization/actions.ts",
+      "exportedName": "saveAiKey"
+    },
+    "6030bc5e61bd095e7a760ca4839df8201fa924212c": {
       "workers": {
         "app/(auth)/account/password/page": {
           "moduleId": 38039,
@@ -114,7 +440,7 @@
       "filename": "src/app/(auth)/actions.ts",
       "exportedName": "changePassword"
     },
-    "60388f35cc13f27031c54b9728134df3dbeff20b6c": {
+    "606245313da25174d04f8ebed02ccf0aee7d7bc430": {
       "workers": {
         "app/(auth)/login/page": {
           "moduleId": 96024,
@@ -130,5 +456,5 @@
     }
   },
   "edge": {},
-  "encryptionKey": "TWZiO9qJbUSqdsN6gDcU5WQ/tWZ21HFnk6KqMdU9Ykk="
+  "encryptionKey": "p6HvdDhMLZRqidvCs17qE1wlyL68q1VpB6kfsqvF/ag="
 }

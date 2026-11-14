@@ -7,9 +7,9 @@ globalThis.__BUILD_MANIFEST = {
     "static/chunks/0cz1d0mv5g_q7.js"
   ],
   "lowPriorityFiles": [
-    "static/yRJ2PvkXaz_mqRXKH8-BB/_buildManifest.js",
-    "static/yRJ2PvkXaz_mqRXKH8-BB/_ssgManifest.js",
-    "static/yRJ2PvkXaz_mqRXKH8-BB/_clientMiddlewareManifest.js"
+    "static/LB8gePyXKuCZRPcl6AlEH/_buildManifest.js",
+    "static/LB8gePyXKuCZRPcl6AlEH/_ssgManifest.js",
+    "static/LB8gePyXKuCZRPcl6AlEH/_clientMiddlewareManifest.js"
   ],
   "rootMainFiles": [
     "static/chunks/1x6obpmlu1_c2.js",
@@ -93,6 +93,30 @@ globalThis.__BUILD_MANIFEST = {
         94553
       ]
     },
+    "/(app)/creative/ads/[adId]/page": {
+      "otherChunks": [
+        "static/chunks/1x6obpmlu1_c2.js",
+        "static/chunks/06bs-nf19b2js.js",
+        "static/chunks/2ki52vdnbo2ft.js",
+        "static/chunks/0yuq46kwp2ick.js",
+        "static/chunks/2gsxhio73malr.js"
+      ],
+      "runtimeModuleIds": [
+        94553
+      ]
+    },
+    "/(app)/creative/assets/page": {
+      "otherChunks": [
+        "static/chunks/1x6obpmlu1_c2.js",
+        "static/chunks/06bs-nf19b2js.js",
+        "static/chunks/2ki52vdnbo2ft.js",
+        "static/chunks/0yuq46kwp2ick.js",
+        "static/chunks/2gsxhio73malr.js"
+      ],
+      "runtimeModuleIds": [
+        94553
+      ]
+    },
     "/(app)/dashboard/page": {
       "otherChunks": [
         "static/chunks/1x6obpmlu1_c2.js",
@@ -118,6 +142,30 @@ globalThis.__BUILD_MANIFEST = {
       ]
     },
     "/(app)/events/page": {
+      "otherChunks": [
+        "static/chunks/1x6obpmlu1_c2.js",
+        "static/chunks/06bs-nf19b2js.js",
+        "static/chunks/2ki52vdnbo2ft.js",
+        "static/chunks/0yuq46kwp2ick.js",
+        "static/chunks/2gsxhio73malr.js"
+      ],
+      "runtimeModuleIds": [
+        94553
+      ]
+    },
+    "/(app)/events/[eventId]/page": {
+      "otherChunks": [
+        "static/chunks/1x6obpmlu1_c2.js",
+        "static/chunks/06bs-nf19b2js.js",
+        "static/chunks/2ki52vdnbo2ft.js",
+        "static/chunks/0yuq46kwp2ick.js",
+        "static/chunks/2gsxhio73malr.js"
+      ],
+      "runtimeModuleIds": [
+        94553
+      ]
+    },
+    "/(app)/events/cogs/page": {
       "otherChunks": [
         "static/chunks/1x6obpmlu1_c2.js",
         "static/chunks/06bs-nf19b2js.js",
@@ -178,6 +226,18 @@ globalThis.__BUILD_MANIFEST = {
       ]
     },
     "/(app)/portfolio/page": {
+      "otherChunks": [
+        "static/chunks/1x6obpmlu1_c2.js",
+        "static/chunks/06bs-nf19b2js.js",
+        "static/chunks/2ki52vdnbo2ft.js",
+        "static/chunks/0yuq46kwp2ick.js",
+        "static/chunks/2gsxhio73malr.js"
+      ],
+      "runtimeModuleIds": [
+        94553
+      ]
+    },
+    "/(app)/portfolio/[sku]/page": {
       "otherChunks": [
         "static/chunks/1x6obpmlu1_c2.js",
         "static/chunks/06bs-nf19b2js.js",

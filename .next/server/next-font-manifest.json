@@ -8,6 +8,14 @@
       "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
       "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
     ],
+    "[project]/src/app/(app)/creative/ads/[adId]/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/creative/assets/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
     "[project]/src/app/(app)/creative/page": [
       "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
       "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
@@ -17,6 +25,14 @@
       "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
     ],
     "[project]/src/app/(app)/ecommerce/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/events/[eventId]/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/events/cogs/page": [
       "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
       "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
     ],
@@ -37,6 +53,10 @@
       "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
     ],
     "[project]/src/app/(app)/master-data/products/page": [
+      "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
+      "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
+    ],
+    "[project]/src/app/(app)/portfolio/[sku]/page": [
       "static/media/Geist_Variable-s.p.2hh2rqmrrgs5n.woff2",
       "static/media/GeistMono_Variable.p.1fz3wige2_h0o.woff2"
     ],
