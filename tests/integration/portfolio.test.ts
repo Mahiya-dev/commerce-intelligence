@@ -2,7 +2,7 @@ import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { seedDemo } from "@/lib/master-data/demo-seed";
 import { seedDemoSales } from "@/lib/master-data/demo-sales";
-import { queryOne } from "@/lib/db/pool";
+import { execute, queryOne } from "@/lib/db/pool";
 import type { ActiveSession } from "@/lib/auth/sessions";
 import { createOrganization, createUser, setMembership } from "@/lib/admin/users";
 import { getPortfolioOverview, getProductDetail } from "@/lib/data/portfolio";
@@ -78,5 +78,31 @@ describe("portfolio read model", () => {
   it("is tenant-scoped", async () => {
     expect(await getPortfolioOverview(outsider, { today: TODAY })).toEqual({ status: "empty" });
     expect(await getProductDetail(outsider, "MU-HUTAN-500", { today: TODAY })).toEqual({ status: "not_found" });
+  });
+
+  it("facts without any SKU mapping show the 'map your listings' state instead of failing", async () => {
+    const org = outsider.organization.id;
+    const channel = (await queryOne<{ id: string }>("SELECT id FROM channels ORDER BY sort_order LIMIT 1"))!.id;
+    await execute(
+      `INSERT INTO import_batches (id, organization_id, channel_id, report_type, source_file_name, mime_type,
+                                   file_size_bytes, file_sha256, status)
+       VALUES ('0b000000-0000-4000-8000-0000000000aa', ?, ?, 'marketplace_product_performance', 'raw.xlsx',
+               'text/csv', 1, REPEAT('a', 64), 'committed')`,
+      [org, channel],
+    );
+    await execute(
+      `INSERT INTO channel_listings (id, organization_id, channel_id, external_product_id, listing_name)
+       VALUES ('0b000000-0000-4000-8000-0000000000ab', ?, ?, 'RAW-1', 'Listing belum dipetakan')`,
+      [org, channel],
+    );
+    await execute(
+      `INSERT INTO listing_daily_facts (organization_id, listing_id, fact_date, channel_id, gmv, orders, units_sold, source_batch_id)
+       VALUES (?, '0b000000-0000-4000-8000-0000000000ab', '2026-11-05', ?, 150000, 2, 3, '0b000000-0000-4000-8000-0000000000aa')`,
+      [org, channel],
+    );
+    expect(await getPortfolioOverview(outsider, { today: TODAY })).toEqual({
+      status: "empty",
+      unmapped: { listings: 1 },
+    });
   });
 });

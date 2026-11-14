@@ -164,12 +164,24 @@ async function load(session: ActiveSession, today: string): Promise<Loaded | nul
   };
 }
 
+async function countUnmappedListings(session: ActiveSession): Promise<number> {
+  const row = await queryOne<{ n: string | number }>(
+    `SELECT COUNT(DISTINCT f.listing_id) AS n
+       FROM listing_daily_facts f
+       JOIN channel_listings l ON l.organization_id = f.organization_id AND l.id = f.listing_id
+      WHERE f.organization_id = ? AND l.variant_id IS NULL`,
+    [session.organization.id],
+  );
+  return n(row?.n ?? 0);
+}
+
 function pickMonth(months: string[], requested: string | undefined): string {
   return requested && months.includes(requested) ? requested : months[months.length - 1];
 }
 
 export type PortfolioOverview =
-  | { status: "empty" }
+  /** `unmapped`: product facts exist but none is mapped to an internal SKU yet. */
+  | { status: "empty"; unmapped?: { listings: number } }
   | {
       status: "ok";
       asOf: string;
@@ -195,6 +207,9 @@ export async function getPortfolioOverview(
     if (!data) return { status: "empty" };
     const history = quadrantHistory(data.skuFacts, data.months, data.asOf, data.thresholds);
     const withData = data.months.filter((_, i) => history.matrices[i].rows.length > 0);
+    // Facts exist but no listing is mapped to a SKU (e.g. raw marketplace exports
+    // imported before the listings were mapped): there is no matrix to show.
+    if (withData.length === 0) return { status: "empty", unmapped: { listings: await countUnmappedListings(session) } };
     const selected = pickMonth(withData, month);
     const idx = data.months.indexOf(selected);
     const matrix = history.matrices[idx];
@@ -293,6 +308,7 @@ export async function getProductDetail(
     if (!data || !data.skuFacts.some((f) => f.sku === info.sku)) return { status: "empty", info };
     const history = quadrantHistory(data.skuFacts, data.months, data.asOf, data.thresholds);
     const withData = data.months.filter((_, i) => history.matrices[i].rows.some((r) => r.sku === info.sku));
+    if (withData.length === 0) return { status: "empty", info };
     const selected = pickMonth(withData, month);
     const idx = data.months.indexOf(selected);
     const matrix = history.matrices[idx];

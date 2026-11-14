@@ -90,7 +90,7 @@ function CommitPanel({ batchId, plan, warningRows }: { batchId: string; plan: Co
               <span className="font-medium tabular-nums">{plan.newListings.toLocaleString("id-ID")}</span> listing baru
               dibuat{plan.autoMapped > 0 ? "" : " sebagai "}
               {plan.autoMapped > 0 ? null : <span className="font-medium">belum dipetakan</span>}
-              {plan.autoMapped > 0 ? "" : " (tetap dihitung di total channel; petakan lewat impor Master Listing)"}
+              {plan.autoMapped > 0 ? "" : " (tetap dihitung di total channel; petakan di Master Data → Listing)"}
             </li>
           ) : null}
           {plan.autoMapped > 0 ? (
@@ -101,13 +101,13 @@ function CommitPanel({ batchId, plan, warningRows }: { batchId: string; plan: Co
             </li>
           ) : null}
         </ul>
-        {plan.unmatchedSkus.length > 0 ? (
+        {plan.newSkus.length > 0 ? (
           <Alert>
             <Info aria-hidden />
             <AlertDescription>
-              SKU berikut tidak ada di Master Produk, jadi listing-nya tetap belum dipetakan (data tetap tersimpan dan
-              dihitung di total channel): {plan.unmatchedSkus.join(", ")}. Tambahkan SKU tersebut di Master Produk lalu
-              impor ulang file ini, atau petakan lewat Master Listing.
+              {plan.newSkus.length} SKU berikut belum ada di Master Produk dan akan <strong>dibuat otomatis</strong>{" "}
+              saat disimpan (nama diambil dari nama listing), lalu listing-nya dipetakan: {plan.newSkus.join(", ")}.
+              Periksa ejaannya; SKU yang salah ketik akan menjadi produk terpisah.
             </AlertDescription>
           </Alert>
         ) : null}

@@ -52,20 +52,34 @@ export default async function PortfolioPage({ searchParams }: PageProps<"/portfo
   );
 
   if (data.status === "empty") {
+    const unmapped = data.unmapped?.listings ?? 0;
     return (
       <div className="space-y-6">
         {header}
         <EmptyState
           icon={Boxes}
-          title="Belum ada data kinerja produk"
-          description="Impor laporan Kinerja Produk Harian (dan Master Listing untuk memetakan listing ke SKU) lalu simpan."
+          title={unmapped > 0 ? "Listing belum dipetakan ke SKU" : "Belum ada data kinerja produk"}
+          description={
+            unmapped > 0
+              ? `Data kinerja produk sudah tersimpan, tetapi ${unmapped} listing belum dipetakan ke SKU internal, jadi portofolio belum bisa dihitung. Buka Master Data → Listing lalu klik "Petakan otomatis", atau petakan manual per listing.`
+              : "Impor laporan Kinerja Produk Harian (dan Master Listing untuk memetakan listing ke SKU) lalu simpan."
+          }
         >
           {hasRole(session.role, "analyst") ? (
-            <Button asChild>
-              <Link href="/imports">
-                <FileUp aria-hidden /> Impor Data
-              </Link>
-            </Button>
+            <div className="flex flex-wrap justify-center gap-2">
+              {unmapped > 0 ? (
+                <Button asChild>
+                  <Link href="/master-data/listings">
+                    <Boxes aria-hidden /> Petakan listing
+                  </Link>
+                </Button>
+              ) : null}
+              <Button asChild variant={unmapped > 0 ? "outline" : "default"}>
+                <Link href="/imports">
+                  <FileUp aria-hidden /> Impor Data
+                </Link>
+              </Button>
+            </div>
           ) : null}
         </EmptyState>
       </div>

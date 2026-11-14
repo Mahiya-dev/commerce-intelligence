@@ -9,6 +9,7 @@ import { logger } from "@/lib/logger";
 import { parseAdName } from "@/lib/creative/creative";
 import type { CellValue } from "@/lib/imports/validate";
 import type { BatchStatus } from "@/lib/imports/staging";
+import { ensureVariants } from "@/lib/master-data/listing-mapping";
 
 /**
  * Commit: moves the valid rows of a validated batch into the canonical fact
@@ -50,8 +51,8 @@ export type CommitPlan = {
   unknownSkus: string[];
   /** Product performance: new or unmapped listings linked to a variant via sku_internal ("auto"). */
   autoMapped: number;
-  /** Product performance: sku_internal values not in Master Produk (listing stays unmapped; not blocking). */
-  unmatchedSkus: string[];
+  /** Product performance: sku_internal values not in Master Produk yet; created on save, then mapped. */
+  newSkus: string[];
 };
 
 export type CommitOutcome =
@@ -179,7 +180,7 @@ async function plan(db: Queryable, org: string, reportType: string, inputRows: R
     newListings: 0,
     unknownSkus: [],
     autoMapped: 0,
-    unmatchedSkus: [],
+    newSkus: [],
   };
 
   if (reportType === "marketplace_sales_daily") {
@@ -218,8 +219,8 @@ async function plan(db: Queryable, org: string, reportType: string, inputRows: R
       overwrites,
       inserts: rows.length - overwrites,
       newListings: missing.size,
-      autoMapped: auto.mapped.size,
-      unmatchedSkus: auto.unmatched,
+      autoMapped: auto.mapped.size + auto.pending,
+      newSkus: auto.missing.map((m) => m.sku).sort(),
     };
   }
 
@@ -345,9 +346,15 @@ async function autoMappings(
   org: string,
   channels: Map<string, string>,
   rows: Row[],
-): Promise<{ mapped: Map<string, string>; unmatched: string[] }> {
+): Promise<{
+  mapped: Map<string, string>;
+  /** Listings whose SKU is not in Master Produk yet (mapped once the SKU is created). */
+  pending: number;
+  /** SKUs to create, named after the first listing that carries them. */
+  missing: { sku: string; name: string }[];
+}> {
   const withSku = rows.filter((r) => str(r.sku_internal) !== "");
-  if (withSku.length === 0) return { mapped: new Map(), unmatched: [] };
+  if (withSku.length === 0) return { mapped: new Map(), pending: 0, missing: [] };
   const [variants, mappedRows] = await Promise.all([
     queryRows<{ id: string; sku: string }>("SELECT id, sku FROM product_variants WHERE organization_id = ?", [org], db),
     queryRows<{ channel_id: string; external_product_id: string; external_sku_id: string }>(
@@ -364,15 +371,20 @@ async function autoMappings(
     ),
   );
   const mapped = new Map<string, string>();
-  const unmatched = new Set<string>();
+  const pending = new Set<string>();
+  const missing = new Map<string, { sku: string; name: string }>();
   for (const r of withSku) {
     const key = rowListingKey(channels, r);
     if (alreadyMapped.has(key)) continue;
-    const variantId = variantBySku.get(str(r.sku_internal).toLowerCase());
+    const sku = str(r.sku_internal);
+    const variantId = variantBySku.get(sku.toLowerCase());
     if (variantId) mapped.set(key, variantId);
-    else unmatched.add(str(r.sku_internal));
+    else {
+      pending.add(key);
+      if (!missing.has(sku.toLowerCase())) missing.set(sku.toLowerCase(), { sku, name: str(r.nama_listing) });
+    }
   }
-  return { mapped, unmatched: [...unmatched].sort() };
+  return { mapped, pending: pending.size, missing: [...missing.values()] };
 }
 
 /** Links existing unmapped listings found by autoMappings (new ones are created already mapped). */
@@ -652,7 +664,16 @@ async function writeFacts(
   }
 
   if (reportType === "marketplace_product_performance") {
-    const auto = await autoMappings(conn, org, channels, rows);
+    let auto = await autoMappings(conn, org, channels, rows);
+    if (auto.missing.length > 0) {
+      // SKUs the report names but Master Produk lacks: create them, then map as usual.
+      await ensureVariants(conn, org, auto.missing, {
+        isDemo,
+        actorUserId: session.user.id,
+        reason: `import:${batchId}`,
+      });
+      auto = await autoMappings(conn, org, channels, rows);
+    }
     const listings = await ensureListings(conn, org, channels, rows, isDemo, auto.mapped);
     await applyAutoMappings(conn, org, listings, auto.mapped);
     await insertChunks(
@@ -837,6 +858,8 @@ export async function commitImportBatch(
         inserts: commitPlan.inserts,
         overwrites: commitPlan.overwrites,
         newListings: commitPlan.newListings,
+        autoMapped: commitPlan.autoMapped,
+        newSkus: commitPlan.newSkus.length,
         warningsAcknowledged: acknowledgeWarnings,
       },
       ipAddress,
