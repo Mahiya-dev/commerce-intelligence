@@ -23,8 +23,8 @@ export function hasRole(actual: AppRole | null | undefined, required: AppRole): 
 export const ROLE_LABELS: Record<AppRole, { label: string; description: string }> = {
   viewer: { label: "Viewer", description: "Melihat dashboard dan laporan." },
   analyst: { label: "Analyst", description: "Mengimpor data, memetakan listing, menggunakan AI Analyst." },
-  admin: { label: "Admin", description: "Mengelola master produk, pengguna, dan audit log." },
-  owner: { label: "Owner", description: "Akses penuh termasuk pengaturan organisasi." },
+  admin: { label: "Admin", description: "Mengelola master produk, melihat daftar pengguna dan audit log." },
+  owner: { label: "Owner", description: "Akses penuh termasuk pengaturan organisasi dan penambahan pengguna." },
 };
 
 /** Capability → minimum role. */
@@ -43,7 +43,9 @@ export const PERMISSIONS = {
   "targets:manage": "admin",
   "allocations:approve": "admin",
   "inventory:manage": "admin",
-  "members:manage": "admin",
+  /** Add users, change roles, suspend/remove, reset temporary passwords. */
+  "members:manage": "owner",
+  "members:view": "admin",
   "audit:view": "admin",
   "organization:manage": "owner",
 } as const satisfies Record<string, AppRole>;

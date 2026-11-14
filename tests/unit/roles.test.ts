@@ -39,7 +39,9 @@ describe("permission matrix", () => {
     expect(can("analyst", "listings:map")).toBe(true);
     expect(can("analyst", "master_data:manage")).toBe(false);
     expect(can("admin", "master_data:manage")).toBe(true);
-    expect(can("admin", "members:manage")).toBe(true);
+    expect(can("admin", "members:view")).toBe(true);
+    expect(can("admin", "members:manage")).toBe(false);
+    expect(can("owner", "members:manage")).toBe(true);
     expect(can("admin", "organization:manage")).toBe(false);
     expect(can("owner", "organization:manage")).toBe(true);
   });

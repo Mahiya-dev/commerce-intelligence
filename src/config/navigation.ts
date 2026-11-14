@@ -152,7 +152,7 @@ export const NAVIGATION: NavSection[] = [
         icon: Users,
         minRole: "admin",
         phase: 1,
-        description: "Daftar anggota organisasi beserta perannya.",
+        description: "Anggota organisasi, perannya, dan siapa yang boleh mengakses dashboard.",
       },
       {
         title: "Audit Log",
