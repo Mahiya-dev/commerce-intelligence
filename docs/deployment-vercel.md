@@ -80,3 +80,28 @@ Akun demo memakai password yang tercantum di dokumentasi. Di URL publik, **lakuk
 - `https://<domain>/api/health` → `"status":"ok"` dan `databaseReachable: true`.
 - Login `owner.demo@uray.local` → Dashboard, Portofolio, Kreatif, Event, Afiliasi berisi data DEMO.
 - Pengaturan → Organisasi: form API Key aktif bila `APP_ENCRYPTION_KEY` terisi.
+
+## 6. Menghapus seluruh data DEMO
+
+Perintah ini menghapus organisasi **Madu Uray (DEMO)** beserta semua datanya (penjualan, impor, portofolio,
+kreatif, event, afiliasi, pengaturan, audit) dan keempat akun `*.demo@uray.local`, dalam satu transaksi.
+Hanya organisasi bertanda DEMO yang bisa dihapus; organisasi asli dan tabel referensi (channel) tidak tersentuh.
+**Tidak bisa dibatalkan** — data DEMO bisa dibuat ulang dengan `db:seed-demo-sales`.
+
+```bash
+npm run db:remove-demo:vercel   # database preview Vercel (.env.vercel)
+npm run db:remove-demo          # database lokal (.env.local)
+```
+
+Setelah itu belum ada akun untuk login. Buat organisasi dan Owner asli (password sementara ditampilkan sekali,
+wajib diganti saat login pertama):
+
+```bash
+npm run build:cli
+# untuk database Vercel, awali setiap perintah dengan: UCI_SKIP_DOTENV=1 node --env-file=.env.vercel …
+node dist/cli/admin.cjs create-org --name "Madu Uray" --slug madu-uray
+node dist/cli/admin.cjs create-user --email nama@perusahaan.com --name "Nama Owner"
+node dist/cli/admin.cjs grant --org madu-uray --email nama@perusahaan.com --role owner
+```
+
+Dashboard akan kosong ("Belum ada data") sampai laporan asli diimpor lewat **Impor Data**.
