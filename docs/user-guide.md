@@ -59,7 +59,9 @@ Lembar **Kamus Kolom** di template menjelaskan setiap kolom. Hapus baris contoh 
 
 ### 3.3 Batas file
 
-- Ukuran maksimal **10 MB**, maksimal **50.000 baris** per sheet.
+- Boleh memilih **beberapa file sekaligus** (maks. **10 file**, **10 MB per file**, total **25 MB**). Setiap file
+  divalidasi dan menjadi batch tersendiri; file yang ditolak tidak menghalangi file lain.
+- Maksimal **50.000 baris** per sheet.
 - Format: `.xlsx` atau `.csv` (UTF-8, pemisah `,` atau `;`). Format `.xls` lama tidak didukung; simpan ulang
   sebagai `.xlsx`.
 

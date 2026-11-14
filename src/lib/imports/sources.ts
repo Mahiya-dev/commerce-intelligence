@@ -2,9 +2,8 @@ import { parseCsv, CsvParseError } from "@/lib/imports/csv";
 import { readXlsx, XlsxReadError } from "@/lib/imports/xlsx";
 import { TEMPLATE_LIST, TEMPLATES, type TemplateKey } from "@/lib/imports/templates";
 
-/** Upload limits. Keep MAX_FILE_BYTES below serverActions.bodySizeLimit in next.config.ts. */
-export const MAX_FILE_BYTES = 10 * 1024 * 1024;
-export const MAX_ROWS = 50_000;
+export { MAX_FILE_BYTES, MAX_FILES, MAX_ROWS, MAX_TOTAL_BYTES } from "@/lib/imports/limits";
+import { MAX_FILE_BYTES, MAX_ROWS } from "@/lib/imports/limits";
 
 export type ImportSourceKind = "file_upload" | "google_sheets" | "marketplace_api";
 

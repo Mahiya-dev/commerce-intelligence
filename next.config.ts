@@ -16,10 +16,10 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   poweredByHeader: false,
   experimental: {
-    // Import uploads: files up to 10 MB (MAX_FILE_BYTES in src/lib/imports/sources.ts)
+    // Import uploads: up to MAX_FILES files of ≤ 10 MB, ≤ 25 MB in total (src/lib/imports/sources.ts)
     // plus multipart overhead. The proxy buffers the body too, so both limits match.
-    serverActions: { bodySizeLimit: "11mb" },
-    proxyClientMaxBodySize: "11mb",
+    serverActions: { bodySizeLimit: "26mb" },
+    proxyClientMaxBodySize: "26mb",
   },
   turbopack: {
     rules: {

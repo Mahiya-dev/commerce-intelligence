@@ -5,7 +5,7 @@ import { seedDemo } from "@/lib/master-data/demo-seed";
 import { AuthorizationError } from "@/lib/data/master-data";
 import { queryOne, queryRows } from "@/lib/db/pool";
 import type { ActiveSession } from "@/lib/auth/sessions";
-import { importTables, sha256 } from "@/lib/imports/pipeline";
+import { importTables, importUploadedFiles, sha256 } from "@/lib/imports/pipeline";
 import { MIME_TYPES, readUploadedFile } from "@/lib/imports/sources";
 import { cancelImportBatch, getImportBatch, listImportBatches } from "@/lib/imports/staging";
 import { createOrganization, createUser, setMembership } from "@/lib/admin/users";
@@ -112,5 +112,32 @@ describe("import staging", () => {
     expect(await cancelImportBatch(outsider, mine[0].id)).toBe("not_found");
     await expect(listImportBatches(viewer)).rejects.toBeInstanceOf(AuthorizationError);
     await expect(upload(viewer, "csv/master_listing_DEMO.csv")).rejects.toBeInstanceOf(AuthorizationError);
+  });
+});
+
+describe("multiple files in one upload", () => {
+  it("stages each file on its own; a bad file never blocks the others", async () => {
+    const file = (path: string) => ({ name: path.split("/").pop()!, buffer: readFileSync(join(SAMPLES, path)) });
+    const res = await importUploadedFiles(
+      analyst,
+      [
+        file("csv/kinerja_toko_harian_DEMO.csv"),
+        { name: "catatan.exe", buffer: Buffer.from("MZ") },
+        file("csv/kinerja_produk_harian_DEMO.csv"),
+        file("Template_Standar_Impor.xlsx"),
+      ],
+      { now: NOW },
+    );
+    expect(
+      res.staged
+        .filter((s) => s.outcome === "staged")
+        .map((s) => s.title)
+        .sort(),
+    ).toEqual(expect.arrayContaining(["Kinerja Produk Harian", "Kinerja Toko Harian"]));
+    expect(res.rejected.find((r) => r.tableName === "catatan.exe")?.message).toMatch(/tidak didukung/);
+    // Sheets of a workbook are labelled with their file when several files are sent.
+    expect([...res.staged, ...res.rejected].some((x) => x.tableName.startsWith("Template_Standar_Impor.xlsx › "))).toBe(
+      true,
+    );
   });
 });

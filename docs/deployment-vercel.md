@@ -10,7 +10,7 @@ Perbedaan dengan cPanel:
 | ----------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------- |
 | Database                | MySQL/MariaDB di server yang sama (`localhost`) | MySQL cloud, koneksi TLS (`DB_SSL=true`)                                      |
 | Region                  | server hosting                                  | fungsi di Singapura (`vercel.json` → `sin1`); pilih database di Asia Tenggara |
-| Batas unggah file impor | 10 MB                                           | **4,5 MB** (batas body request Vercel)                                        |
+| Batas unggah file impor | 10 file, 10 MB/file, total 25 MB                | total **4,5 MB** per unggahan (batas body request Vercel)                     |
 | Deploy                  | `deploy.sh` / branch `release`                  | otomatis setiap push (import repo GitHub)                                     |
 
 ## 1. Buat database MySQL cloud
