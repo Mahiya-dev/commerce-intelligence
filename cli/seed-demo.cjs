@@ -36616,7 +36616,80 @@ async function saveAsset(session, input, { id, ipAddress = null, isDemo } = {}) 
 }
 
 // src/lib/imports/commit.ts
+var import_node_crypto8 = require("node:crypto");
+
+// src/lib/master-data/listing-mapping.ts
 var import_node_crypto7 = require("node:crypto");
+var SKU_RE3 = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
+var productName = (sku, name) => {
+  const n = name.trim().slice(0, 200);
+  return n.length >= 2 ? n : `Produk ${sku}`;
+};
+async function ensureVariants(db, org, wanted, ctx) {
+  const unique = /* @__PURE__ */ new Map();
+  for (const w of wanted) {
+    const sku = w.sku.trim();
+    if (SKU_RE3.test(sku) && !unique.has(sku.toLowerCase())) unique.set(sku.toLowerCase(), { sku, name: w.name });
+  }
+  const bySku = /* @__PURE__ */ new Map();
+  if (unique.size === 0) return { bySku, created: [] };
+  const existing = await queryRows(
+    "SELECT id, sku FROM product_variants WHERE organization_id = ?",
+    [org],
+    db
+  );
+  const known = new Map(existing.map((v) => [v.sku.toLowerCase(), v.id]));
+  const created = [];
+  for (const [key, w] of unique) {
+    const found = known.get(key);
+    if (found) {
+      bySku.set(key, found);
+      continue;
+    }
+    const name = productName(w.sku, w.name);
+    let product = await queryOne(
+      "SELECT id FROM products WHERE organization_id = ? AND code = ?",
+      [org, w.sku],
+      db
+    );
+    if (!product) {
+      product = { id: (0, import_node_crypto7.randomUUID)() };
+      await execute(
+        `INSERT INTO products (id, organization_id, code, name, product_type, is_demo, created_by)
+         VALUES (?, ?, ?, ?, 'single', ?, ?)`,
+        [product.id, org, w.sku, name, ctx.isDemo, ctx.actorUserId],
+        db
+      );
+    }
+    const variantId2 = (0, import_node_crypto7.randomUUID)();
+    await execute(
+      "INSERT INTO product_variants (id, organization_id, product_id, sku, name, is_demo) VALUES (?, ?, ?, ?, ?, ?)",
+      [variantId2, org, product.id, w.sku, name, ctx.isDemo],
+      db
+    );
+    bySku.set(key, variantId2);
+    created.push(w.sku);
+  }
+  if (created.length) {
+    await writeAudit(db, {
+      organizationId: org,
+      actorUserId: ctx.actorUserId,
+      action: "product.auto_created",
+      entityType: "product_variant",
+      entityId: null,
+      newData: { reason: ctx.reason, skus: created.slice(0, 200), count: created.length },
+      ipAddress: ctx.ipAddress ?? null
+    });
+  }
+  return { bySku, created: created.sort() };
+}
+var mapListingSchema = external_exports.object({
+  sku: external_exports.string().trim().regex(SKU_RE3, "SKU hanya huruf, angka, titik, garis bawah atau tanda hubung (maks. 64 karakter)."),
+  unitsPerListing: external_exports.coerce.number({ error: "Isi per listing harus angka." }).int("Isi per listing harus bilangan bulat.").min(1, "Minimal 1.").max(1e3, "Maksimal 1000."),
+  createIfMissing: external_exports.boolean().default(false)
+});
+
+// src/lib/imports/commit.ts
 var CHUNK = 500;
 function assertCanManage2(session) {
   if (!can(session.role, "imports:manage")) throw new AuthorizationError("analyst");
@@ -36665,7 +36738,7 @@ async function existingListings(db, org) {
 var rowListingKey = (channels, r) => listingKey(channelOf(channels, r), str(r.id_produk_channel).toLowerCase(), str(r.id_sku_channel).toLowerCase());
 function adCampaignKey(r) {
   const part = (v) => str(v ?? null).toLowerCase();
-  return (0, import_node_crypto7.createHash)("sha256").update(`${part(r.jenis_iklan)}|${part(r.nama_iklan)}|${part(r.kode_produk)}`).digest("hex");
+  return (0, import_node_crypto8.createHash)("sha256").update(`${part(r.jenis_iklan)}|${part(r.nama_iklan)}|${part(r.kode_produk)}`).digest("hex");
 }
 async function existingDateKeys(db, sql, org, rows2, key, dateColumn) {
   if (rows2.length === 0) return /* @__PURE__ */ new Set();
@@ -36694,7 +36767,7 @@ async function plan(db, org, reportType, inputRows) {
     newListings: 0,
     unknownSkus: [],
     autoMapped: 0,
-    unmatchedSkus: []
+    newSkus: []
   };
   if (reportType === "marketplace_sales_daily") {
     const existing = await existingDateKeys(
@@ -36731,8 +36804,8 @@ async function plan(db, org, reportType, inputRows) {
       overwrites,
       inserts: rows2.length - overwrites,
       newListings: missing.size,
-      autoMapped: auto.mapped.size,
-      unmatchedSkus: auto.unmatched
+      autoMapped: auto.mapped.size + auto.pending,
+      newSkus: auto.missing.map((m) => m.sku).sort()
     };
   }
   if (reportType === "touchpoint_performance") {
@@ -36832,7 +36905,7 @@ async function insertChunks(conn, rows2, sqlHead, placeholders, tail) {
 }
 async function autoMappings(db, org, channels, rows2) {
   const withSku = rows2.filter((r) => str(r.sku_internal) !== "");
-  if (withSku.length === 0) return { mapped: /* @__PURE__ */ new Map(), unmatched: [] };
+  if (withSku.length === 0) return { mapped: /* @__PURE__ */ new Map(), pending: 0, missing: [] };
   const [variants, mappedRows] = await Promise.all([
     queryRows("SELECT id, sku FROM product_variants WHERE organization_id = ?", [org], db),
     queryRows(
@@ -36849,15 +36922,20 @@ async function autoMappings(db, org, channels, rows2) {
     )
   );
   const mapped = /* @__PURE__ */ new Map();
-  const unmatched = /* @__PURE__ */ new Set();
+  const pending = /* @__PURE__ */ new Set();
+  const missing = /* @__PURE__ */ new Map();
   for (const r of withSku) {
     const key = rowListingKey(channels, r);
     if (alreadyMapped.has(key)) continue;
-    const variantId2 = variantBySku2.get(str(r.sku_internal).toLowerCase());
+    const sku = str(r.sku_internal);
+    const variantId2 = variantBySku2.get(sku.toLowerCase());
     if (variantId2) mapped.set(key, variantId2);
-    else unmatched.add(str(r.sku_internal));
+    else {
+      pending.add(key);
+      if (!missing.has(sku.toLowerCase())) missing.set(sku.toLowerCase(), { sku, name: str(r.nama_listing) });
+    }
   }
-  return { mapped, unmatched: [...unmatched].sort() };
+  return { mapped, pending: pending.size, missing: [...missing.values()] };
 }
 async function applyAutoMappings(conn, org, listings, mapped) {
   for (const [key, variantId2] of mapped) {
@@ -36876,7 +36954,7 @@ async function ensureListings(conn, org, channels, rows2, isDemo, autoMapped = /
   for (const r of rows2) {
     const key = rowListingKey(channels, r);
     if (listings.has(key)) continue;
-    const id = (0, import_node_crypto7.randomUUID)();
+    const id = (0, import_node_crypto8.randomUUID)();
     listings.set(key, id);
     const variantId2 = autoMapped.get(key) ?? null;
     created.push([
@@ -36914,7 +36992,7 @@ async function writeFacts(conn, session, batchId, reportType, inputRows, isDemo)
     for (const r of rows2) {
       const username = str(r.username_afiliasi);
       if (affiliates.has(username.toLowerCase())) continue;
-      const id = (0, import_node_crypto7.randomUUID)();
+      const id = (0, import_node_crypto8.randomUUID)();
       affiliates.set(username.toLowerCase(), id);
       created.push([id, org, username, str(r.nama_afiliasi) || username, isDemo]);
     }
@@ -37107,7 +37185,15 @@ async function writeFacts(conn, session, batchId, reportType, inputRows, isDemo)
     return;
   }
   if (reportType === "marketplace_product_performance") {
-    const auto = await autoMappings(conn, org, channels, rows2);
+    let auto = await autoMappings(conn, org, channels, rows2);
+    if (auto.missing.length > 0) {
+      await ensureVariants(conn, org, auto.missing, {
+        isDemo,
+        actorUserId: session.user.id,
+        reason: `import:${batchId}`
+      });
+      auto = await autoMappings(conn, org, channels, rows2);
+    }
     const listings = await ensureListings(conn, org, channels, rows2, isDemo, auto.mapped);
     await applyAutoMappings(conn, org, listings, auto.mapped);
     await insertChunks(
@@ -37187,7 +37273,7 @@ async function writeFacts(conn, session, batchId, reportType, inputRows, isDemo)
               units_per_listing, mapping_source, mapped_by, mapped_at, is_demo)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
-            (0, import_node_crypto7.randomUUID)(),
+            (0, import_node_crypto8.randomUUID)(),
             org,
             channelOf(channels, r),
             str(r.id_produk_channel),
@@ -37262,6 +37348,8 @@ async function commitImportBatch(session, batchId, { acknowledgeWarnings = false
         inserts: commitPlan.inserts,
         overwrites: commitPlan.overwrites,
         newListings: commitPlan.newListings,
+        autoMapped: commitPlan.autoMapped,
+        newSkus: commitPlan.newSkus.length,
         warningsAcknowledged: acknowledgeWarnings
       },
       ipAddress
@@ -37273,7 +37361,7 @@ async function commitImportBatch(session, batchId, { acknowledgeWarnings = false
 }
 
 // src/lib/events/manage.ts
-var import_node_crypto8 = require("node:crypto");
+var import_node_crypto9 = require("node:crypto");
 
 // src/lib/ecommerce/date-range.ts
 var RANGE_PRESETS = ["mtd", "7d", "30d", "90d", "last_month", "custom"];
@@ -37375,7 +37463,7 @@ async function saveEvent(session, input, { id, ipAddress = null, isDemo } = {}) 
   assertCan(session, "events:manage", "analyst");
   const org = session.organization.id;
   return withTransaction(async (conn) => {
-    const eventId = id ?? (0, import_node_crypto8.randomUUID)();
+    const eventId = id ?? (0, import_node_crypto9.randomUUID)();
     if (id) {
       const res = await execute(
         `UPDATE events SET name = ?, kind = ?, location = ?, start_date = ?, end_date = ?, status = ?,
@@ -37749,7 +37837,7 @@ var import_node_fs = require("node:fs");
 var import_node_path = require("node:path");
 
 // src/lib/affiliates/manage.ts
-var import_node_crypto9 = require("node:crypto");
+var import_node_crypto10 = require("node:crypto");
 function assertCan2(session, permission, role) {
   if (!can(session.role, permission)) throw new AuthorizationError(role);
 }
@@ -37830,7 +37918,7 @@ async function proposeAllocations(session, proposals, { ipAddress = null, isDemo
           `INSERT INTO hsl_allocations (id, organization_id, affiliate_id, variant_id, proposed_qty, basis, proposed_by, is_demo)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
           [
-            (0, import_node_crypto9.randomUUID)(),
+            (0, import_node_crypto10.randomUUID)(),
             org,
             a.id,
             v.id,

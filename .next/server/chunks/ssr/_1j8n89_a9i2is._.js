@@ -1,3 +1,0 @@
-(()=>{"use strict";module.exports=[13412,a=>{var b=a.i(64831);let c={name:"circle-check",size:24,node:[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}],["path",{d:"m16 9-5.5 5.5L8 12",key:"xofnsj"}]],aliases:["check-circle-2"]};c.node;let d=(0,b.f)(c);a.s(["f",0,d],13412)},81457,a=>{var b=a.i(87924),c=a.i(66718),d=a.i(70430);a.s(["f",0,function({id:a,label:e,errors:f,...g}){let h=`${a}-error`;return(0,b.jsxs)("div",{className:"grid gap-2",children:[(0,b.jsx)(d.f,{htmlFor:a,children:e}),(0,b.jsx)(c.f,{id:a,name:a,"aria-invalid":!!f?.length||void 0,"aria-describedby":f?.length?h:void 0,...g}),f?.length?(0,b.jsx)("p",{id:h,className:"text-xs text-destructive",children:f[0]}):null]})}])}]})();
-
-//# sourceMappingURL=_1j8n89_a9i2is._.js.map

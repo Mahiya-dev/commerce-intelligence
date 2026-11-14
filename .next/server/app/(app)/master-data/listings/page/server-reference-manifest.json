@@ -1,14 +1,34 @@
 {
   "node": {
-    "0046402c7eef01c34523e70171905c555057164ab2": {
+    "006f7516c938c02a6952d8c66c124e97fb6cbebe07": {
       "workers": {
         "app/(app)/master-data/listings/page": {
-          "moduleId": 14163,
+          "moduleId": 8141,
           "async": false
         }
       },
       "exportedName": "signOut",
       "filename": "src/app/(auth)/actions.ts"
+    },
+    "00092a2836c3b319b038a125574385d9f0ac0f789e": {
+      "workers": {
+        "app/(app)/master-data/listings/page": {
+          "moduleId": 8141,
+          "async": false
+        }
+      },
+      "exportedName": "autoMapListingsAction",
+      "filename": "src/app/(app)/master-data/listings/actions.ts"
+    },
+    "60200a2eab0aaf701c221fcb030387d7544bdda74e": {
+      "workers": {
+        "app/(app)/master-data/listings/page": {
+          "moduleId": 8141,
+          "async": false
+        }
+      },
+      "exportedName": "mapListingAction",
+      "filename": "src/app/(app)/master-data/listings/actions.ts"
     }
   },
   "edge": {}
